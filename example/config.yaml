@@ -1,0 +1,8 @@
+# Config for example blog
+# Used by simpleblog
+
+entry_ext: .txt
+
+extensions:
+- title
+- render_markdown

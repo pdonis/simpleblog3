@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+"""
+Script SIMPLEBLOG-RUN
+Wrapper script for package SIMPLEBLOG
+Copyright (C) 2012 by Peter A. Donis
+
+Released under the GNU General Public License, Version 2
+See the LICENSE and README files for more information
+"""
+
+import simpleblog
+
+
+if __name__ == '__main__':
+    from plib.stdlib.options import parse_options
+    
+    opts, args, result, remaining = parse_options(
+        simpleblog.global_optlist, simpleblog.global_arglist,
+        incremental=True
+    )
+    
+    cmd = args.command
+    if cmd:
+        simpleblog.run(cmd, result, remaining)
+    else:
+        from plib.stdlib.cmdline import run_shell
+        run_shell()
