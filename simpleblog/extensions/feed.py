@@ -109,6 +109,14 @@ class FeedBlogMixin(object):
     @extendable_property()
     def feed_formats(self):
         return set(["rss", "atom"]).intersection(self.index_formats)
+    
+    @cached_property
+    def feedlink_template_rss(self):
+        return self.template_data("link", "rss")
+    
+    @cached_property
+    def feedlink_template_atom(self):
+        return self.template_data("link", "atom")
 
 
 re_link = re.compile(r'<a href=\"\/([A-Za-z0-9\-\/\.]+)\"')
@@ -122,13 +130,6 @@ def fixup_relative_links(html, root_url):
         lambda m: '<a href="{0}/{1}"'.format(root_url, m.group(1)),
         html
     )
-
-
-feedlink_template_rss = """<link rel="alternate" type="application/rss+xml" title="{rss_title}"
-      href="{rss_url}">"""
-
-feedlink_template_atom = """<link rel="alternate" type="application/atom+xml" title="{atom_title}"
-      href="{atom_url}">"""
 
 
 class FeedExtension(BlogExtension):
@@ -202,11 +203,11 @@ class FeedExtension(BlogExtension):
         feedlinks = []
         if 'rss' in blog.feed_formats:
             feedlinks.append(
-                feedlink_template_rss.format(**blog.metadata)
+                blog.feedlink_template_rss.format(**blog.metadata)
             )
         if 'atom' in blog.feed_formats:
             feedlinks.append(
-                feedlink_template_atom.format(**blog.metadata)
+                blog.feedlink_template_atom.format(**blog.metadata)
             )
         blog.metadata['feed_links'] = html_newline.join(feedlinks)
         return sources
