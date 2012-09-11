@@ -124,10 +124,10 @@ def fixup_relative_links(html, root_url):
     )
 
 
-feedlink_template_rss = """<link rel="alternate" type="application/rss+xml" title="RSS 2.0"
+feedlink_template_rss = """<link rel="alternate" type="application/rss+xml" title="{rss_title}"
       href="{rss_url}">"""
 
-feedlink_template_atom = """<link rel="alternate" type="application/atom+xml" title="Atom"
+feedlink_template_atom = """<link rel="alternate" type="application/atom+xml" title="{atom_title}"
       href="{atom_url}">"""
 
 
@@ -188,10 +188,12 @@ class FeedExtension(BlogExtension):
     def blog_mod_default_metadata(self, blog, data):
         if 'rss' in blog.feed_formats:
             data.update(
+                rss_title="RSS",
                 rss_url="/index.rss"
             )
         if 'atom' in blog.index_formats:
             data.update(
+                atom_title="Atom",
                 atom_url="/index.atom",
             )
         return data
