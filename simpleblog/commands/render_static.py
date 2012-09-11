@@ -17,15 +17,25 @@ class RenderStatic(BlogCommand):
     """Static rendering of all blog pages.
     """
     
+    options = (
+        ("-f", "--force", {
+            'action': 'store_true',
+            'help': "force writing of unchanged files"
+        }),
+    )
+    
     def run(self, config, blog):
         for page in blog.pages:
             data = page.formatted
             path = os.path.abspath("{0}{1}".format(
                 config.get('static_dir', "static"), page.urlpath
             ))  # FIXME make this portable
-            with open(path, 'rU') as f:
-                olddata = f.read()
-            if data != olddata:
+            if self.opts.force or not os.path.isfile(path):
+                olddata = ""
+            else:
+                with open(path, 'rU') as f:
+                    olddata = f.read()
+            if self.opts.force or (data != olddata):
                 print "Rendering", path
                 dir = os.path.split(path)[0]
                 if not os.path.isdir(dir):

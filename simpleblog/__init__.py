@@ -665,12 +665,8 @@ global_optlist = (
     )
 )
 
-global_arglist = (
-    ("command", { 'nargs': "?", 'default': "" }),
-)
 
-
-def run(cmdname, result=None, remaining=None):
+def run(cmdname, opts, result=None, remaining=None):
     from simpleblog.commands import BlogCommand
     mod, klass = load_sub("command", cmdname,
         BlogCommandError, BlogCommand)
@@ -681,14 +677,10 @@ def run(cmdname, result=None, remaining=None):
     epilog = klass.epilog
     if optlist or arglist or remaining:
         from plib.stdlib.options import parse_options
-        opts, args = parse_options(
+        copts, cargs = parse_options(
             optlist, arglist, description, epilog, remaining, result
         )
-    else:
-        from plib.stdlib.options import prepare_specs, make_objs
-        optlist, arglist = prepare_specs(global_optlist, global_arglist)
-        opts, args = make_objs(result, optlist, arglist)
     
-    cmd = klass(opts, args)
+    cmd = klass(copts, cargs)
     config, blog = load_blog(opts)
     cmd.run(config, blog)
