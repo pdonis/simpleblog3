@@ -78,7 +78,7 @@ tz_utc = UTC()
 tz_local = LocalTimezone()
 
 
-template_rss20 = "{0}, {1.day:02d} {2} {1.year} {1.hour:02d}:{1.minute:02d} GMT"
+template_rss = "{0}, {1.day:02d} {2} {1.year} {1.hour:02d}:{1.minute:02d} GMT"
 
 template_atom = "{0.year}-{0.month:02d}-{0.day:02d}T{0.hour:02d}:{0.minute:02d}:00Z"
 
@@ -97,18 +97,18 @@ class FeedEntryMixin(object):
         return template_atom.format(t)
     
     @extendable_property()
-    def timestamp_rss20(self):
+    def timestamp_rss(self):
         t = self.timestamp_utc
         weekday = weekdaynames[t.weekday()]
         monthname = monthnames[t.month]
-        return template_rss20.format(weekday, t, monthname)
+        return template_rss.format(weekday, t, monthname)
 
 
 class FeedBlogMixin(object):
     
     @extendable_property()
     def feed_formats(self):
-        return set(["rss20", "atom"]).intersection(self.index_formats)
+        return set(["rss", "atom"]).intersection(self.index_formats)
 
 
 re_link = re.compile(r'<a href=\"\/([A-Za-z0-9\-\/\.]+)\"')
@@ -124,8 +124,8 @@ def fixup_relative_links(html, root_url):
     )
 
 
-feedlink_template_rss20 = """<link rel="alternate" type="application/rss+xml" title="RSS 2.0"
-      href="{rss20_url}">"""
+feedlink_template_rss = """<link rel="alternate" type="application/rss+xml" title="RSS 2.0"
+      href="{rss_url}">"""
 
 feedlink_template_atom = """<link rel="alternate" type="application/atom+xml" title="Atom"
       href="{atom_url}">"""
@@ -144,17 +144,17 @@ class FeedExtension(BlogExtension):
         return body
     
     def entry_mod_attrs(self, entry, attrs, format, params):
-        do_rss20 = 'rss20' in entry.blog.feed_formats
+        do_rss = 'rss' in entry.blog.feed_formats
         do_atom = 'atom' in entry.blog.feed_formats
-        if do_rss20 or do_atom:
+        if do_rss or do_atom:
             attrs.update(
                 root_url=entry.blog.metadata['root_url'],
                 author=entry.blog.metadata['author'],
                 email=entry.blog.metadata['email']
             )
-            if do_rss20:
+            if do_rss:
                 attrs.update(
-                    timestamp_rss20=entry.timestamp_rss20
+                    timestamp_rss=entry.timestamp_rss
                 )
             if do_atom:
                 attrs.update(
@@ -167,7 +167,7 @@ class FeedExtension(BlogExtension):
             attrs.update(
                 sys_timestamp_atom=template_atom.format(datetime.utcnow())
             )
-        if 'rss20' in page.blog.feed_formats:
+        if 'rss' in page.blog.feed_formats:
             language = page.blog.metadata['language']
             try:
                 country = page.blog.metadata['country'].lower()
@@ -176,19 +176,19 @@ class FeedExtension(BlogExtension):
             else:
                 language = '-'.join([language, country])
             attrs.update(
-                blog_language_rss20=language
+                blog_language_rss=language
             )
         return attrs
     
     def blog_mod_required_metadata(self, blog, data):
-        if 'rss20' in blog.feed_formats:
+        if 'rss' in blog.feed_formats:
             data.add('language')
         return data
     
     def blog_mod_default_metadata(self, blog, data):
-        if 'rss20' in blog.feed_formats:
+        if 'rss' in blog.feed_formats:
             data.update(
-                rss20_url="/index.rss20"
+                rss_url="/index.rss"
             )
         if 'atom' in blog.index_formats:
             data.update(
@@ -198,9 +198,9 @@ class FeedExtension(BlogExtension):
     
     def blog_mod_sources(self, blog, sources):
         feedlinks = []
-        if 'rss20' in blog.feed_formats:
+        if 'rss' in blog.feed_formats:
             feedlinks.append(
-                feedlink_template_rss20.format(**blog.metadata)
+                feedlink_template_rss.format(**blog.metadata)
             )
         if 'atom' in blog.feed_formats:
             feedlinks.append(
