@@ -27,9 +27,9 @@ class RenderStatic(BlogCommand):
     def run(self, config, blog):
         for page in blog.pages:
             data = page.formatted
-            path = os.path.abspath("{0}{1}".format(
-                config.get('static_dir', "static"), page.urlpath
-            ))  # FIXME make this portable
+            path = os.path.abspath(os.path.join(
+                config.get('static_dir', "static"), page.urlpath[1:]
+            ))
             if self.opts.force or not os.path.isfile(path):
                 olddata = ""
             else:
@@ -43,4 +43,4 @@ class RenderStatic(BlogCommand):
                 with open(path, 'w') as f:
                     f.write(data)
             else:
-                print path, "is unchanged."
+                print path, "is unchanged"
