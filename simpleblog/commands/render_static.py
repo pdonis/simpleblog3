@@ -23,9 +23,14 @@ class RenderStatic(BlogCommand):
             path = os.path.abspath("{0}{1}".format(
                 config.get('static_dir', "static"), page.urlpath
             ))  # FIXME make this portable
-            print "Rendering", path
-            dir = os.path.split(path)[0]
-            if not os.path.isdir(dir):
-                os.makedirs(dir)
-            with open(path, 'w') as f:
-                f.write(data)
+            with open(path, 'rU') as f:
+                olddata = f.read()
+            if data != olddata:
+                print "Rendering", path
+                dir = os.path.split(path)[0]
+                if not os.path.isdir(dir):
+                    os.makedirs(dir)
+                with open(path, 'w') as f:
+                    f.write(data)
+            else:
+                print path, "is unchanged."
