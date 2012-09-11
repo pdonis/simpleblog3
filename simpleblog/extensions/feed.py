@@ -83,6 +83,14 @@ template_rss = "{0}, {1.day:02d} {2} {1.year} {1.hour:02d}:{1.minute:02d} GMT"
 template_atom = "{0.year}-{0.month:02d}-{0.day:02d}T{0.hour:02d}:{0.minute:02d}:00Z"
 
 
+def rss_format(t):
+    return template_rss.format(weekdaynames[t.weekday()], t, monthnames[t.month])
+
+
+def atom_format(t):
+    return template_atom.format(t)
+
+
 class FeedEntryMixin(object):
     
     @cached_property
@@ -93,15 +101,11 @@ class FeedEntryMixin(object):
     
     @extendable_property()
     def timestamp_atom(self):
-        t = self.timestamp_utc
-        return template_atom.format(t)
+        return atom_format(self.timestamp_utc)
     
     @extendable_property()
     def timestamp_rss(self):
-        t = self.timestamp_utc
-        weekday = weekdaynames[t.weekday()]
-        monthname = monthnames[t.month]
-        return template_rss.format(weekday, t, monthname)
+        return rss_format(self.timestamp_utc)
 
 
 class FeedBlogMixin(object):
@@ -164,9 +168,10 @@ class FeedExtension(BlogExtension):
         return attrs
     
     def page_mod_attrs(self, page, attrs):
+        t = datetime.utcnow()
         if 'atom' in page.blog.feed_formats:
             attrs.update(
-                sys_timestamp_atom=template_atom.format(datetime.utcnow())
+                sys_timestamp_atom=atom_format(t)
             )
         if 'rss' in page.blog.feed_formats:
             language = page.blog.metadata['language']
@@ -177,6 +182,7 @@ class FeedExtension(BlogExtension):
             else:
                 language = '-'.join([language, country])
             attrs.update(
+                sys_timestamp_rss=rss_format(t),
                 blog_language_rss=language
             )
         return attrs
