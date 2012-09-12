@@ -336,6 +336,10 @@ class BlogEntry(BlogObject):
     def body(self, format, params):
         return self.rendered
     
+    @extendable_method()
+    def template(self, format):
+        return self.template_data("entry", format)
+    
     @cached_method
     def make_permalink(self, format):
         return "{}.{}".format(self.urlpath, format)
@@ -360,10 +364,6 @@ class BlogEntry(BlogObject):
         )
     
     @extendable_method()
-    def template(self, format):
-        return self.template_data("entry", format)
-    
-    @extendable_method()
     def formatted(self, format, params):
         return self.template(format).format(**self.attrs(format, params))
 
@@ -382,9 +382,6 @@ class BlogEntries(BlogObject):
     def __init__(self, blog):
         BlogObject.__init__(self, blog)
     
-    def _get_entries(self):
-        raise NotImplementedError
-    
     @cached_property
     def entry_sort_key(self):
         return self.config.get('entry_sort_key', 'timestamp')
@@ -400,14 +397,17 @@ class BlogEntries(BlogObject):
             reverse=self.entry_sort_reversed
         )
     
-    def _get_urlpath(self):
-        if self.urlshort is not None:
-            return "{}index".format(self.urlshort)
+    def _get_entries(self):
         raise NotImplementedError
     
     @cached_property
     def urlpath(self):
         return self._get_urlpath()
+    
+    def _get_urlpath(self):
+        if self.urlshort is not None:
+            return "{}index".format(self.urlshort)
+        raise NotImplementedError
 
 
 class BlogIndex(BlogEntries):
@@ -472,13 +472,13 @@ class BlogPage(BlogObject):
     # The format_entries generator is not extendable;
     # mixins can override _get_format_entries
     
-    @memoize_generator
-    def format_entries(self):
-        return self._get_format_entries()
-    
     @extendable_method()
     def entry_params(self, entry):
         return BlogEntryParams()
+    
+    @memoize_generator
+    def format_entries(self):
+        return self._get_format_entries()
     
     def _get_format_entries(self):
         for entry in self.entries:
@@ -552,13 +552,13 @@ class Blog(BlogObject):
     def default_metadata(self):
         return {}
     
-    @cached_property
-    def entry_class(self):
-        return extension_types['entry']
-    
     @cached_method
     def filter_entries(self, path):
         return suffixed_items(os.listdir(path), self.entry_ext)
+    
+    @cached_property
+    def entry_class(self):
+        return extension_types['entry']
     
     @extendable_property()
     def all_entries(self):
@@ -566,10 +566,6 @@ class Blog(BlogObject):
             self.entry_class(self, name)
             for name in self.filter_entries(self.entries_dir)
         ]
-    
-    @cached_property
-    def page_class(self):
-        return extension_types['page']
     
     @extendable_property()
     def index_formats(self):
@@ -592,6 +588,10 @@ class Blog(BlogObject):
             for entry in self.all_entries
             for format in self.entry_formats
         ]
+    
+    @cached_property
+    def page_class(self):
+        return extension_types['page']
     
     @extendable_property()
     def pages(self):

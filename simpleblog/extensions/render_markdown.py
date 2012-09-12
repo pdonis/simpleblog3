@@ -19,12 +19,12 @@ from simpleblog.extensions import BlogExtension
 class MarkdownEntryMixin(object):
     
     @cached_property
-    def pretty_print(self):
-        return self.config.get('markdown_pretty', False)
-    
-    @cached_property
     def output_format(self):
         return self.config.get('markdown_format', "html4")
+    
+    @cached_property
+    def pretty_print(self):
+        return self.config.get('markdown_pretty', False)
     
     def _do_render(self, rawdata):
         html = markdown(rawdata, output_format=self.output_format)
