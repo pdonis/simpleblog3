@@ -22,8 +22,12 @@ class MarkdownEntryMixin(object):
     def pretty_print(self):
         return self.config.get('markdown_pretty', False)
     
+    @cached_property
+    def output_format(self):
+        return self.config.get('markdown_format', "html4")
+    
     def _do_render(self, rawdata):
-        html = markdown(rawdata, output_format="html4")
+        html = markdown(rawdata, output_format=self.output_format)
         if not self.pretty_print:
             return html
         
