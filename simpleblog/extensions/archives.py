@@ -47,7 +47,7 @@ class BlogArchiveEntries(BlogEntries):
         if month:
             if day:
                 self.sortkey = (year, month, day)
-                self.urlshort = "/{0}/{1}/{2}/".format(year, monthkey, day)
+                self.urlshort = "/{0}/{1}/{2:02d}/".format(year, monthkey, day)
                 title_template = self.archive_day_template
             else:
                 self.sortkey = (year, month)
