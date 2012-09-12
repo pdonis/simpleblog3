@@ -13,10 +13,10 @@ import time as _time
 from datetime import tzinfo, timedelta, datetime
 
 from plib.stdlib.decotools import cached_property
+from plib.stdlib.localize import weekdayname, monthname
 from plib.stdlib.strings import universal_newline
 
-from simpleblog import (extendable_property,
-    weekdaynames, monthnames)
+from simpleblog import extendable_property
 from simpleblog.extensions import BlogExtension
 
 
@@ -84,7 +84,11 @@ template_atom = "{0.year}-{0.month:02d}-{0.day:02d}T{0.hour:02d}:{0.minute:02d}:
 
 
 def rss_format(t):
-    return template_rss.format(weekdaynames[t.weekday()], t, monthnames[t.month])
+    return template_rss.format(
+        weekdayname(t.weekday(), dt=True),
+        t,
+        monthname(t.month)
+    )
 
 
 def atom_format(t):
@@ -108,11 +112,14 @@ class FeedEntryMixin(object):
         return rss_format(self.timestamp_utc)
 
 
+known_feed_formats = ["rss", "atom"]
+
+
 class FeedBlogMixin(object):
     
     @extendable_property()
     def feed_formats(self):
-        return set(["rss", "atom"]).intersection(self.index_formats)
+        return set(known_feed_formats).intersection(self.index_formats)
     
     @cached_property
     def feedlink_template_rss(self):

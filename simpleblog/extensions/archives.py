@@ -11,8 +11,9 @@ See the LICENSE and README files for more information
 from collections import defaultdict
 
 from plib.stdlib.decotools import cached_property
+from plib.stdlib.localize import monthname, monthname_long
 
-from simpleblog import BlogEntries, monthnames
+from simpleblog import BlogEntries
 from simpleblog.extensions import BlogExtension, get_links
 
 
@@ -31,9 +32,16 @@ class BlogArchiveEntries(BlogEntries):
         BlogEntries.__init__(self, blog)
         self.year = year
         self.month = month
-        self.monthname = monthname = monthnames[month]
-        self.monthkey = monthkey = (
-            "{:02d}".format(month), monthname)[self.archive_use_monthnames]
+        if month:
+            self.monthname = mname = monthname(month)
+            self.monthname_long = mname_long = monthname_long(month)
+            self.monthkey = monthkey = (
+                "{:02d}".format(month) if not self.archive_use_monthnames else
+                mname if not self.archive_long_monthnames else
+                mname_long
+            )
+        else:
+            self.monthname = self.monthname_long = self.monthkey = ""
         self.day = day
         
         if month:
@@ -63,6 +71,10 @@ class BlogArchiveEntries(BlogEntries):
     @cached_property
     def archive_use_monthnames(self):
         return self.config.get('archive_use_monthnames', False)
+    
+    @cached_property
+    def archive_long_monthnames(self):
+        return self.config.get('archive_long_monthnames', False)
     
     @cached_property
     def archive_year_template(self):

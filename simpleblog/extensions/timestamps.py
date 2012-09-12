@@ -14,7 +14,7 @@ from functools import total_ordering
 
 from plib.stdlib.decotools import convert
 
-from simpleblog import weekdaynames, monthnames, extendable_property
+from simpleblog import extendable_property
 from simpleblog.caching import cached
 from simpleblog.extensions import BlogExtension
 

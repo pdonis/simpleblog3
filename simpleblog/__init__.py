@@ -19,6 +19,10 @@ from plib.stdlib.builtins import first
 from plib.stdlib.decotools import (
     cached_method, cached_property, memoize_generator)
 from plib.stdlib.iters import suffixed_items
+from plib.stdlib.localize import (
+    weekdayname, weekdayname_long,
+    monthname, monthname_long)
+
 from plib.stdlib.strings import universal_newline
 from plib.stdlib.version import version_string
 
@@ -222,11 +226,6 @@ def extendable(cls):
 
 # ENTRY
 
-weekdaynames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-
-monthnames = [None,
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-
 
 @extendable
 class BlogEntry(BlogObject):
@@ -265,8 +264,10 @@ class BlogEntry(BlogObject):
             hour=t.hour,
             minute=t.minute,
             second=t.second,
-            weekdayname=weekdaynames[t.weekday()],
-            monthname=monthnames[t.month]
+            weekdayname=weekdayname(t.weekday(), dt=True),
+            weekdayname_long=weekdayname_long(t.weekday(), dt=True),
+            monthname=monthname(t.month),
+            monthname_long=monthname_long(t.month)
         )
     
     @cached_property
