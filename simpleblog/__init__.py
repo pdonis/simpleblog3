@@ -346,16 +346,12 @@ class BlogEntry(BlogObject):
     @extendable_method()
     def attrs(self, format, params):
         return dict(
+            self.timestamp_vars,
             name=self.name,
             cachekey=self.cachekey,
             urlpath=self.urlpath,
             title=self.title,
             body=self.body(format, params),
-            year=self.timestamp.year,
-            month=self.timestamp.month,
-            day=self.timestamp.day,
-            hour=self.timestamp.hour,
-            minute=self.timestamp.minute,
             timestamp=self.timestamp_formatted,
             datestamp=self.datestamp_formatted,
             permalink=self.make_permalink(format),
