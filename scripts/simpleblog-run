@@ -28,5 +28,6 @@ if __name__ == '__main__':
     if cmd:
         run(cmd, opts, result, remaining)
     else:
+        from simpleblog import *
         from plib.stdlib.cmdline import run_shell
         run_shell()
