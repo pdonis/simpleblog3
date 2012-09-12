@@ -12,8 +12,9 @@ from itertools import groupby
 from operator import itemgetter
 
 from plib.stdlib.decotools import cached_property, cached_method
+from plib.stdlib.strings import universal_newline
 
-from simpleblog import extendable_method, html_newline
+from simpleblog import extendable_method
 from simpleblog.extensions import BlogExtension
 
 
@@ -51,7 +52,7 @@ class LinksEntryMixin(object):
     @extendable_method()
     def prev_next_link(self, attr, format, prefix):
         if isinstance(attr, list):
-            sep = '{0}{1}{0}'.format(html_newline, self.entrylink_sep)
+            sep = '{0}{1}{0}'.format(universal_newline, self.entrylink_sep)
             return sep.join(
                 self.get_entrylink(value, format, prefix)
                 for value in attr

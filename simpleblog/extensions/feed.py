@@ -13,9 +13,9 @@ import time as _time
 from datetime import tzinfo, timedelta, datetime
 
 from plib.stdlib.decotools import cached_property
+from plib.stdlib.strings import universal_newline
 
 from simpleblog import (extendable_property,
-    html_newline,
     weekdaynames, monthnames)
 from simpleblog.extensions import BlogExtension
 
@@ -215,5 +215,5 @@ class FeedExtension(BlogExtension):
             feedlinks.append(
                 blog.feedlink_template_atom.format(**blog.metadata)
             )
-        blog.metadata['feed_links'] = html_newline.join(feedlinks)
+        blog.metadata['feed_links'] = universal_newline.join(feedlinks)
         return sources

@@ -11,8 +11,8 @@ See the LICENSE and README files for more information
 from markdown import markdown
 
 from plib.stdlib.decotools import cached_property
+from plib.stdlib.strings import universal_newline
 
-from simpleblog import html_newline
 from simpleblog.extensions import BlogExtension
 
 
@@ -35,7 +35,7 @@ class MarkdownEntryMixin(object):
         # of the Pyblosxom markdown formatter (indent
         # blockquotes and add blank lines between
         # paragraphs)
-        lines = html.split(html_newline)
+        lines = html.split(universal_newline)
         out = []
         in_blockquote = False
         blankline_flag = False
@@ -60,7 +60,7 @@ class MarkdownEntryMixin(object):
                 line.endswith("</blockquote>")
             ):
                 blankline_flag = True
-        return html_newline.join(out)
+        return universal_newline.join(out)
 
 
 class MarkdownExtension(BlogExtension):

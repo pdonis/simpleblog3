@@ -19,6 +19,7 @@ from plib.stdlib.builtins import first
 from plib.stdlib.decotools import (
     cached_method, cached_property, memoize_generator)
 from plib.stdlib.iters import suffixed_items
+from plib.stdlib.strings import universal_newline
 from plib.stdlib.version import version_string
 
 
@@ -225,8 +226,6 @@ weekdaynames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
 monthnames = [None,
     "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-
-html_newline = '\n'  # FIXME find out markdown's newline spec
 
 
 @extendable
@@ -491,7 +490,7 @@ class BlogPage(BlogObject):
     @extendable_property()
     def body(self):
         if self.entries:
-            return html_newline.join(self.format_entries())
+            return universal_newline.join(self.format_entries())
         return self.no_entries
     
     @extendable_property()

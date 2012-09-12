@@ -11,10 +11,11 @@ from operator import attrgetter
 
 from plib.stdlib.decotools import cached_property, wraps_class
 from plib.stdlib.iters import prefixed_items
+from plib.stdlib.strings import universal_newline
 
 from simpleblog import (
     extension_types, extension_map, extend_attributes,
-    BlogEntries, html_newline)
+    BlogEntries, universal_newline)
 
 
 class NamedEntries(BlogEntries):
@@ -42,7 +43,7 @@ def get_links(containers, reverse=False):
     """Return HTML links to containers.
     """
     # FIXME make this configurable
-    return html_newline.join(
+    return universal_newline.join(
         '<a href="{0}">{1}</a>&nbsp;({2})'.format(c.urlshort, c.title, len(c.entries))
         for c in sorted(containers, key=attrgetter('sortkey'), reverse=reverse)
     )

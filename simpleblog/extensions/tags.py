@@ -11,7 +11,7 @@ See the LICENSE and README files for more information
 from plib.stdlib.decotools import cached_property, convert
 from plib.stdlib.strings import split_string, universal_newline
 
-from simpleblog import extendable_property, html_newline
+from simpleblog import extendable_property
 from simpleblog.caching import cached
 from simpleblog.extensions import (BlogExtension,
     NamedEntries, get_links)
@@ -113,7 +113,7 @@ class TagsExtension(BlogExtension):
     
     def entry_post_init(self, entry):
         entry.metadata.update(
-            taglinks=',{}'.format(html_newline).join(
+            taglinks=',{}'.format(universal_newline).join(
                 makelink(tag, self.tags_prefix) for tag in sorted(entry.tags)
             )
         )
