@@ -28,7 +28,7 @@ class RenderStatic(BlogCommand):
         for page in blog.pages:
             data = page.formatted
             path = os.path.abspath(os.path.join(
-                config.get('static_dir', "static"), page.urlpath[1:]
+                config.get('static_dir', "static"), page.filepath
             ))
             if self.opts.force or not os.path.isfile(path):
                 olddata = ""

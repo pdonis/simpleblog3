@@ -459,6 +459,9 @@ class BlogPage(BlogObject):
         self.format = format
         self.urlpath = "{0}.{1}".format(
             source.urlpath, format)
+        self.filepath = os.path.join(
+            *self.urlpath[1:].split('/')
+        )
     
     # The format_entries generator is not extendable;
     # mixins can override _get_format_entries
