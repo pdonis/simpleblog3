@@ -61,8 +61,8 @@ class FoldEntryMixin(object):
     
     @extendable_method()
     def short_template(self, format):
-        if format == "html":
-            return self.template_data("entry", "short")
+        if format in self.short_formats:
+            return self.template_data("short", format)
         raise NotImplementedError
     
     @extendable_property()
