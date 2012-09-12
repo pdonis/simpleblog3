@@ -281,7 +281,7 @@ class BlogEntry(BlogObject):
     @cached_property
     def datestamp_template(self):
         return self.config.get('datestamp_template',
-            "{weekdayname}, {day:02d} {monthname} {year}")
+            "{year}-{month:02d}-{day:02d}")
     
     @extendable_property()
     def datestamp_formatted(self):
