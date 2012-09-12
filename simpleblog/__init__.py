@@ -449,7 +449,7 @@ class BlogPage(BlogObject):
     """Single page containing one or more entries.
     """
     
-    def __init__(self, blog, source, format, pagenum=None):
+    def __init__(self, blog, source, format):
         BlogObject.__init__(self, blog)
         self.source = source
         if isinstance(source, BlogEntry):
@@ -457,13 +457,8 @@ class BlogPage(BlogObject):
         else:
             self.entries = source.entries
         self.format = format
-        self.pagenum = pagenum
-        if self.pagenum and (self.pagenum > 1):
-            pagemarker = self.pagenum
-        else:
-            pagemarker = ""
-        self.urlpath = "{0}{1}.{2}".format(
-            source.urlpath, pagemarker, format)
+        self.urlpath = "{0}.{1}".format(
+            source.urlpath, format)
     
     # The format_entries generator is not extendable;
     # mixins can override _get_format_entries
