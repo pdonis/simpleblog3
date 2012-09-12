@@ -38,13 +38,13 @@ class BlogConfig(object):
     """Blog configuration.
     """
     
-    settings = {}
-    
     def __init__(self, filename=None):
         self.filename = filename or "config.yaml"
+        self.settings = {}
+        
         if os.path.isfile(self.filename):
             with open(self.filename, 'rU') as f:
-                self.settings = load(f)
+                self.settings.update(load(f))
         
         # This will prove to be convenient
         self.get = self.settings.get
