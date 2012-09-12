@@ -39,11 +39,10 @@ class LinksEntryMixin(object):
     @cached_method
     def get_entrylink(self, attr, format, prefix):
         entry, label = attr
-        is_prev = prefix.startswith('p')
         title = (
             self.link_next_template,
             self.link_prev_template
-        )[is_prev].format(label)
+        )[prefix.startswith('p')].format(label)
         if entry is not None:
             href = entry.make_permalink(format)
             return '<a href="{0}">{1}</a>'.format(href, title)
