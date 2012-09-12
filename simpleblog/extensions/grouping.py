@@ -29,11 +29,11 @@ class GroupingPageMixin(object):
     
     @extendable_property()
     def group_head_template(self):
-        return self.template_data("date", "head")
+        return self.template_data("group", "head")
     
     @extendable_property()
     def group_foot_template(self):
-        return self.template_data("date", "foot")
+        return self.template_data("group", "foot")
     
     @cached_property
     def group_formats(self):
