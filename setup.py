@@ -74,7 +74,7 @@ setup(
         "Programming Language :: Python"
     ],
     requires=[
-        'plib (>=0.8)',
+        'plib (>=0.8.1)',
         'yaml'
     ],
     packages=[
