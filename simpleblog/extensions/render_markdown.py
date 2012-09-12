@@ -10,14 +10,22 @@ See the LICENSE and README files for more information
 
 from markdown import markdown
 
+from plib.stdlib.decotools import cached_property
+
 from simpleblog import html_newline
 from simpleblog.extensions import BlogExtension
 
 
 class MarkdownEntryMixin(object):
     
+    @cached_property
+    def pretty_print(self):
+        return self.config.get('markdown_pretty', False)
+    
     def _do_render(self, rawdata):
         html = markdown(rawdata, output_format="html4")
+        if not self.pretty_print:
+            return html
         
         # Extra pretty formatting to match the behavior
         # of the Pyblosxom markdown formatter (indent
