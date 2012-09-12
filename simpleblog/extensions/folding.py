@@ -43,11 +43,9 @@ class FoldEntryMixin(object):
             self._short = None
         return raw
     
-    @extendable_property()
+    @cached_property
     def short_formats(self):
-        return set([
-            "html"
-        ])
+        return set(self.config.get('short_formats', ["html"]))
     
     @cached_method
     def has_short(self, format):
