@@ -175,7 +175,7 @@ class FeedExtension(BlogExtension):
         return attrs
     
     def page_mod_attrs(self, page, attrs):
-        t = datetime.utcnow()
+        t = page.blog.metadata['feed_timestamp']
         if 'atom' in page.blog.feed_formats:
             attrs.update(
                 sys_timestamp_atom=atom_format(t)
@@ -223,4 +223,7 @@ class FeedExtension(BlogExtension):
                 blog.feedlink_template_atom.format(**blog.metadata)
             )
         blog.metadata['feed_links'] = universal_newline.join(feedlinks)
+        blog.metadata['feed_timestamp'] = max(
+            entry.timestamp_utc for entry in blog.all_entries
+        )
         return sources
