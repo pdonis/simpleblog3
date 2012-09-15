@@ -212,9 +212,6 @@ implemented, but more are on the To Do list:
 To Do
 -----
 
-Add support for JSON instead of YAML for the config and blog metadata
-files; this will remove the hard dependency on PyYAML.
-
 Add a command for publishing your blog via SSH (I do this now with
 a shell script, but doing it in Python would allow some enhancements
 that aren't easy in shell).
