@@ -576,6 +576,10 @@ class Blog(BlogObject):
         ]
     
     @extendable_property()
+    def index_entries(self):
+        return BlogIndex(self)
+    
+    @extendable_property()
     def index_formats(self):
         return set(self.config.get('index_formats', ["html"]))
     
@@ -585,8 +589,6 @@ class Blog(BlogObject):
     
     @extendable_property()
     def sources(self):
-        
-        self.index_entries = BlogIndex(self)
         
         return [
             (self.index_entries, format)
