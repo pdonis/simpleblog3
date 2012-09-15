@@ -13,8 +13,6 @@ from datetime import datetime
 from functools import wraps
 from operator import attrgetter
 
-from yaml import load
-
 from plib.stdlib.builtins import first
 from plib.stdlib.decotools import (
     cached_method, cached_property, memoize_generator)
@@ -28,6 +26,28 @@ from plib.stdlib.version import version_string
 
 
 __version__ = (0, 1)
+
+
+blogfile_exts = ["json"]
+
+try:
+    from yaml import load
+except ImportError:
+    from json import load
+else:
+    blogfile_exts.insert(0, "yaml")
+
+
+def load_blogfile(filename, basename, mapping):
+    trial_names = [filename] + [
+        "{0}.{1}".format(basename, ext)
+        for ext in blogfile_exts
+    ]
+    for fname in trial_names:
+        if fname and os.path.isfile(fname):
+            with open(fname, 'rU') as f:
+                mapping.update(load(f))
+            break
 
 
 # CONFIG
@@ -44,12 +64,9 @@ class BlogConfig(object):
     """
     
     def __init__(self, filename=None):
-        self.filename = filename or "config.yaml"
+        self.filename = filename
         self.settings = {}
-        
-        if os.path.isfile(self.filename):
-            with open(self.filename, 'rU') as f:
-                self.settings.update(load(f))
+        load_blogfile(self.filename, "config", self.settings)
         
         # This will prove to be convenient
         self.get = self.settings.get
@@ -527,11 +544,8 @@ class Blog(BlogObject):
     def __init__(self, config, filename=None):
         self.blog = self
         self.config = config
-        self.filename = filename or "blog.yaml"
         self.metadata = {}
-        if os.path.isfile(self.filename):
-            with open(self.filename, 'rU') as f:
-                self.metadata.update(load(f))
+        load_blogfile(filename, "blog", self.metadata)
         for key in self.required_metadata:
             if key not in self.metadata:
                 raise BlogMetadataError("{} missing from blog metadata".format(key))
@@ -652,10 +666,10 @@ class BlogCommandError(BlogError):
 
 global_optlist = (
     ("-c", "--configfile",
-        { 'help': "the configuration file name (defaults to config.yaml)" }
+        { 'help': "the configuration file name" }
     ),
     ("-b", "--blogfile",
-        { 'help': "the blog metadata file name (defaults to blog.yaml)" }
+        { 'help': "the blog metadata file name" }
     )
 )
 
