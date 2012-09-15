@@ -579,11 +579,11 @@ class Blog(BlogObject):
     def index_entries(self):
         return BlogIndex(self)
     
-    @extendable_property()
+    @cached_property
     def index_formats(self):
         return set(self.config.get('index_formats', ["html"]))
     
-    @extendable_property()
+    @cached_property
     def entry_formats(self):
         return set(self.config.get('entry_formats', ["html"]))
     
