@@ -243,12 +243,18 @@ class FeedEntryMixin(object):
 
 known_feed_formats = ["rss", "atom"]
 
+known_archive_feed_formats = ["atom"]
+
 
 class FeedBlogMixin(object):
     
     @extendable_property()
     def feed_formats(self):
         return set(known_feed_formats).intersection(self.index_formats)
+    
+    @extendable_property()
+    def archive_feed_formats(self):
+        return set(known_archive_feed_formats).intersection(self.index_formats)
     
     @cached_property
     def feedlink_template_rss(self):
@@ -310,7 +316,7 @@ class FeedExtension(BlogExtension):
     def page_mod_attrs(self, page, attrs):
         if page.format in page.blog.feed_formats:
             t = max(entry.timestamp_utc for entry in page.entries)
-            if self.archive_feeds:
+            if self.archive_feeds and (page.format in page.blog.archive_feed_formats):
                 attrs.update(
                     page_archive_elements=page.source.archive_elements(
                         page.format
@@ -376,7 +382,7 @@ class FeedExtension(BlogExtension):
         return BlogArchiveFeedEntries(blog, arglist, *args)
     
     def blog_mod_index_entries(self, blog, entries, format):
-        if self.archive_feeds and (format in blog.feed_formats):
+        if self.archive_feeds and (format in blog.archive_feed_formats):
             return self.current_feed_entries(blog)
         return entries
     
@@ -398,7 +404,7 @@ class FeedExtension(BlogExtension):
             sources.extend(
                 (self.archive_feed_entries(blog, *args), format)
                 for args in arglist[:-1]
-                for format in blog.feed_formats
+                for format in blog.archive_feed_formats
             )
         
         return sources
