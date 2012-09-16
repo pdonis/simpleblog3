@@ -1,0 +1,12 @@
+<item>
+   <title>{title}</title>
+   <guid isPermaLink="false">{cachekey}</guid>
+   <link>{root_url}{urlpath}.html</link>
+   <description><![CDATA[
+<div>
+{body}
+</div>
+]]></description>
+   <category domain="{root_url}">/{category}</category>
+   <pubDate>{timestamp_rss}</pubDate>
+</item>

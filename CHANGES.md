@@ -12,6 +12,9 @@ also added support for long names.
 Added support for archived feeds per RFC 5005. Only Atom feeds are
 archived (RSS doesn't appear to support this).
 
+Template files for feeds now have defaults in the ``simpleblog``
+package, so you do not need to define them yourself.
+
 Feed link templates are now loaded from template files.
 
 Markdown output format and "pretty-printing" of output are now

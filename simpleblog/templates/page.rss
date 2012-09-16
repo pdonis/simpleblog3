@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="{blog_encoding}" ?>
+<?xml-stylesheet type="text/css" href="{blog_root_url}{blog_feed_stylesheet_url}" ?>
+<rss version="2.0">
+<channel>
+   <title>{blog_title}</title>
+   <link>{blog_root_url}</link>
+   <description>{blog_description}</description>
+   <language>{blog_language_rss}</language>
+   <copyright>{blog_copyright}</copyright>
+   <pubDate>{page_timestamp_rss}</pubDate>
+   <managingEditor>{blog_email} ({blog_author})</managingEditor>
+   <generator>{sys_gen_name} {sys_gen_uri} {sys_gen_version}</generator>
+{page_entries}
+</channel>
+</rss>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="{blog_encoding}"?>
+<?xml-stylesheet type="text/css" href="{blog_root_url}{blog_feed_stylesheet_url}" ?>
+
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+
+<title type="text">{blog_title}</title>
+<subtitle type="text">
+{blog_description}
+</subtitle>
+<id>{blog_root_url}{blog_atom_url}</id>
+<link rel="alternate" type="text/html" href="{blog_root_url}/" />
+<link rel="self" type="application/atom+xml" href="{blog_root_url}{blog_atom_url}" />
+
+<author>
+<name>{blog_author}</name>
+<uri>{blog_root_url}</uri>
+<email>{blog_email}</email>
+</author>
+
+<rights>{blog_copyright}</rights>
+
+<generator uri="{sys_gen_uri}" version="{sys_gen_version}">
+{sys_gen_name} {sys_gen_uri} {sys_gen_version}
+</generator>
+
+<updated>{page_timestamp_atom}</updated>
+{page_archive_elements}
+{page_entries}
+
+</feed>

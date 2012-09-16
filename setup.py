@@ -82,6 +82,9 @@ setup(
         'simpleblog.commands',
         'simpleblog.extensions'
     ],
+    package_data={
+        'simpleblog': ["templates/*"]
+    },
     scripts=[
         'scripts/simpleblog-run'
     ]

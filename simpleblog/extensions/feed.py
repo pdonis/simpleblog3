@@ -179,15 +179,19 @@ class BlogCurrentFeedEntries(BlogEntries):
     
     @cached_method
     def archive_elements(self, format):
-        return universal_newline.join(
-            item for item in [
-                self.archive_elem,
-                self.archive_current(format)
-            ] + [
-                self.archive_rel(rel, format)
-                for rel in archive_rel_specs
-            ]
-            if item
+        return "{}{}{}".format(
+            universal_newline,
+            universal_newline.join(
+                item for item in [
+                    self.archive_elem,
+                    self.archive_current(format)
+                ] + [
+                    self.archive_rel(rel, format)
+                    for rel in archive_rel_specs
+                ]
+                if item
+            ),
+            universal_newline
         )
 
 
@@ -316,11 +320,11 @@ class FeedExtension(BlogExtension):
     def page_mod_attrs(self, page, attrs):
         if page.format in page.blog.feed_formats:
             t = max(entry.timestamp_utc for entry in page.entries)
-            if self.archive_feeds and (page.format in page.blog.archive_feed_formats):
+            if page.format in page.blog.archive_feed_formats:
                 attrs.update(
                     page_archive_elements=page.source.archive_elements(
                         page.format
-                    )
+                    ) if self.archive_feeds else ""
                 )
             if page.format == 'atom':
                 attrs.update(

@@ -8,6 +8,7 @@ See the LICENSE and README files for more information
 """
 
 import os
+import pkgutil
 from collections import defaultdict
 from datetime import datetime
 from functools import wraps
@@ -80,6 +81,9 @@ class BlogConfig(object):
 
 # BASE
 
+class BlogTemplateError(BlogError):
+    pass
+
 
 class BlogObject(object):
     """Base object for items managed by blog.
@@ -102,13 +106,24 @@ class BlogObject(object):
         return self.config.get('template_dir', "templates")
     
     @cached_method
+    def template_basename(self, kind, format):
+        return "{0}.{1}".format(kind, format)
+    
+    @cached_method
     def template_file(self, kind, format):
-        return os.path.join(self.template_dir, "{0}.{1}".format(kind, format))
+        return os.path.join(self.template_dir, self.template_basename(kind, format))
     
     @cached_method
     def template_data(self, kind, format):
-        with open(self.template_file(kind, format), 'rU') as f:
-            return f.read()
+        try:
+            with open(self.template_file(kind, format), 'rU') as f:
+                return f.read()
+        except IOError:
+            try:
+                return pkgutil.get_data('simpleblog',
+                    "templates/{}".format(self.template_basename(kind, format)))
+            except IOError:
+                raise BlogConfigError("template {}.{} not found".format(kind, format))
 
 
 extension_types = {}
