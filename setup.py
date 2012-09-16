@@ -24,11 +24,11 @@ def h3_underline(line, underline='~'):
     return "{}\n".format(underline * len(line))
 
 
-def make_readme(filename="README.md"):
-    with open(filename, 'rU') as f:
+def rst_from_md(basename):
+    with open("{}.md".format(basename), 'rU') as f:
         lines = f.readlines()
     outlines = [
-        "**README** for SIMPLEBLOG {}\n".format(version),
+        "**{}** for SIMPLEBLOG {}\n".format(basename, version),
         "\n",
         ":Author:        Peter A. Donis\n",
         ":Release Date:  {}\n".format(datetime.now().strftime("%d %b %Y"))
@@ -40,8 +40,12 @@ def make_readme(filename="README.md"):
         outlines.append(line)
         if is_h3line:
             outlines.append(h3_underline(line))
-    with open("README", 'w') as f:
+    with open(basename, 'w') as f:
         f.writelines(outlines)
+
+
+for basename in ("CHANGES", "README"):
+    rst_from_md(basename)
 
 
 def long_description(filename="README"):
@@ -52,8 +56,6 @@ def long_description(filename="README"):
         islice(lines, 5, None)
     ))
 
-
-make_readme()
 
 setup(
     name="simpleblog",
