@@ -13,7 +13,7 @@ from itertools import islice, takewhile
 from distutils.core import setup
 
 
-version = "0.1"
+version = "0.2"
 
 h3_prefix = '### '
 
@@ -48,12 +48,12 @@ for basename in ("CHANGES", "README"):
     rst_from_md(basename)
 
 
-def long_description(filename="README"):
+def long_description(filename="README", startline=5, endspec="Copyright and License"):
     with open(filename, 'rU') as f:
         lines = f.readlines()
     return "".join(takewhile(
-        lambda line: not line.startswith("Copyright and License"),
-        islice(lines, 5, None)
+        lambda line: not line.startswith(endspec),
+        islice(lines, startline, None)
     ))
 
 
@@ -76,8 +76,7 @@ setup(
         "Programming Language :: Python"
     ],
     requires=[
-        'plib (>=0.8.1)',
-        'yaml'
+        'plib (>=0.8.1)'
     ],
     packages=[
         'simpleblog',
