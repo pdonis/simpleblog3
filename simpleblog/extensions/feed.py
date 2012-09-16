@@ -83,7 +83,7 @@ archive_marker = "<fh:archive />"
 
 archive_current_tmpl = '<link rel="current" href="{}/index.{}" />'
 
-archive_rel_tmpl = """<link rel="{}-archive" href="{}{}.{}" />"""
+archive_rel_tmpl = """<link rel="{}-archive" href="{}{}{}.{}" />"""
 
 archive_rel_specs = ('prev', 'next')
 
@@ -107,12 +107,12 @@ class BlogCurrentFeedEntries(BlogEntries):
         self.prev_args = arglist[i - 1] if i > 0 else None
         self.next_args = arglist[i + 1] if i < (len(arglist) - 2) else None
         
-        self.title = self.argstr(*args)
+        self.title = self.argstr('-', *args)
         self.heading = "Feed Archive: {}".format(self.title)
     
     @cached_method
-    def argstr(self, *args):
-        return '-'.join(
+    def argstr(self, sep, *args):
+        return sep.join(
             str(arg).rjust(2, '0') for arg in args
         )
     
@@ -126,9 +126,18 @@ class BlogCurrentFeedEntries(BlogEntries):
             if self.entry_match(entry):
                 yield entry
     
+    @cached_property
+    def archive_feed_dirs(self):
+        return self.config.get('archive_feed_dirs', False)
+    
     @cached_method
     def args_urlshort(self, *args):
-        return "/{}".format(self.argstr(*args))
+        if self.archive_feed_dirs:
+            sep = suffix = '/'
+        else:
+            sep = '-'
+            suffix = ''
+        return "/{}{}".format(self.argstr(sep, *args), suffix)
     
     @cached_property
     def archive_elem(self):
@@ -149,6 +158,7 @@ class BlogCurrentFeedEntries(BlogEntries):
                 rel,
                 self.blog.metadata['root_url'],
                 self.args_urlshort(*args),
+                "index" if self.archive_feed_dirs else "",
                 format
             )
         return ""
@@ -178,9 +188,9 @@ class BlogArchiveFeedEntries(BlogCurrentFeedEntries):
         return self.args_urlshort(*self.args)
     
     def _get_urlpath(self):
-        if self.urlshort is not None:
+        if (not self.archive_feed_dirs) and (self.urlshort is not None):
             return self.urlshort
-        raise NotImplementedError
+        return super(BlogArchiveFeedEntries, self)._get_urlpath()
 
 
 template_rss = "{0}, {1.day:02d} {2} {1.year} {1.hour:02d}:{1.minute:02d} GMT"
