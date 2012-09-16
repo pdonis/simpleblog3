@@ -15,7 +15,8 @@ archived (RSS doesn't appear to support this).
 Template files for feeds now have defaults in the ``simpleblog``
 package, so you do not need to define them yourself.
 
-Feed link templates are now loaded from template files.
+Feed link templates are now loaded from template files instead of
+being hard-coded in the Python source.
 
 Markdown output format and "pretty-printing" of output are now
 configurable.
