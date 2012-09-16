@@ -392,9 +392,6 @@ class BlogEntries(BlogObject):
     multisource = None
     urlshort = None
     
-    def __init__(self, blog):
-        BlogObject.__init__(self, blog)
-    
     @cached_property
     def entry_sort_key(self):
         return self.config.get('entry_sort_key', 'timestamp')
@@ -575,8 +572,8 @@ class Blog(BlogObject):
             for name in self.filter_entries(self.entries_dir)
         ]
     
-    @extendable_property()
-    def index_entries(self):
+    @extendable_method()
+    def index_entries(self, format):
         return BlogIndex(self)
     
     @cached_property
@@ -591,7 +588,7 @@ class Blog(BlogObject):
     def sources(self):
         
         return [
-            (self.index_entries, format)
+            (self.index_entries(format), format)
             for format in self.index_formats
         ] + [
             (entry, format)

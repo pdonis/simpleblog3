@@ -11,12 +11,13 @@ See the LICENSE and README files for more information
 import re
 import time as _time
 from datetime import tzinfo, timedelta, datetime
+from itertools import groupby
 
-from plib.stdlib.decotools import cached_property
+from plib.stdlib.decotools import cached_property, cached_method
 from plib.stdlib.localize import weekdayname, monthname
 from plib.stdlib.strings import universal_newline
 
-from simpleblog import extendable_property
+from simpleblog import extendable_property, BlogEntries
 from simpleblog.extensions import BlogExtension
 
 
@@ -76,6 +77,110 @@ class LocalTimezone(tzinfo):
 tz_utc = UTC()
 
 tz_local = LocalTimezone()
+
+
+archive_marker = "<fh:archive />"
+
+archive_current_tmpl = '<link rel="current" href="{}/index.{}" />'
+
+archive_rel_tmpl = """<link rel="{}-archive" href="{}{}.{}" />"""
+
+archive_rel_specs = ('prev', 'next')
+
+
+class BlogCurrentFeedEntries(BlogEntries):
+    """Current syndication feed entries.
+    """
+    
+    urlshort = "/"
+    
+    is_current_feed = True
+    
+    def __init__(self, blog, arglist, *args):
+        BlogEntries.__init__(self, blog)
+        self.arglist = arglist
+        self.args = args
+        self.argindex = i = arglist.index(args)
+        
+        assert self.is_current_feed == (i == (len(arglist) - 1))
+        
+        self.prev_args = arglist[i - 1] if i > 0 else None
+        self.next_args = arglist[i + 1] if i < (len(arglist) - 2) else None
+        
+        self.title = self.argstr(*args)
+        self.heading = "Feed Archive: {}".format(self.title)
+    
+    @cached_method
+    def argstr(self, *args):
+        return '-'.join(
+            str(arg).rjust(2, '0') for arg in args
+        )
+    
+    @cached_method
+    def entry_match(self, entry):
+        t = entry.timestamp
+        return (t.year, t.month, t.day)[:len(self.args)] == self.args
+    
+    def _get_entries(self):
+        for entry in self.blog.all_entries:
+            if self.entry_match(entry):
+                yield entry
+    
+    @cached_method
+    def args_urlshort(self, *args):
+        return "/{}".format(self.argstr(*args))
+    
+    @cached_property
+    def archive_elem(self):
+        return "" if self.is_current_feed else archive_marker
+    
+    @cached_method
+    def archive_current(self, format):
+        return archive_current_tmpl.format(
+            self.blog.metadata['root_url'],
+            format
+        ) if not self.is_current_feed else ""
+    
+    @cached_method
+    def archive_rel(self, rel, format):
+        args = getattr(self, '{}_args'.format(rel), None)
+        if args:
+            return archive_rel_tmpl.format(
+                rel,
+                self.blog.metadata['root_url'],
+                self.args_urlshort(*args),
+                format
+            )
+        return ""
+    
+    @cached_method
+    def archive_elements(self, format):
+        return universal_newline.join(
+            item for item in [
+                self.archive_elem,
+                self.archive_current(format)
+            ] + [
+                self.archive_rel(rel, format)
+                for rel in archive_rel_specs
+            ]
+            if item
+        )
+
+
+class BlogArchiveFeedEntries(BlogCurrentFeedEntries):
+    """Feed archive entries.
+    """
+    
+    is_current_feed = False
+    
+    @cached_property
+    def urlshort(self):
+        return self.args_urlshort(*self.args)
+    
+    def _get_urlpath(self):
+        if self.urlshort is not None:
+            return self.urlshort
+        raise NotImplementedError
 
 
 template_rss = "{0}, {1.day:02d} {2} {1.year} {1.hour:02d}:{1.minute:02d} GMT"
@@ -150,6 +255,10 @@ class FeedExtension(BlogExtension):
     entry_mixin = FeedEntryMixin
     blog_mixin = FeedBlogMixin
     
+    @cached_property
+    def archive_feeds(self):
+        return self.config.get('archive_feeds', None)
+    
     def entry_mod_body(self, entry, body, format, params):
         if format in entry.blog.feed_formats:
             return fixup_relative_links(body, entry.blog.metadata['root_url'])
@@ -175,23 +284,30 @@ class FeedExtension(BlogExtension):
         return attrs
     
     def page_mod_attrs(self, page, attrs):
-        t = page.blog.metadata['feed_timestamp']
-        if 'atom' in page.blog.feed_formats:
-            attrs.update(
-                sys_timestamp_atom=atom_format(t)
-            )
-        if 'rss' in page.blog.feed_formats:
-            language = page.blog.metadata['language']
-            try:
-                country = page.blog.metadata['country'].lower()
-            except KeyError:
-                pass
-            else:
-                language = '-'.join([language, country])
-            attrs.update(
-                sys_timestamp_rss=rss_format(t),
-                blog_language_rss=language
-            )
+        if page.format in page.blog.feed_formats:
+            t = max(entry.timestamp_utc for entry in page.entries)
+            if self.archive_feeds:
+                attrs.update(
+                    page_archive_elements=page.source.archive_elements(
+                        page.format
+                    )
+                )
+            if page.format == 'atom':
+                attrs.update(
+                    page_timestamp_atom=atom_format(t)
+                )
+            if page.format == 'rss':
+                language = page.blog.metadata['language']
+                try:
+                    country = page.blog.metadata['country'].lower()
+                except KeyError:
+                    pass
+                else:
+                    language = '-'.join([language, country])
+                attrs.update(
+                    page_timestamp_rss=rss_format(t),
+                    blog_language_rss=language
+                )
         return attrs
     
     def blog_mod_required_metadata(self, blog, data):
@@ -205,14 +321,43 @@ class FeedExtension(BlogExtension):
                 rss_title="RSS",
                 rss_url="/index.rss"
             )
-        if 'atom' in blog.index_formats:
+        if 'atom' in blog.feed_formats:
             data.update(
                 atom_title="Atom",
                 atom_url="/index.atom",
             )
         return data
     
+    @cached_method
+    def archive_feed_args(self, blog):
+        eattrs = ('year', 'month', 'day')
+        eattrs = eattrs[:eattrs.index(self.archive_feeds) + 1]
+        return [
+            groupkey for groupkey, _ in groupby(
+                sorted(e.timestamp for e in blog.all_entries),
+                lambda t: tuple(
+                    getattr(t, attrname) for attrname in eattrs
+                )
+            )
+        ]
+    
+    @cached_method
+    def current_feed_entries(self, blog):
+        arglist = self.archive_feed_args(blog)
+        return BlogCurrentFeedEntries(blog, arglist, *arglist[-1])
+    
+    @cached_method
+    def archive_feed_entries(self, blog, *args):
+        arglist = self.archive_feed_args(blog)
+        return BlogArchiveFeedEntries(blog, arglist, *args)
+    
+    def blog_mod_index_entries(self, blog, entries, format):
+        if self.archive_feeds and (format in blog.feed_formats):
+            return self.current_feed_entries(blog)
+        return entries
+    
     def blog_mod_sources(self, blog, sources):
+        
         feedlinks = []
         if 'rss' in blog.feed_formats:
             feedlinks.append(
@@ -223,7 +368,13 @@ class FeedExtension(BlogExtension):
                 blog.feedlink_template_atom.format(**blog.metadata)
             )
         blog.metadata['feed_links'] = universal_newline.join(feedlinks)
-        blog.metadata['feed_timestamp'] = max(
-            entry.timestamp_utc for entry in blog.all_entries
-        )
+        
+        if self.archive_feeds:
+            arglist = self.archive_feed_args(blog)
+            sources.extend(
+                (self.archive_feed_entries(blog, *args), format)
+                for args in arglist[:-1]
+                for format in blog.feed_formats
+            )
+        
         return sources
