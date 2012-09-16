@@ -4,7 +4,9 @@ Simpleblog Change Log
 Version 0.2
 -----------
 
-JSON format is now supported for config and blog metadata files.
+JSON format is now supported for config and blog metadata files,
+so the PyYAML package is no longer required (though it will still
+be used if it is available).
 
 Weekday and month names are now localized using the current locale;
 also added support for long names.
