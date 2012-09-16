@@ -14,7 +14,7 @@ from datetime import tzinfo, timedelta, datetime
 from itertools import groupby
 
 from plib.stdlib.decotools import cached_property, cached_method
-from plib.stdlib.localize import weekdayname, monthname
+from plib.stdlib.localize import weekdayname, monthname, monthname_long
 from plib.stdlib.strings import universal_newline
 
 from simpleblog import extendable_property, BlogEntries
@@ -110,8 +110,22 @@ class BlogCurrentFeedEntries(BlogEntries):
         self.title = self.argstr('-', *args)
         self.heading = "Feed Archive: {}".format(self.title)
     
+    @cached_property
+    def archive_use_monthnames(self):
+        return self.config.get('archive_use_monthnames', False)
+    
+    @cached_property
+    def archive_long_monthnames(self):
+        return self.config.get('archive_long_monthnames', False)
+    
     @cached_method
     def argstr(self, sep, *args):
+        if (len(args) > 1) and self.archive_use_monthnames:
+            arg1 = (
+                monthname_long(args[1]) if self.archive_long_monthnames
+                else monthname(args[1])
+            )
+            args = (args[0], arg1) + args[2:]
         return sep.join(
             str(arg).rjust(2, '0') for arg in args
         )
