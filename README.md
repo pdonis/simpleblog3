@@ -30,13 +30,14 @@ subdirectory, which give extremely plain HTML pages by default.
 
 Note that in order to use ``simpleblog``, you will need to have
 installed ``plib`` (my library of useful Python stuff, which is
-used in a number of places in ``simpleblog``). If you want to
-use YAML instead of JSON for your config and blog metadata files
-(I certainly find YAML much easier to type since I hate typing
-delimiters, as you will know if you read my blog), you will also
-need to have installed PyYAML, the YAML parsing library for
-Python (which in my opinion should be in the Python standard
-library).
+used in a number of places in ``simpleblog``). It is available
+from the Python Package Index at http://pypi.python.org/pypi/plib.
+If you want to use YAML instead of JSON for your config and blog
+metadata files (I certainly find YAML much easier to type since
+I hate typing delimiters, as you will know if you read my blog),
+you will also need to have installed PyYAML, the YAML parsing
+library for Python (which in my opinion should be in the Python
+standard library).
 
 Simpleblog's Architecture
 -------------------------
