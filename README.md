@@ -212,14 +212,16 @@ implemented, but more are on the To Do list:
 To Do
 -----
 
-Add a command for publishing your blog via SSH (I do this now with
-a shell script, but doing it in Python would allow some enhancements
-that aren't easy in shell).
+Add an extension to allow pagination of index pages.
 
 Add support for having extension and command files available
 in other places besides the simpleblog sub-packages. This will
 allow you to write your own and use them without having to mess
 with the simpleblog installation itself.
+
+Add a command for publishing your blog via SSH (I do this now with
+a shell script, but doing it in Python would allow some enhancements
+that aren't easy in shell).
 
 Add fancier example blogs to show how the various extensions work.
 
