@@ -6,42 +6,42 @@ and publish my own blog at http://blog.peterdonis.com. I wrote
 it because I couldn't find an existing blogging system that made
 it sufficiently easy to write, format, and publish my blog.
 
-My chief goal with simpleblog is for the system to stay out of
-my way; I want to be able to add features easily, but other than
-when I'm actually doing that, I want simpleblog to "just work",
-so I don't even have to think about it at all. That way I can
-think about what I'm writing instead. With the existing systems
-I've tried, I have ended up spending too much time figuring out
-the internals of the system in order to get things the way I
-want them. Admittedly, I have not tried many existing systems;
-but what I have read about the ones I haven't tried has not
-encouraged me that any of them would work any better for me. So
-here we are.
+My chief goal with ``simpleblog`` is for the system to stay out
+of my way; I want to be able to add features easily, but other
+than when I'm actually doing that, I want simpleblog to "just
+work", so I don't even have to think about it at all. That way
+I can think about what I'm writing instead. With the existing
+systems I've tried, I have ended up spending too much time
+figuring out the internals of the system in order to get things
+the way I want them. Admittedly, I have not tried many existing
+systems; but what I have read about the ones I haven't tried
+has not encouraged me that any of them would work any better
+for me. So here we are.
 
-If you just want to start using simpleblog, without digging into
-its internal details, then once you've installed it, you can
-copy the contents of the ``example`` directory to a directory of
+If you just want to start using ``simpleblog``, without digging
+into its internal details, then once you've installed it, you can
+copy the contents of one of the example blogs to a directory of
 your choice, and start writing your blog there. The layout of
-the example blog, and the files in it, will give you a good start.
+the example blogs, and the files in them, will give you a start.
 Before writing any entries, you will want to at least edit the
-``blog.yaml`` file to customize your blog's metadata, and the
-template files in the ``templates`` subdirectory, which give
-extremely plain HTML pages by default.
+``blog.json`` or ``blog.yaml`` file to customize your blog's
+metadata, and the template files in the ``templates``
+subdirectory, which give extremely plain HTML pages by default.
 
-Note that in order to use simpleblog, you will need to have
+Note that in order to use ``simpleblog``, you will need to have
 installed ``plib`` (my library of useful Python stuff, which is
-used in a number of places in simpleblog) and PyYAML, the YAML
-parsing library for Python (which in my opinion should be in the
-Python standard library). I could have used JSON (which *is* in
-the Python standard library) as the default language for the
-config and blog metadata files, but I hate typing delimiters
-(as you'll know if you read my blog); however, adding JSON
-support is on the To Do list (see below).
+used in a number of places in ``simpleblog``). If you want to
+use YAML instead of JSON for your config and blog metadata files
+(I certainly find YAML much easier to type since I hate typing
+delimiters, as you will know if you read my blog), you will also
+need to have installed PyYAML, the YAML parsing library for
+Python (which in my opinion should be in the Python standard
+library).
 
 Simpleblog's Architecture
 -------------------------
 
-The structure of simpleblog is simple (no, that wasn't intended
+The structure of ``simpleblog`` is simple (no, that wasn't intended
 to be humor, it's just the way it naturally came out). There
 are five core object types: the config, the blog, pages, containers,
 and entries. The config lets you define or customize the internal
@@ -50,9 +50,9 @@ to it. The other object types fall into a simple hierarchy:
 
 - The blog contains one or more pages, plus metadata which can be
   specified in a separate file from the config file (the default
-  filenames are ``blog.yaml`` and ``config.yaml``, but other
-  filenames can be passed on the command line to the ``simpleblog-run``
-  script--see below);
+  filenames are ``blog.yaml`` (or ``blog.json``) and ``config.yaml``
+  (or ``config.json``), but other filenames can be passed on the
+  command line to the ``simpleblog-run`` script--see below);
 
 - Each page wraps a "source", which can be either a single entry,
   or a container;
@@ -76,7 +76,7 @@ have a simple blog, which is part of the point.)
 ### Templates
 
 Simpleblog uses Python's built-in string templating and formatting
-to render entries and pages. The example blog illustrates the
+to render entries and pages. The example blogs illustrate the
 basics of how this works. This is one area where I do *not* have
 any items on my To Do list; the various fancy templating engines
 out there have their uses for highly dynamic web applications,
@@ -112,7 +112,11 @@ give good examples of how the extension mechanism can be used:
 - The ``feed`` extension generates feeds for your blog. Both
   RSS 2.0 and Atom feeds are supported. Currently only your
   blog's index page will have a feed generated, but extending
-  that is on the To Do list (see below).
+  that is on the To Do list (see below). This extension also
+  supports archived feeds per RFC 5005 (this only works for
+  Atom feeds since the RSS spec does not appear to support
+  this), which lets you limit the size of your syndication
+  feed file by archiving old entries.
 
 - The ``folding`` extension allows your entries to have "short"
   versions that can appear in index pages, with links to the
@@ -149,7 +153,9 @@ give good examples of how the extension mechanism can be used:
   to be plain text using Markdown syntax; the extension then
   renders it into HTML. (Without any extension changing the
   rendering, simpleblog just uses your entry source unchanged
-  as its rendered HTML.)
+  as its rendered HTML.) There are config options to specify
+  the output format for Markdown (the default is HTML 4) and
+  to "pretty print" the output.
 
 - The ``tags`` extension allows you to add tags to your entries,
   and adds a container and index page for each tag. This extension
@@ -168,13 +174,13 @@ give good examples of how the extension mechanism can be used:
   path, which is probably not what you want.)
 
 Note that in some cases the order in which extensions are declared
-in your ``config.yaml`` file matters. The order in which extensions
-are listed in ``config.yaml`` determines the order in which they
-are loaded, which determines the order in which they get to process
-whatever data they are processing, which can obviously make a
-difference if multiple extensions process the same data. The cases
-you are most likely to encounter are extensions that process the
-raw entry source data (the ``title``, ``tags``, and ``folding``
+in your config file matters. The order in which extensions are
+listed in the config determines the order in which they are loaded,
+which determines the order in which they get to process whatever
+data they are processing, which can obviously make a difference
+if multiple extensions process the same data. The cases you are
+most likely to encounter are extensions that process the raw
+entry source data (the ``title``, ``tags``, and ``folding``
 extensions all do, and the ordering that is known to work is the
 order in which I just gave them), and extensions that add sources
 in the form of new containers (the ``archives``, ``categories``,
