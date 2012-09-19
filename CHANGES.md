@@ -1,6 +1,12 @@
 Simpleblog Change Log
 =====================
 
+Version 0.3
+-----------
+
+Simpleblog now uses the ``setuputils`` helper module to automate
+away the boilerplate in its ``setup.py`` script.
+
 Version 0.2
 -----------
 
