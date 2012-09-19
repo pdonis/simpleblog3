@@ -187,25 +187,36 @@ def pypi_url(varmap):
     return "http://pypi.python.org/pypi/{}".format(varmap['name'])
 
 
+def provides(varmap):
+    """Return a minimal ``provides`` list from the setup vars.
+    """
+    
+    try:
+        return ["{} ({})".format(varmap['name'], varmap['version'])]
+    except KeyError:
+        return [varmap['name']]
+
+
 def add_vars(varmap):
-    """Automate adding ``long_description`` and ``url`` setup vars.
+    """Automate adding ``long_description``, ``url``, and ``provides`` setup vars.
     """
     
     if 'long_description' not in varmap:
         varmap['long_description'] = long_description(varmap)
     if 'url' not in varmap:
         varmap['url'] = pypi_url(varmap)
+    if 'provides' not in varmap:
+        varmap['provides'] = provides(varmap)
 
 
-def convert_lists(varmap, listnames=('classifiers', 'requires')):
+def convert_lists(varmap,
+                  listnames=('classifiers', 'requires', 'provides', 'obsoletes')):
     """Convert long strings to lists of strings.
     
     Allows variable names in ``listnames`` to be specified as
     long strings instead of lists, for easier typing. The
     ``license_map`` and ``devstatus_trove`` strings below give
     examples of the kind of long strings that can be used.
-    By default the ``classifiers`` and ``requires`` setup vars
-    are the ones converted.
     """
     
     listnames = varmap.get('listnames', listnames)
@@ -779,7 +790,9 @@ distutils_keywords = dict(
     data_files=list,
     package_dir=str,
     package_data=dict,
-    requires=list
+    requires=list,
+    provides=list,
+    obsoletes=list
 )
 
 
