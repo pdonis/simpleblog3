@@ -623,8 +623,7 @@ class Blog(BlogObject):
         ]
 
 
-# COMMANDS
-
+# INITIALIZATION
 
 def first_subclass(o, c):
     """Return first object in o that is a subclass of c
@@ -672,37 +671,3 @@ def load_blog(opts):
     initialize(config)
     blog = extension_types['blog'](config, opts.blogfile)
     return config, blog
-
-
-class BlogCommandError(BlogError):
-    pass
-
-
-global_optlist = (
-    ("-c", "--configfile",
-        { 'help': "the configuration file name" }
-    ),
-    ("-b", "--blogfile",
-        { 'help': "the blog metadata file name" }
-    )
-)
-
-
-def run(cmdname, opts, result=None, remaining=None):
-    from simpleblog.commands import BlogCommand
-    mod, klass = load_sub("command", cmdname,
-        BlogCommandError, BlogCommand)
-    
-    optlist = klass.options or ()
-    arglist = klass.arguments or ()
-    description = klass.description
-    epilog = klass.epilog
-    if optlist or arglist or remaining:
-        from plib.stdlib.options import parse_options
-        copts, cargs = parse_options(
-            optlist, arglist, description, epilog, remaining, result
-        )
-    
-    cmd = klass(copts, cargs)
-    config, blog = load_blog(opts)
-    cmd.run(config, blog)

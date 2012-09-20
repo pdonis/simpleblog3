@@ -8,8 +8,15 @@ Released under the GNU General Public License, Version 2
 See the LICENSE and README files for more information
 """
 
-from simpleblog import global_optlist, run
 
+global_optlist = (
+    ("-c", "--configfile",
+        { 'help': "the configuration file name" }
+    ),
+    ("-b", "--blogfile",
+        { 'help': "the blog metadata file name" }
+    )
+)
 
 global_arglist = (
     ("command", { 'nargs': "?", 'default': "" }),
@@ -26,6 +33,7 @@ if __name__ == '__main__':
     
     cmd = args.command
     if cmd:
+        from simpleblog.run import run
         run(cmd, opts, result, remaining)
     else:
         from simpleblog import *
