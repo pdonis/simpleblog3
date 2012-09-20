@@ -62,11 +62,10 @@ from functools import partial
 from itertools import chain, dropwhile, islice, izip, takewhile
 
 
-h3_prefix = '### '
-
-
-def h3_underline(line, underline='~'):
-    """Convert a Markdown h3 to an RST level 3 underlined heading.
+def underline(line, underline='~'):
+    """Return an underline string for ``line``.
+    
+    Intended for use with level 3 and lower headings.
     
     Note that the default for ``underline`` assumes that the level
     1 and 2 underlines are the standard ``=`` and ``-``. You can
@@ -76,6 +75,9 @@ def h3_underline(line, underline='~'):
     if line.endswith('\n'):
         line = line[:-1]
     return "{}\n".format(underline * len(line))
+
+
+h3_prefix = '### '
 
 
 def _rst_from_md(basename, template=None, startline=None, **kwds):
@@ -102,7 +104,7 @@ def _rst_from_md(basename, template=None, startline=None, **kwds):
             line = line[len(h3_prefix):]
         outlines.append(line)
         if is_h3line:
-            outlines.append(h3_underline(line))
+            outlines.append(underline(line))
     with open(basename, 'w') as f:
         f.writelines(outlines)
 
