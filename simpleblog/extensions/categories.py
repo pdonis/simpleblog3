@@ -42,15 +42,22 @@ class CategoryEntryMixin(object):
         return self._category
 
 
-def make_category_link(category):
-    return '<a href="/{0}/" title="Category">{0}</a>'.format(category)
-
-
 class CategoryExtension(BlogExtension):
     """Add category to entry and category pages to blog.
     """
     
     entry_mixin = CategoryEntryMixin
+    
+    @cached_property
+    def category_link_template(self):
+        return self.config.get('category_link_template',
+            '<a href="/{category}/">{category}</a>')
+    
+    def make_category_link(self, entry):
+        return self.category_link_template.format(
+            category=entry.category,
+            **entry.metadata
+        )
     
     def entry_get_name(self, entry):
         return entry._name
@@ -63,7 +70,7 @@ class CategoryExtension(BlogExtension):
         # Use entry.category instead of entry._category here and elsewhere
         # in case the property is extended elsewhere
         if entry.category:
-            link = make_category_link(entry.category)
+            link = self.make_category_link(entry)
         else:
             link = "(None)"
         entry.metadata.update(
