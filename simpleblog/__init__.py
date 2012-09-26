@@ -269,10 +269,20 @@ class BlogEntry(BlogObject):
     
     def __init__(self, blog, name):
         BlogObject.__init__(self, blog)
-        self.cachekey = self.name = name
-        self.urlpath = "/{}".format(name)
-        self.heading = "Single Entry"
+        self.cachekey = name
         self.metadata = {}
+    
+    @extendable_property()
+    def name(self):
+        return self.cachekey
+    
+    @extendable_property()
+    def urlpath(self):
+        return "/{}".format(self.cachekey)
+    
+    @extendable_property()
+    def heading(self):
+        return "Single Entry"
     
     @extendable_property()
     def title(self):

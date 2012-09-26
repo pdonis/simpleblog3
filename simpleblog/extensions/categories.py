@@ -13,6 +13,7 @@ import os
 from plib.stdlib.decotools import cached_property
 from plib.stdlib.ostools import subdirs
 
+from simpleblog import extendable_property
 from simpleblog.extensions import (BlogExtension,
     NamedEntries, get_links)
 
@@ -34,6 +35,13 @@ class BlogCategory(NamedEntries):
         ]
 
 
+class CategoryEntryMixin(object):
+    
+    @extendable_property()
+    def category(self):
+        return self._category
+
+
 def make_category_link(category):
     return '<a href="/{0}/" title="Category">{0}</a>'.format(category)
 
@@ -42,11 +50,18 @@ class CategoryExtension(BlogExtension):
     """Add category to entry and category pages to blog.
     """
     
+    entry_mixin = CategoryEntryMixin
+    
+    def entry_get_name(self, entry):
+        return entry._name
+    
     def entry_post_init(self, entry):
         # The category will be an empty string for entries in
         # the root entries dir instead of a subdir
-        entry.category, entry.name = os.path.split(entry.name)
+        entry._category, entry._name = os.path.split(entry.cachekey)
         
+        # Use entry.category instead of entry._category here and elsewhere
+        # in case the property is extended elsewhere
         if entry.category:
             link = make_category_link(entry.category)
         else:
