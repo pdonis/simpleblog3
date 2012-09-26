@@ -4,8 +4,14 @@ Simpleblog Change Log
 Version 0.3
 -----------
 
+All attributes of entry objects are now extendable except for
+``cachekey``, which needs to be hard-coded.
+
 Factored out ``simpleblog.run`` module for running commands, so
 unnecessary code is not loaded in the interactive shell.
+
+The template used for category links in the ``categories``
+extension is now configurable.
 
 Simpleblog now uses the ``setuputils`` helper module to automate
 away the boilerplate in its ``setup.py`` script.
