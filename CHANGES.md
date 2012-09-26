@@ -5,7 +5,9 @@ Version 0.3
 -----------
 
 All properties of entry objects are now either extendable or
-configurable except for ``cachekey``, which needs to be hard-coded.
+configurable except for ``cachekey``, which needs to be hard-coded,
+and ``source`` (see comments in the source code for discussion of
+that one).
 
 Factored out ``simpleblog.run`` module for running commands, so
 unnecessary code is not loaded in the interactive shell.
