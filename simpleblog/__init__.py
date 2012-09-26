@@ -296,7 +296,7 @@ class BlogEntry(BlogObject):
     def timestamp(self):
         return datetime.fromtimestamp(os.path.getmtime(self.filename))
     
-    @cached_property
+    @extendable_property()
     def timestamp_vars(self):
         t = self.timestamp
         return dict(
