@@ -4,8 +4,8 @@ Simpleblog Change Log
 Version 0.3
 -----------
 
-All attributes of entry objects are now extendable except for
-``cachekey``, which needs to be hard-coded.
+All properties of entry objects are now either extendable or
+configurable except for ``cachekey``, which needs to be hard-coded.
 
 Factored out ``simpleblog.run`` module for running commands, so
 unnecessary code is not loaded in the interactive shell.
