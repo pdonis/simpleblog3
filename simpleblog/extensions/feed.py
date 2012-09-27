@@ -9,72 +9,19 @@ See the LICENSE and README files for more information
 """
 
 import re
-import time as _time
-from datetime import tzinfo, timedelta, datetime
+from datetime import datetime
 from itertools import groupby
 
 from plib.stdlib.decotools import cached_property, cached_method
 from plib.stdlib.localize import weekdayname, monthname, monthname_long
 from plib.stdlib.strings import universal_newline
+from plib.stdlib.tztools import UTCTimezone, LocalTimezone
 
 from simpleblog import BlogMixin, extendable_property, BlogEntries
 from simpleblog.extensions import BlogExtension
 
 
-# TZINFO code cribbed from Python docs for datetime module
-
-ZERO = timedelta(0)
-HOUR = timedelta(hours=1)
-
-
-class UTC(tzinfo):
-    
-    def utcoffset(self, dt):
-        return ZERO
-    
-    def tzname(self, dt):
-        return "UTC"
-    
-    def dst(self, dt):
-        return ZERO
-
-
-STDOFFSET = timedelta(seconds = -_time.timezone)
-if _time.daylight:
-    DSTOFFSET = timedelta(seconds = -_time.altzone)
-else:
-    DSTOFFSET = STDOFFSET
-
-DSTDIFF = DSTOFFSET - STDOFFSET
-
-
-class LocalTimezone(tzinfo):
-
-    def utcoffset(self, dt):
-        if self._isdst(dt):
-            return DSTOFFSET
-        else:
-            return STDOFFSET
-
-    def dst(self, dt):
-        if self._isdst(dt):
-            return DSTDIFF
-        else:
-            return ZERO
-
-    def tzname(self, dt):
-        return _time.tzname[self._isdst(dt)]
-
-    def _isdst(self, dt):
-        tt = (dt.year, dt.month, dt.day,
-              dt.hour, dt.minute, dt.second,
-              dt.weekday(), 0, 0)
-        stamp = _time.mktime(tt)
-        tt = _time.localtime(stamp)
-        return tt.tm_isdst > 0
-
-
-tz_utc = UTC()
+tz_utc = UTCTimezone()
 
 tz_local = LocalTimezone()
 
