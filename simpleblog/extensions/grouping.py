@@ -13,19 +13,19 @@ from operator import attrgetter
 
 from plib.stdlib.decotools import cached_property
 
-from simpleblog import extendable_property, BlogEntry
+from simpleblog import BlogMixin, extendable_property, BlogEntry
 from simpleblog.extensions import BlogExtension
 
 
-class GroupingPageMixin(object):
+class GroupingPageMixin(BlogMixin):
     
-    @cached_property
-    def groupindex_key(self):
-        return self.blog.config.get('groupindex_key', 'groupindex')
-    
-    @cached_property
-    def group_key(self):
-        return self.blog.config.get('group_key', 'datestamp_formatted')
+    config_vars = dict(
+        groupindex_key='groupindex',
+        group_key='datestamp_formatted',
+        group_formats=dict(
+            vartype=set,
+            default=["html"])
+    )
     
     @extendable_property()
     def group_head_template(self):
@@ -34,10 +34,6 @@ class GroupingPageMixin(object):
     @extendable_property()
     def group_foot_template(self):
         return self.template_data("group", "foot")
-    
-    @cached_property
-    def group_formats(self):
-        return set(self.config.get('group_formats', ["html"]))
     
     def _get_format_entries(self):
         if self.format in self.group_formats:

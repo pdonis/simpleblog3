@@ -11,21 +11,21 @@ See the LICENSE and README files for more information
 from plib.stdlib.decotools import cached_property, cached_method
 from plib.stdlib.strings import universal_newline
 
-from simpleblog import (
+from simpleblog import (BlogMixin,
     extendable_property, extendable_method,
     noresult)
 from simpleblog.extensions import BlogExtension
 
 
-class FoldEntryMixin(object):
+class FoldEntryMixin(BlogMixin):
     
-    @cached_property
-    def fold_symbol(self):
-        return self.config.get('fold_symbol', "<!-- FOLD -->")
-    
-    @cached_property
-    def fold_inline(self):
-        return self.config.get('fold_inline', False)
+    config_vars = dict(
+        fold_symbol="<!-- FOLD -->",
+        fold_inline=False,
+        short_formats=dict(
+            vartype=set,
+            default=["html"])
+    )
     
     @extendable_property()
     def fold_marker(self):
@@ -42,10 +42,6 @@ class FoldEntryMixin(object):
         else:
             self._short = None
         return raw
-    
-    @cached_property
-    def short_formats(self):
-        return set(self.config.get('short_formats', ["html"]))
     
     @cached_method
     def has_short(self, format):
@@ -73,6 +69,13 @@ class FoldingExtension(BlogExtension):
     """Generate short version of entry for index pages.
     """
     
+    config_vars = dict(
+        max_index_full=dict(
+            vartype=lambda n: max(n - 1, 0),
+            varkey='max_full_entries',
+            default=1)
+    )
+    
     entry_mixin = FoldEntryMixin
     
     def page_mod_entry_params(self, page, params, entry):
@@ -80,10 +83,6 @@ class FoldingExtension(BlogExtension):
             index=page.entries.index(entry)
         )
         return params
-    
-    @cached_property
-    def max_index_full(self):
-        return max(self.config.get('max_full_entries', 1) - 1, 0)
     
     def entry_get_body(self, entry, format, params):
         if (params.index > self.max_index_full) and entry.has_short(format):

@@ -13,18 +13,16 @@ from markdown import markdown
 from plib.stdlib.decotools import cached_property
 from plib.stdlib.strings import universal_newline
 
+from simpleblog import BlogMixin
 from simpleblog.extensions import BlogExtension
 
 
-class MarkdownEntryMixin(object):
+class MarkdownEntryMixin(BlogMixin):
     
-    @cached_property
-    def output_format(self):
-        return self.config.get('markdown_format', "html4")
-    
-    @cached_property
-    def pretty_print(self):
-        return self.config.get('markdown_pretty', False)
+    config_vars = dict(
+        output_format=('markdown_format', "html4"),
+        pretty_print=('markdown_pretty', False)
+    )
     
     def _do_render(self, rawdata):
         html = markdown(rawdata, output_format=self.output_format)

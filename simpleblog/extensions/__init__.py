@@ -13,7 +13,7 @@ from plib.stdlib.decotools import cached_property, wraps_class
 from plib.stdlib.iters import prefixed_items
 from plib.stdlib.strings import universal_newline
 
-from simpleblog import (
+from simpleblog import (BlogConfigUser,
     extension_types, extension_map, extend_attributes,
     BlogEntries, universal_newline)
 
@@ -49,12 +49,12 @@ def get_links(containers, reverse=False):
     )
 
 
-class BlogExtension(object):
+class BlogExtension(BlogConfigUser):
     """Base class for extension mechanism.
     """
     
     def __init__(self, config):
-        self.config = config
+        BlogConfigUser.__init__(self, config)
         
         # Register this extension in the appropriate places
         attr_tmpl = '{}_'

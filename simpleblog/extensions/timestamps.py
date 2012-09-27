@@ -14,7 +14,7 @@ from functools import total_ordering
 
 from plib.stdlib.decotools import convert
 
-from simpleblog import extendable_property
+from simpleblog import BlogMixin, extendable_property
 from simpleblog.caching import cached
 from simpleblog.extensions import BlogExtension
 
@@ -79,7 +79,7 @@ class Timestamp(object):
 timestamps_file = BlogExtension.config.get('timestamps_file', "timestamps")
 
 
-class TimestampEntryMixin(object):
+class TimestampEntryMixin(BlogMixin):
     
     @extendable_property(
         cached(timestamps_file, reverse=True, objtype=Timestamp)

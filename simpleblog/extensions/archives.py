@@ -26,6 +26,15 @@ class BlogArchiveEntries(BlogEntries):
     """Archive of entries spanning a given time period.
     """
     
+    config_vars = dict(
+        prefix=('archives_prefix', ""),
+        archive_use_monthnames=False,
+        archive_long_monthnames=False,
+        archive_year_template="{year}",
+        archive_month_template="{year}-{monthkey}",
+        archive_day_template="{year}-{monthkey}-{day}"
+    )
+    
     sourcetype = 'archive'
     
     def __init__(self, blog, year, month=0, day=0):
@@ -64,30 +73,6 @@ class BlogArchiveEntries(BlogEntries):
         self.title = title_template.format(**vars(self))
         self.heading = "Archive: {}".format(self.title)
     
-    @cached_property
-    def prefix(self):
-        return self.config.get('archives_prefix', "")
-    
-    @cached_property
-    def archive_use_monthnames(self):
-        return self.config.get('archive_use_monthnames', False)
-    
-    @cached_property
-    def archive_long_monthnames(self):
-        return self.config.get('archive_long_monthnames', False)
-    
-    @cached_property
-    def archive_year_template(self):
-        return self.config.get('archive_year_template', "{year}")
-    
-    @cached_property
-    def archive_month_template(self):
-        return self.config.get('archive_month_template', "{year}-{monthkey}")
-    
-    @cached_property
-    def archive_day_template(self):
-        return self.config.get('archive_day_template', "{year}-{monthkey}-{day}")
-    
     def _get_entries(self):
         if self.month:
             if self.day:
@@ -100,29 +85,14 @@ class ArchivesExtension(BlogExtension):
     """Add blog archive pages.
     """
     
-    @cached_property
-    def archive_years(self):
-        return self.config.get('archive_years', False)
-    
-    @cached_property
-    def archive_months(self):
-        return self.config.get('archive_months', False)
-    
-    @cached_property
-    def archive_days(self):
-        return self.config.get('archive_days', False)
-    
-    @cached_property
-    def archive_link_years(self):
-        return self.config.get('archive_link_years', False)
-    
-    @cached_property
-    def archive_link_months(self):
-        return self.config.get('archive_link_months', False)
-    
-    @cached_property
-    def archive_link_days(self):
-        return self.config.get('archive_link_days', False)
+    config_vars = dict(
+        archive_years=False,
+        archive_months=False,
+        archive_days=False,
+        archive_link_years=False,
+        archive_link_months=False,
+        archive_link_days=False
+    )
     
     def blog_mod_sources(self, blog, sources):
         

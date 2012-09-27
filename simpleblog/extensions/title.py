@@ -11,14 +11,15 @@ See the LICENSE and README files for more information
 from plib.stdlib.decotools import cached_property
 from plib.stdlib.strings import universal_newline
 
+from simpleblog import BlogMixin
 from simpleblog.extensions import BlogExtension
 
 
-class TitleEntryMixin(object):
+class TitleEntryMixin(BlogMixin):
     
-    @cached_property
-    def title_separator(self):
-        return self.config.get('title_separator', universal_newline)
+    config_vars = dict(
+        title_separator=universal_newline
+    )
     
     def _do_load(self):
         raw = super(TitleEntryMixin, self)._do_load()

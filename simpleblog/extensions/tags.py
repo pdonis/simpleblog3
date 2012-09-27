@@ -11,7 +11,7 @@ See the LICENSE and README files for more information
 from plib.stdlib.decotools import cached_property, convert
 from plib.stdlib.strings import split_string, universal_newline
 
-from simpleblog import extendable_property
+from simpleblog import BlogMixin, extendable_property
 from simpleblog.caching import cached
 from simpleblog.extensions import (BlogExtension,
     NamedEntries, get_links)
@@ -58,13 +58,13 @@ class BlogTag(NamedEntries):
     """Entries matching a given tag.
     """
     
+    config_vars = dict(
+        prefix=('tags_prefix', "")
+    )
+    
     sourcetype = 'tag'
     multisource = 'tags'
     typename = "Tag"
-    
-    @cached_property
-    def prefix(self):
-        return self.config.get('tags_prefix', "")
     
     def _get_entries(self):
         return [
@@ -72,23 +72,20 @@ class BlogTag(NamedEntries):
         ]
 
 
-class TagsEntryMixin(object):
+class TagsEntryMixin(BlogMixin):
     
-    @extendable_property()
-    def tags_prefix(self):
-        return self.config.get('tags_prefix', "#tags ")
-    
-    @extendable_property()
-    def tags_suffix(self):
-        return self.config.get('tags_suffix', universal_newline)
+    config_vars = dict(
+        tags_marker="#tags ",
+        tags_end=universal_newline
+    )
     
     def _do_load(self):
         raw = super(TagsEntryMixin, self)._do_load()
         pre, mid, post = split_string(raw,
-            self.tags_prefix, self.tags_suffix, find_newlines=False)
+            self.tags_marker, self.tags_end, find_newlines=False)
         if pre and post:
             self._tagstr = mid
-            raw = ''.join([pre[:-len(self.tags_prefix)], post[len(self.tags_suffix):]])
+            raw = ''.join([pre[:-len(self.tags_marker)], post[len(self.tags_end):]])
         else:
             self._tagstr = ""
         return raw
@@ -105,11 +102,11 @@ class TagsExtension(BlogExtension):
     """Add tags to entry and tag pages to blog.
     """
     
-    entry_mixin = TagsEntryMixin
+    config_vars = dict(
+        tags_prefix=""
+    )
     
-    @cached_property
-    def tags_prefix(self):
-        return self.config.get('tags_prefix', "")
+    entry_mixin = TagsEntryMixin
     
     def entry_post_init(self, entry):
         entry.metadata.update(

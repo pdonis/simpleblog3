@@ -17,7 +17,7 @@ from plib.stdlib.decotools import cached_property, cached_method
 from plib.stdlib.localize import weekdayname, monthname, monthname_long
 from plib.stdlib.strings import universal_newline
 
-from simpleblog import extendable_property, BlogEntries
+from simpleblog import BlogMixin, extendable_property, BlogEntries
 from simpleblog.extensions import BlogExtension
 
 
@@ -92,6 +92,12 @@ class BlogCurrentFeedEntries(BlogEntries):
     """Current syndication feed entries.
     """
     
+    config_vars = dict(
+        archive_use_monthnames=False,
+        archive_long_monthnames=False,
+        archive_feed_dirs=False
+    )
+    
     urlshort = "/"
     
     is_current_feed = True
@@ -109,14 +115,6 @@ class BlogCurrentFeedEntries(BlogEntries):
         
         self.title = self.argstr('-', *args)
         self.heading = "Feed Archive: {}".format(self.title)
-    
-    @cached_property
-    def archive_use_monthnames(self):
-        return self.config.get('archive_use_monthnames', False)
-    
-    @cached_property
-    def archive_long_monthnames(self):
-        return self.config.get('archive_long_monthnames', False)
     
     @cached_method
     def argstr(self, sep, *args):
@@ -139,10 +137,6 @@ class BlogCurrentFeedEntries(BlogEntries):
         for entry in self.blog.all_entries:
             if self.entry_match(entry):
                 yield entry
-    
-    @cached_property
-    def archive_feed_dirs(self):
-        return self.config.get('archive_feed_dirs', False)
     
     @cached_method
     def args_urlshort(self, *args):
@@ -228,7 +222,7 @@ def atom_format(t):
     return template_atom.format(t)
 
 
-class FeedEntryMixin(object):
+class FeedEntryMixin(BlogMixin):
     
     @cached_property
     def timestamp_utc(self):
@@ -250,7 +244,7 @@ known_feed_formats = ["rss", "atom"]
 known_archive_feed_formats = ["atom"]
 
 
-class FeedBlogMixin(object):
+class FeedBlogMixin(BlogMixin):
     
     @extendable_property()
     def feed_formats(self):
@@ -286,12 +280,12 @@ class FeedExtension(BlogExtension):
     """Add RSS and Atom feed links to home page.
     """
     
+    config_vars = dict(
+        archive_feeds=None
+    )
+    
     entry_mixin = FeedEntryMixin
     blog_mixin = FeedBlogMixin
-    
-    @cached_property
-    def archive_feeds(self):
-        return self.config.get('archive_feeds', None)
     
     def entry_mod_body(self, entry, body, format, params):
         if format in entry.blog.feed_formats:

@@ -79,31 +79,94 @@ class BlogConfig(object):
             raise AttributeError
 
 
+def make_config_property(key, value):
+    """Return``cached_property`` for config setting.
+    
+    The ``key`` argument is the name of the property.
+    
+    The ``value`` argument is either a default value, or a
+    2-tuple ``(varkey, default)`` giving the key of the setting
+    in the config and the default value, or a dict with one or
+    more of the following keys: ``varkey``, ``default``,
+    ``vartype``, where ``vartype`` gives a type to which the
+    returned value will be coerced.
+    """
+    
+    if isinstance(value, dict):
+        vartype = value.get('vartype', None)
+        varkey = value.get('varkey', key)
+        default = value.get('default', None)
+    elif isinstance(value, tuple):
+        vartype = None
+        varkey, default = value
+    else:
+        vartype = None
+        varkey = key
+        default = value
+    if vartype is not None:
+        def fget(self):
+            return vartype(self.config.get(varkey, default))
+    else:
+        def fget(self):
+            return self.config.get(varkey, default)
+    fget.__name__ = key
+    return cached_property(fget)
+
+
+class BlogConfigUserMeta(type):
+    """Metaclass to automatically set up configurable attributes.
+    
+    We do this with a metaclass instead of a class decorator because
+    we want every subclass of ``BlogConfigUser`` to have configurable
+    attributes automatically set up, without requiring the programmer
+    to remember to decorate the class.
+    """
+    
+    def __init__(cls, name, bases, attrs):
+        super(BlogConfigUserMeta, cls).__init__(name, bases, attrs)
+        # Only do this for config vars declared in this class
+        vars = attrs.get('config_vars', {})
+        for key, value in vars.iteritems():
+            # The make_config_property function is factored out
+            # to ensure each closure it returns is "clean"
+            setattr(cls, key, make_config_property(key, value))
+
+
+class BlogConfigUser(object):
+    """Base class for objects that use a config.
+    """
+    
+    __metaclass__ = BlogConfigUserMeta
+    
+    def __init__(self, config):
+        self.config = config
+
+
 # BASE
+
+class BlogMixin(BlogConfigUser):
+    """All entry, page, and blog mixins in extensions must subclass this class.
+    """
+    pass
+
 
 class BlogTemplateError(BlogError):
     pass
 
 
-class BlogObject(object):
+class BlogObject(BlogConfigUser):
     """Base object for items managed by blog.
     """
     
+    config_vars = dict(
+        entries_dir="entries",
+        entry_ext=".html",
+        template_dir="templates"
+    )
+    
     def __init__(self, blog):
         self.blog = blog
-        self.config = self.blog.config
-    
-    @cached_property
-    def entries_dir(self):
-        return self.config.get('entries_dir', "entries")
-    
-    @cached_property
-    def entry_ext(self):
-        return self.config.get('entry_ext', ".html")
-    
-    @cached_property
-    def template_dir(self):
-        return self.config.get('template_dir', "templates")
+        self.config = self.blog.config  # don't need to call the superclass __init__
     
     @cached_method
     def template_basename(self, kind, format):
@@ -264,6 +327,11 @@ class BlogEntry(BlogObject):
     """Single blog entry.
     """
     
+    config_vars = dict(
+        timestamp_template="{hour:02d}:{minute:02d}",
+        datestamp_template="{year}-{month:02d}-{day:02d}"
+    )
+    
     sourcetype = 'entry'
     multisource = None
     
@@ -312,19 +380,9 @@ class BlogEntry(BlogObject):
             monthname_long=monthname_long(t.month)
         )
     
-    @cached_property
-    def timestamp_template(self):
-        return self.config.get('timestamp_template',
-            "{hour:02d}:{minute:02d}")
-    
     @extendable_property()
     def timestamp_formatted(self):
         return self.timestamp_template.format(**self.timestamp_vars)
-    
-    @cached_property
-    def datestamp_template(self):
-        return self.config.get('datestamp_template',
-            "{year}-{month:02d}-{day:02d}")
     
     @extendable_property()
     def datestamp_formatted(self):
@@ -413,17 +471,14 @@ class BlogEntries(BlogObject):
     """Container for a set of blog entries.
     """
     
+    config_vars = dict(
+        entry_sort_key='timestamp',
+        entry_sort_reversed=True
+    )
+    
     sourcetype = None
     multisource = None
     urlshort = None
-    
-    @cached_property
-    def entry_sort_key(self):
-        return self.config.get('entry_sort_key', 'timestamp')
-    
-    @cached_property
-    def entry_sort_reversed(self):
-        return self.config.get('entry_sort_reversed', True)
     
     @cached_property
     def entries(self):
@@ -488,6 +543,10 @@ class BlogPage(BlogObject):
     """Single page containing one or more entries.
     """
     
+    config_vars = dict(
+        no_entries=('no_entries_content', "<p>No entries found!</p>")
+    )
+    
     def __init__(self, blog, source, format):
         BlogObject.__init__(self, blog)
         self.source = source
@@ -516,10 +575,6 @@ class BlogPage(BlogObject):
     def _get_format_entries(self):
         for entry in self.entries:
             yield entry.formatted(self.format, self.entry_params(entry))
-    
-    @cached_property
-    def no_entries(self):
-        return self.config.get('no_entries_content', "<p>No entries found!</p>")
     
     @extendable_property()
     def body(self):
@@ -563,6 +618,15 @@ class Blog(BlogObject):
     """The entire blog.
     """
     
+    config_vars = dict(
+        index_formats=dict(
+            vartype=set,
+            default=["html"]),
+        entry_formats=dict(
+            vartype=set,
+            default=["html"])
+    )
+    
     def __init__(self, config, filename=None):
         self.blog = self
         self.config = config
@@ -600,14 +664,6 @@ class Blog(BlogObject):
     @extendable_method()
     def index_entries(self, format):
         return BlogIndex(self)
-    
-    @cached_property
-    def index_formats(self):
-        return set(self.config.get('index_formats', ["html"]))
-    
-    @cached_property
-    def entry_formats(self):
-        return set(self.config.get('entry_formats', ["html"]))
     
     @extendable_property()
     def sources(self):

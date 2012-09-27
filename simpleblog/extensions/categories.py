@@ -13,7 +13,7 @@ import os
 from plib.stdlib.decotools import cached_property
 from plib.stdlib.ostools import subdirs
 
-from simpleblog import extendable_property
+from simpleblog import BlogMixin, extendable_property
 from simpleblog.extensions import (BlogExtension,
     NamedEntries, get_links)
 
@@ -22,12 +22,12 @@ class BlogCategory(NamedEntries):
     """Category of blog entries.
     """
     
+    config_vars = dict(
+        prefix=('categories_prefix', "")
+    )
+    
     sourcetype = 'category'
     typename = "Category"
-    
-    @cached_property
-    def prefix(self):
-        return self.config.get('categories_prefix', "")
     
     def _get_entries(self):
         return [
@@ -35,7 +35,7 @@ class BlogCategory(NamedEntries):
         ]
 
 
-class CategoryEntryMixin(object):
+class CategoryEntryMixin(BlogMixin):
     
     @extendable_property()
     def category(self):
@@ -46,12 +46,11 @@ class CategoryExtension(BlogExtension):
     """Add category to entry and category pages to blog.
     """
     
-    entry_mixin = CategoryEntryMixin
+    config_vars = dict(
+        category_link_template='<a href="/{category}/">{category}</a>'
+    )
     
-    @cached_property
-    def category_link_template(self):
-        return self.config.get('category_link_template',
-            '<a href="/{category}/">{category}</a>')
+    entry_mixin = CategoryEntryMixin
     
     def make_category_link(self, entry):
         return self.category_link_template.format(
