@@ -9,6 +9,10 @@ configurable except for ``cachekey``, which needs to be hard-coded,
 and ``source`` (see comments in the source code for discussion of
 that one).
 
+Properties loaded from config settings can now be declared in a
+``config_vars`` class attribute, without having to write the
+boilerplate property definition code each time.
+
 Factored out ``simpleblog.run`` module for running commands, so
 unnecessary code is not loaded in the interactive shell.
 
