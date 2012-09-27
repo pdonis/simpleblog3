@@ -125,8 +125,7 @@ class BlogConfigUserMeta(type):
     def __init__(cls, name, bases, attrs):
         super(BlogConfigUserMeta, cls).__init__(name, bases, attrs)
         # Only do this for config vars declared in this class
-        vars = attrs.get('config_vars', {})
-        for key, value in vars.iteritems():
+        for key, value in attrs.get('config_vars', {}).iteritems():
             # The make_config_property function is factored out
             # to ensure each closure it returns is "clean"
             setattr(cls, key, make_config_property(key, value))
