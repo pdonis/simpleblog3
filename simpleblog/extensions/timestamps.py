@@ -36,7 +36,7 @@ class Timestamp(BlogConfigUser):
     
     config_vars = dict(
         utc_timestamps=False,
-        timestamps_cache_seconds=False
+        timestamp_cache_format="%Y-%m-%d-%H-%M"
     )
     
     datetime_attrs = (
@@ -54,7 +54,7 @@ class Timestamp(BlogConfigUser):
             self._datetime = data
         elif isinstance(data, basestring):
             # It's a string timestamp from the cache
-            self._datetime = datetime(*map(int, data.split('-')))
+            self._datetime = datetime.strptime(data, self.timestamp_cache_format)
         else:
             raise ValueError("{!r} is not a valid entry timestamp".format(data))
         for attr in self.datetime_attrs:
@@ -64,11 +64,7 @@ class Timestamp(BlogConfigUser):
         return "Timestamp: {!r}".format(self._datetime)
     
     def __str__(self):
-        dt = self._datetime
-        dt_fields = (dt.year, dt.month, dt.day, dt.hour, dt.minute)
-        if self.timestamps_cache_seconds:
-            dt_fields += (dt.second,)
-        return '-'.join('{:02d}'.format(i) for i in dt_fields)
+        return self._datetime.strftime(self.timestamp_cache_format)
     
     def __eq__(self, other):
         if isinstance(other, self.__class__):
