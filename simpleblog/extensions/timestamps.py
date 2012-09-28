@@ -29,9 +29,10 @@ class Timestamp(BlogConfigUser):
     DST transitions, etc. to be an issue. However, if you want to ensure
     that such issues won't arise, you can set the ``utc_timestamps``
     config to use UTC timestamps instead of platform local time. Also,
-    timestamps are normally cached only to the minute; if you want to
-    cache them to the second, set the ``timestamps_cache_seconds``
-    config.
+    the ``timestamp_cache_format`` config controls how timestamps are
+    converted to/from cache strings; this can be used to control how
+    accurately timestamps are cached (the default format caches with
+    accuracy to the minute).
     """
     
     config_vars = dict(
