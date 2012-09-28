@@ -327,6 +327,7 @@ class BlogEntry(BlogObject):
     """
     
     config_vars = dict(
+        utc_timestamps=False,
         timestamp_template="{hour:02d}:{minute:02d}",
         datestamp_template="{year}-{month:02d}-{day:02d}"
     )
@@ -361,7 +362,8 @@ class BlogEntry(BlogObject):
     
     @extendable_property()
     def timestamp(self):
-        return datetime.fromtimestamp(os.path.getmtime(self.filename))
+        tf = datetime.utcfromtimestamp if self.utc_timestamps else datetime.fromtimestamp
+        return tf(os.path.getmtime(self.filename))
     
     @extendable_property()
     def timestamp_vars(self):

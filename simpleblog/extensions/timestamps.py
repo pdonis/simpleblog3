@@ -14,24 +14,30 @@ from functools import total_ordering
 
 from plib.stdlib.decotools import convert
 
-from simpleblog import BlogMixin, extendable_property
+from simpleblog import BlogConfigUser, BlogMixin, extendable_property
 from simpleblog.caching import cached
 from simpleblog.extensions import BlogExtension
 
 
 @total_ordering
-class Timestamp(object):
+class Timestamp(BlogConfigUser):
     """Blog entry time stamp.
     
     Wraps ``datetime.datetime`` to customize for usage here. Note that
     we use "naive" ``datetime`` objects; we don't expect blog entry
     times to be close enough to make correct handling of time zones,
-    DST transitions, etc. to be an issue. This does, however, mean that
-    "original" timestamps, generated from the entry source file mtime
-    when the entry is first added to the timestamp file, are generated
-    using platform local time, since we use ``datetime.fromtimestamp``
-    to construct them.
+    DST transitions, etc. to be an issue. However, if you want to ensure
+    that such issues won't arise, you can set the ``utc_timestamps``
+    config to use UTC timestamps instead of platform local time. Also,
+    timestamps are normally cached only to the minute; if you want to
+    cache them to the second, set the ``timestamps_cache_seconds``
+    config.
     """
+    
+    config_vars = dict(
+        utc_timestamps=False,
+        timestamps_cache_seconds=False
+    )
     
     datetime_attrs = (
         'year', 'month', 'day',
@@ -40,9 +46,13 @@ class Timestamp(object):
     )
     
     def __init__(self, data):
+        # A hack but it works...
+        self.config = BlogExtension.config
+        
         if isinstance(data, float):
             # It's a file mtime
-            self._datetime = datetime.fromtimestamp(data)
+            tf = datetime.utcfromtimestamp if self.utc_timestamps else datetime.fromtimestamp
+            self._datetime = tf(data)
         elif isinstance(data, basestring):
             # It's a string timestamp from the cache
             self._datetime = datetime(*map(int, data.split('-')))
@@ -56,10 +66,10 @@ class Timestamp(object):
     
     def __str__(self):
         dt = self._datetime
-        return '-'.join(
-            '{:02d}'.format(i)
-            for i in (dt.year, dt.month, dt.day, dt.hour, dt.minute)
-        )
+        dt_fields = (dt.year, dt.month, dt.day, dt.hour, dt.minute)
+        if self.timestamps_cache_seconds:
+            dt_fields += (dt.second,)
+        return '-'.join('{:02d}'.format(i) for i in dt_fields)
     
     def __eq__(self, other):
         if isinstance(other, self.__class__):

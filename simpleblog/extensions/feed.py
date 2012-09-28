@@ -171,11 +171,16 @@ def atom_format(t):
 
 class FeedEntryMixin(BlogMixin):
     
-    @cached_property
+    config_vars = dict(
+        utc_timestamps=False
+    )
+    
+    @extendable_property()
     def timestamp_utc(self):
         t = self.timestamp
-        t_local = datetime(t.year, t.month, t.day, t.hour, t.minute, tzinfo=tz_local)
-        return t_local.astimezone(tz_utc)
+        if self.utc_timestamps:
+            return datetime(t.year, t.month, t.day, t.hour, t.minute, t.second, tzinfo=tz_utc)
+        return datetime(t.year, t.month, t.day, t.hour, t.minute, t.second, tzinfo=tz_local).astimezone(tz_utc)
     
     @extendable_property()
     def timestamp_atom(self):
