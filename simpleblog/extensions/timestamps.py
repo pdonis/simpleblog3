@@ -49,10 +49,9 @@ class Timestamp(BlogConfigUser):
         # A hack but it works...
         self.config = BlogExtension.config
         
-        if isinstance(data, float):
-            # It's a file mtime
-            tf = datetime.utcfromtimestamp if self.utc_timestamps else datetime.fromtimestamp
-            self._datetime = tf(data)
+        if isinstance(data, datetime):
+            # It's a datetime object computed from the file mtime
+            self._datetime = data
         elif isinstance(data, basestring):
             # It's a string timestamp from the cache
             self._datetime = datetime(*map(int, data.split('-')))
@@ -95,7 +94,7 @@ class TimestampEntryMixin(BlogMixin):
         cached(timestamps_file, reverse=True, objtype=Timestamp)
     )
     def timestamp(self):
-        return os.path.getmtime(self.filename)
+        return self.datetime_from_mtime
 
 
 class TimestampsExtension(BlogExtension):

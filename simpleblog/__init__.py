@@ -360,10 +360,21 @@ class BlogEntry(BlogObject):
     def filename(self):
         return os.path.join(self.entries_dir, self.cachekey + self.entry_ext)
     
-    @extendable_property()
-    def timestamp(self):
+    # Note that datetime_from_mtime is *not* an extendable property; it
+    # must always represent the file mtime. Mixins should override
+    # _get_datetime_from_mtime instead.
+    
+    @cached_property
+    def datetime_from_mtime(self):
+        return self._get_datetime_from_mtime()
+    
+    def _get_datetime_from_mtime(self):
         tf = datetime.utcfromtimestamp if self.utc_timestamps else datetime.fromtimestamp
         return tf(os.path.getmtime(self.filename))
+    
+    @extendable_property()
+    def timestamp(self):
+        return self.datetime_from_mtime
     
     @extendable_property()
     def timestamp_vars(self):
