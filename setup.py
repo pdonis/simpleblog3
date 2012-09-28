@@ -9,7 +9,7 @@ See the LICENSE and README files for more information
 
 
 name = "simpleblog"
-version = "0.3"
+version = "0.4"
 description = "A simple Python blogging system."
 
 startline = 5
