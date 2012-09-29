@@ -385,20 +385,30 @@ class BlogEntry(BlogObject):
         return self.datetime_from_mtime
     
     @extendable_property()
-    def timestamp_vars(self):
-        t = self.timestamp
+    def timestamp_attrfuncs(self):
         return dict(
-            year=t.year,
-            month=t.month,
-            day=t.day,
-            hour=t.hour,
-            minute=t.minute,
-            second=t.second,
-            weekdayname=weekdayname(t.weekday(), dt=True),
-            weekdayname_long=weekdayname_long(t.weekday(), dt=True),
-            monthname=monthname(t.month),
-            monthname_long=monthname_long(t.month)
+            year=None,
+            month=None,
+            day=None,
+            hour=None,
+            minute=None,
+            second=None,
+            weekdayname=lambda t: weekdayname(t.weekday(), dt=True),
+            weekdayname_long=lambda t: weekdayname_long(t.weekday(), dt=True),
+            monthname=lambda t: monthname(t.month),
+            monthname_long=lambda t: monthname_long(t.month)
         )
+    
+    @extendable_method()
+    def timestamp_attrs(self, dt):
+        return dict(
+            (key, (varfunc or attrgetter(key))(dt))
+            for key, varfunc in self.timestamp_attrfuncs.iteritems()
+        )
+    
+    @extendable_property()
+    def timestamp_vars(self):
+        return self.timestamp_attrs(self.timestamp)
     
     @extendable_property()
     def timestamp_formatted(self):
