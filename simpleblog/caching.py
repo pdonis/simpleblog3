@@ -23,11 +23,12 @@ class BlogCache(BlogObject):
     without having to stat or open and load any entry files.
     """
     
-    def __init__(self, blog, cachename, reverse=False, objtype=None):
+    def __init__(self, blog, cachename, reverse=False, objtype=None, sep=' '):
         BlogObject.__init__(self, blog)
         self.cachename = cachename
         self.reverse = reverse
         self.objtype = objtype
+        self.sep = sep
     
     @cached_property
     def cache_dir(self):
@@ -42,11 +43,11 @@ class BlogCache(BlogObject):
         with open(self.filename, 'rU') as f:
             lines = f.readlines()
         if self.reverse:
-            def r(t):
-                return tuple(reversed(t))
+            def r(line):
+                return tuple(reversed(line.strip().rsplit(self.sep, 1)))
         else:
-            def r(t):
-                return t
+            def r(line):
+                return tuple(line.strip().split(self.sep, 1))
         if self.objtype:
             def e(t):
                 return t[0], self.objtype(t[1])
@@ -54,14 +55,14 @@ class BlogCache(BlogObject):
             def e(t):
                 return t
         return dict(
-            e(r(line.split())) for line in lines
+            e(r(line)) for line in lines
         )
     
     def save(self):
         items = self.cache.iteritems()
         if self.reverse:
             items = ((v, k) for k, v in items)
-        lines = sorted("{0!s} {1!s}\n".format(a, b) for a, b in items)
+        lines = sorted("{0!s}{1}{2!s}\n".format(a, self.sep, b) for a, b in items)
         with open(self.filename, 'w') as f:
             f.writelines(lines)
 
@@ -69,7 +70,7 @@ class BlogCache(BlogObject):
 cache_map = {}
 
 
-def cached(cachename, reverse=False, objtype=None):
+def cached(cachename, reverse=False, objtype=None, sep=' '):
     """Decorator for blog entry properties that should be cached.
     """
     
@@ -80,7 +81,7 @@ def cached(cachename, reverse=False, objtype=None):
                 cacheobj = cache_map[cachename]
             except KeyError:
                 cacheobj = cache_map[cachename] = BlogCache(
-                    self.blog, cachename, reverse, objtype
+                    self.blog, cachename, reverse, objtype, sep
                 )
             cache = cacheobj.cache
             try:
