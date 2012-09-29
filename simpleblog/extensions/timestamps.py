@@ -37,7 +37,7 @@ class Timestamp(BlogConfigUser):
     
     config_vars = dict(
         utc_timestamps=False,
-        timestamp_cache_format="%Y-%m-%d-%H-%M"
+        timestamp_cache_format="%Y-%m-%d %H:%M"
     )
     
     datetime_attrs = (
