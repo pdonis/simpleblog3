@@ -360,10 +360,9 @@ class BlogEntry(BlogObject):
     def filename(self):
         return os.path.join(self.entries_dir, self.cachekey + self.entry_ext)
     
-    # Note that mtime and datetime_from_mtime are *not* extendable properties;
-    # they must always represent the last modification time of the entry, in
-    # file mtime (i.e., POSIX mtime) format. Mixins should override _get_mtime
-    # or _get_datetime_from_mtime instead.
+    # Note that mtime is *not* an extendable property; it must always represent
+    # the last modification time of the entry's source, in file mtime (i.e.,
+    # POSIX mtime) format. Mixins should override _get_mtime instead.
     
     @cached_property
     def mtime(self):
@@ -372,17 +371,14 @@ class BlogEntry(BlogObject):
     def _get_mtime(self):
         return os.path.getmtime(self.filename)
     
-    @cached_property
-    def datetime_from_mtime(self):
-        return self._get_datetime_from_mtime()
-    
-    def _get_datetime_from_mtime(self):
+    @extendable_method()
+    def datetime_from_mtime(self, mtime):
         tf = datetime.utcfromtimestamp if self.utc_timestamps else datetime.fromtimestamp
-        return tf(self.mtime)
+        return tf(mtime)
     
     @extendable_property()
     def timestamp(self):
-        return self.datetime_from_mtime
+        return self.datetime_from_mtime(self.mtime)
     
     @extendable_property()
     def timestamp_attrfuncs(self):
