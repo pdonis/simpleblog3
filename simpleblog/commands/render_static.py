@@ -13,6 +13,17 @@ import os
 from simpleblog.commands import BlogCommand
 
 
+def changed(data, path):
+    """Check if ``data`` is changed from the file data at ``path``.
+    """
+    
+    if os.stat(path).st_size != len(data):
+        return True
+    with open(path, 'r') as f:
+        olddata = f.read()
+    return data != olddata
+
+
 class RenderStatic(BlogCommand):
     """Static rendering of all blog pages.
     """
@@ -30,12 +41,7 @@ class RenderStatic(BlogCommand):
             path = os.path.abspath(os.path.join(
                 config.get('static_dir', "static"), page.filepath
             ))
-            if self.opts.force or not os.path.isfile(path):
-                olddata = ""
-            else:
-                with open(path, 'rU') as f:
-                    olddata = f.read()
-            if self.opts.force or (data != olddata):
+            if self.opts.force or changed(data, path):
                 print "Rendering", path
                 dir = os.path.split(path)[0]
                 if not os.path.isdir(dir):
