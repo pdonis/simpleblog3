@@ -1,6 +1,24 @@
 Simpleblog Change Log
 =====================
 
+Version 0.4
+-----------
+
+Added ``timezone`` extension to make entry timestamps timezone-aware
+(without this extension they are "naive" ``datetime`` objects).
+Refactored entry class and timestamps extension APIs to enable this
+extension to work easily. The ``timezone_name`` config setting lets
+you explicitly declare your blog's timezone. This extension requires
+the ``pytz`` library.
+
+Added ``utc_timestamps`` config setting, to make entry timestamps
+use UTC instead of the system's local timezone. This functionality is
+only used if the ``timezone`` extension is not loaded; if that extension
+is used, the ``utc_timestamps`` config is only used if there is no
+explicit ``timezone_name`` config given, to tell the extension which
+timezone to use (UTC or system local) when making "aware" ``datetime``
+objects.
+
 Version 0.3
 -----------
 
