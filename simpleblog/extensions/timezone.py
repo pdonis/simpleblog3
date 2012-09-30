@@ -60,6 +60,7 @@ class TimezoneExtension(BlogExtension):
         return dt_utc.astimezone(entry.timezone)
     
     def entry_get_string_from_datetime(self, entry, dt, fmt):
+        assert dt.dst() is not None  # make sure dt is not "naive"
         idst = 0 if dt.dst() == timedelta(0) else 1
         return "{} {} {}".format(dt.strftime(fmt), entry.timezone_tzname, idst)
     
