@@ -169,6 +169,14 @@ give good examples of how the extension mechanism can be used:
   once it is published, its time stamp changes, which may change
   where it appears in index pages.)
 
+- The ``timezone`` extension makes entry timestamps timezone-aware
+  (without this extension they are "naive" ``datetime`` objects).
+  The ``timezone_name`` config setting lets you explicitly declare
+  your blog's timezone; otherwise your system's local time zone
+  setting will be used (note, however, that the ``utc_timestamps``
+  config setting can force the timezone to UTC; see notes in the
+  change log). This extension requires the ``pytz`` library.
+
 - The ``title`` extension allows you to specify a title for each
   entry in the entry's source file. (Without any extension, the
   title of an entry is the same as its relative file name or URL

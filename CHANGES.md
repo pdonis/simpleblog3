@@ -19,6 +19,10 @@ explicit ``timezone_name`` config given, to tell the extension which
 timezone to use (UTC or system local) when making "aware" ``datetime``
 objects.
 
+The ``render_static`` command now checks file sizes to determine if
+pages are unchanged; it only compares the actual page data if the file
+size is unchanged.
+
 Version 0.3
 -----------
 
