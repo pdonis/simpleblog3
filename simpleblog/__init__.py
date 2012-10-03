@@ -504,7 +504,10 @@ class BlogEntries(BlogObject):
     
     sourcetype = None
     multisource = None
-    urlshort = None
+    
+    urlshort = ""
+    title = ""
+    heading = ""
     
     @cached_property
     def entries(self):
@@ -524,6 +527,19 @@ class BlogEntries(BlogObject):
         if self.urlshort is not None:
             return "{}index".format(self.urlshort)
         raise NotImplementedError
+    
+    @cached_property
+    def link_attrs(self):
+        return self._get_link_attrs()
+    
+    def _get_link_attrs(self):
+        return dict(
+            urlshort=self.urlshort,
+            urlpath=self.urlpath,
+            title=self.title,
+            heading=self.heading,
+            count=len(self.entries)
+        )
 
 
 class BlogIndex(BlogEntries):

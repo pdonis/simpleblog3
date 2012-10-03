@@ -39,19 +39,13 @@ class NamedEntries(BlogEntries):
         return self.name
 
 
-def get_links(containers, reverse=False):
-    """Return HTML links to containers.
-    """
-    # FIXME make this configurable
-    return universal_newline.join(
-        '<a href="{0}">{1}</a>&nbsp;({2})'.format(c.urlshort, c.title, len(c.entries))
-        for c in sorted(containers, key=attrgetter('sortkey'), reverse=reverse)
-    )
-
-
 class BlogExtension(BlogConfigUser):
     """Base class for extension mechanism.
     """
+    
+    config_vars = dict(
+        container_link_template='<a href="{urlshort}">{title}</a>'
+    )
     
     def __init__(self, config):
         BlogConfigUser.__init__(self, config)
@@ -82,3 +76,12 @@ class BlogExtension(BlogConfigUser):
     
     def post_init(self):
         pass
+    
+    def get_links(self, containers, reverse=False):
+        """Return HTML links to containers.
+        """
+        
+        return universal_newline.join(
+            self.container_link_template.format(**c.link_attrs)
+            for c in sorted(containers, key=attrgetter('sortkey'), reverse=reverse)
+        )

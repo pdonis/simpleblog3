@@ -13,8 +13,7 @@ from plib.stdlib.strings import split_string, universal_newline
 
 from simpleblog import BlogMixin, extendable_property
 from simpleblog.caching import cached
-from simpleblog.extensions import (BlogExtension,
-    NamedEntries, get_links)
+from simpleblog.extensions import BlogExtension, NamedEntries
 
 
 tags_file = BlogExtension.config.get('tags_file', "tags")
@@ -134,7 +133,7 @@ class TagsExtension(BlogExtension):
         ]
         
         blog.metadata.update(
-            tag_links=get_links(blog.all_tags)
+            tag_links=self.get_links(blog.all_tags)
         )
         
         sources.extend(

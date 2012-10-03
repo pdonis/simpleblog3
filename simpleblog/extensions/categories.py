@@ -14,8 +14,7 @@ from plib.stdlib.decotools import cached_property
 from plib.stdlib.ostools import subdirs
 
 from simpleblog import BlogMixin, extendable_property
-from simpleblog.extensions import (BlogExtension,
-    NamedEntries, get_links)
+from simpleblog.extensions import BlogExtension, NamedEntries
 
 
 class BlogCategory(NamedEntries):
@@ -100,7 +99,9 @@ class CategoryExtension(BlogExtension):
             for catname in blog.category_names
         ]
         
-        blog.metadata['category_links'] = get_links(blog.all_categories)
+        blog.metadata.update(
+            category_links=self.get_links(blog.all_categories)
+        )
         
         sources.extend(
             (category, "html")

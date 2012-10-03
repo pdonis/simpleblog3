@@ -14,7 +14,7 @@ from plib.stdlib.decotools import cached_property
 from plib.stdlib.localize import monthname, monthname_long
 
 from simpleblog import BlogEntries
-from simpleblog.extensions import BlogExtension, get_links
+from simpleblog.extensions import BlogExtension
 
 
 year_entries = defaultdict(list)
@@ -138,7 +138,9 @@ class ArchivesExtension(BlogExtension):
             if self.archive_link_days:
                 archive_links.extend(days)
         
-        blog.metadata['archive_links'] = get_links(archive_links, True)
+        blog.metadata.update(
+            archive_links=self.get_links(archive_links, True)
+        )
         
         sources.extend(
             (archive, "html")
