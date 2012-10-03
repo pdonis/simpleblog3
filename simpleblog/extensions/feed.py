@@ -233,7 +233,9 @@ class FeedExtension(BlogExtension):
     """
     
     config_vars = dict(
-        archive_feeds=None
+        archive_feeds=None,
+        atom_id_template="{cachekey}",
+        rss_id_template="{cachekey}"
     )
     
     entry_mixin = FeedEntryMixin
@@ -255,10 +257,12 @@ class FeedExtension(BlogExtension):
             )
             if do_rss:
                 attrs.update(
+                    id_rss=self.rss_id_template.format(**attrs),
                     timestamp_rss=entry.timestamp_rss
                 )
             if do_atom:
                 attrs.update(
+                    id_atom=self.atom_id_template.format(**attrs),
                     timestamp_atom=entry.timestamp_atom
                 )
         return attrs

@@ -1,7 +1,7 @@
 <entry>
 <title type="html">{title}</title>
 <category term="/{category}" />
-<id>{root_url}/{year}/{month:02d}/{day:02d}/{name}</id>
+<id>{id_atom}</id>
 <updated>{timestamp_atom}</updated>
 <published>{timestamp_atom}</published>
 <link rel="alternate" type="text/html" href="{root_url}{urlpath}.html" />

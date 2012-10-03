@@ -1,6 +1,6 @@
 <item>
    <title>{title}</title>
-   <guid isPermaLink="false">{cachekey}</guid>
+   <guid isPermaLink="false">{id_rss}</guid>
    <link>{root_url}{urlpath}.html</link>
    <description><![CDATA[
 <div>
