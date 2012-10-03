@@ -1,6 +1,12 @@
 Simpleblog Change Log
 =====================
 
+Version 0.5
+-----------
+
+The ``feed`` extension now supports customized templates for the
+unique ids that label entries.
+
 Version 0.4
 -----------
 
