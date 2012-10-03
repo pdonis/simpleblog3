@@ -20,7 +20,7 @@
 <rights>{blog_copyright}</rights>
 
 <generator uri="{sys_gen_uri}" version="{sys_gen_version}">
-{sys_gen_name} {sys_gen_uri} {sys_gen_version}
+{sys_gen_name} {sys_gen_version}
 </generator>
 
 <updated>{page_timestamp_atom}</updated>
