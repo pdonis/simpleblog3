@@ -7,6 +7,6 @@
 {body}
 </div>
 ]]></description>
-   <category domain="{root_url}">/{category}</category>
+   <category domain="{root_url}">{category_rss}</category>
    <pubDate>{timestamp_rss}</pubDate>
 </item>

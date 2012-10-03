@@ -1,6 +1,6 @@
 <entry>
 <title type="html">{title}</title>
-<category term="/{category}" />
+<category term="{category_atom}" />
 <id>{id_atom}</id>
 <updated>{timestamp_atom}</updated>
 <published>{timestamp_atom}</published>
