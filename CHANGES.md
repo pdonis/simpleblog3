@@ -4,6 +4,10 @@ Simpleblog Change Log
 Version 0.5
 -----------
 
+The template for container links (used by various extensions that
+call the ``get_links`` API) is now configurable. (The API function
+itself is now a method of the ``BlogExtension`` class.)
+
 The ``feed`` extension now supports customized templates for the
 unique ids that label entries and for the category elements of
 entries.
