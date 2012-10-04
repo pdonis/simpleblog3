@@ -17,11 +17,6 @@ from simpleblog import BlogEntries
 from simpleblog.extensions import BlogExtension
 
 
-year_entries = defaultdict(list)
-month_entries = defaultdict(list)
-day_entries = defaultdict(list)
-
-
 class BlogArchiveEntries(BlogEntries):
     """Archive of entries spanning a given time period.
     """
@@ -76,9 +71,9 @@ class BlogArchiveEntries(BlogEntries):
     def _get_entries(self):
         if self.month:
             if self.day:
-                return day_entries[(self.year, self.month, self.day)]
-            return month_entries[(self.year, self.month)]
-        return year_entries[self.year]
+                return self.blog.day_entries[(self.year, self.month, self.day)]
+            return self.blog.month_entries[(self.year, self.month)]
+        return self.blog.year_entries[self.year]
 
 
 class ArchivesExtension(BlogExtension):
@@ -96,13 +91,17 @@ class ArchivesExtension(BlogExtension):
     
     def blog_mod_sources(self, blog, sources):
         
+        blog.year_entries = defaultdict(list)
+        blog.month_entries = defaultdict(list)
+        blog.day_entries = defaultdict(list)
+        
         def archive_containers(t):
             if self.archive_years:
-                yield year_entries[t.year]
+                yield blog.year_entries[t.year]
             if self.archive_months:
-                yield month_entries[(t.year, t.month)]
+                yield blog.month_entries[(t.year, t.month)]
             if self.archive_days:
-                yield day_entries[(t.year, t.month, t.day)]
+                yield blog.day_entries[(t.year, t.month, t.day)]
         
         for entry in blog.all_entries:
             for container in archive_containers(entry.timestamp):
@@ -114,7 +113,7 @@ class ArchivesExtension(BlogExtension):
         if self.archive_years:
             years = [
                 BlogArchiveEntries(blog, year)
-                for year in year_entries
+                for year in blog.year_entries
             ]
             blog.all_archives.extend(years)
             if self.archive_link_years:
@@ -123,7 +122,7 @@ class ArchivesExtension(BlogExtension):
         if self.archive_months:
             months = [
                 BlogArchiveEntries(blog, year, month)
-                for year, month in month_entries
+                for year, month in blog.month_entries
             ]
             blog.all_archives.extend(months)
             if self.archive_link_months:
@@ -132,7 +131,7 @@ class ArchivesExtension(BlogExtension):
         if self.archive_days:
             days = [
                 BlogArchiveEntries(blog, year, month, day)
-                for year, month, day in day_entries
+                for year, month, day in blog.day_entries
             ]
             blog.all_archives.extend(days)
             if self.archive_link_days:
