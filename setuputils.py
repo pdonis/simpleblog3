@@ -45,7 +45,7 @@ but using it for particular things:
     
     description = "My Python Program"
     
-    packages = autodiscover_packages()
+    packages = autodiscover_packages(globals())
     
     if __name__ == '__main__':
         from distutils.core import setup
