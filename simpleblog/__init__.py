@@ -505,8 +505,27 @@ class BlogEntries(BlogObject):
     multisource = None
     
     urlshort = ""
-    title = ""
-    heading = ""
+    
+    default_title = ""
+    default_heading = ""
+    
+    @cached_method
+    def config_or_default(self, key):
+        default = getattr(self, 'default_{}'.format(key))
+        if self.sourcetype:
+            return self.config.get(
+                '{}_index_{}'.format(self.sourcetype, key),
+                default
+            )
+        return default
+    
+    @cached_property
+    def title(self):
+        return self.config_or_default('title')
+    
+    @cached_property
+    def heading(self):
+        return self.config_or_default('heading')
     
     @cached_property
     def entries(self):
@@ -544,9 +563,9 @@ class BlogEntries(BlogObject):
 class BlogIndex(BlogEntries):
     
     sourcetype = 'blog'
-    title = "Home"
-    heading = "Home Page"
     urlshort = "/"
+    default_title = "Home"
+    default_heading = "Home Page"
     
     def _get_entries(self):
         return self.blog.all_entries

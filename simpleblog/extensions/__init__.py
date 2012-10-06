@@ -27,8 +27,8 @@ class NamedEntries(BlogEntries):
     
     def __init__(self, blog, name):
         BlogEntries.__init__(self, blog)
-        self.name = self.title = self.sortkey = name
-        self.heading = "{0}: {1}".format(self.typename, name)
+        self.name = self.default_title = self.sortkey = name
+        self.default_heading = "{0}: {1}".format(self.typename, name)
         if self.prefix:
             self.urlshort = "/{0}/{1}/".format(self.prefix, name)
         else:

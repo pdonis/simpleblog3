@@ -60,8 +60,8 @@ class BlogCurrentFeedEntries(BlogEntries):
         self.prev_args = arglist[i - 1] if i > 0 else None
         self.next_args = arglist[i + 1] if i < (len(arglist) - 2) else None
         
-        self.title = self.argstr('-', *args)
-        self.heading = "Feed Archive: {}".format(self.title)
+        self.default_title = self.argstr('-', *args)
+        self.default_heading = "Feed Archive: {}".format(self.title)
     
     @cached_method
     def argstr(self, sep, *args):

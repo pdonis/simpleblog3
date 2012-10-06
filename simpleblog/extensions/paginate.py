@@ -48,8 +48,8 @@ class PageEntries(BlogEntries):
             heading=source.heading,
             pagenum=pagenum + 1  # pagenum is zero-based
         )
-        self.title = self.page_title_template.format(**page_attrs)
-        self.heading = self.page_heading_template.format(**page_attrs)
+        self.default_title = self.page_title_template.format(**page_attrs)
+        self.default_heading = self.page_heading_template.format(**page_attrs)
     
     def _get_entries(self):
         return self.orig_source.entries[self.index_start:self.index_end]

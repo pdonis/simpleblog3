@@ -65,8 +65,8 @@ class BlogArchiveEntries(BlogEntries):
         if self.prefix:
             self.urlshort = "/{0}{1}".format(self.prefix, self.urlshort)
         
-        self.title = title_template.format(**vars(self))
-        self.heading = "Archive: {}".format(self.title)
+        self.default_title = title_template.format(**vars(self))
+        self.default_heading = "Archive: {}".format(self.title)
     
     def _get_entries(self):
         if self.month:
