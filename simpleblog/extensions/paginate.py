@@ -79,9 +79,9 @@ class PageEntries(BlogEntries):
         )
         return "{}{}".format(
             "&nbsp;&nbsp;".join([
-                '<a href="{}.{}">{}</a>'.format(
+                '<a href="{}{}">{}</a>'.format(
                     self.make_urlpath(self.urlshort, self.pagenum + ofs),
-                    format if (self.pagenum + ofs) > 0 else "",
+                    ".{}".format(format) if (self.pagenum + ofs) > 0 else "",
                     label
                 ) for test, ofs, label in linkspecs
                 if self.pagenum * ofs < test
