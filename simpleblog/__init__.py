@@ -21,7 +21,6 @@ from plib.stdlib.iters import suffixed_items
 from plib.stdlib.localize import (
     weekdayname, weekdayname_long,
     monthname, monthname_long)
-
 from plib.stdlib.strings import universal_newline
 from plib.stdlib.version import version_string
 
@@ -578,6 +577,9 @@ class BlogEntryParams(object):
             if obj:
                 for k, v in obj.iteritems():
                     setattr(self, k, v)
+    
+    def get(self, key, default=None):
+        return getattr(self, key, default)
 
 
 @extendable

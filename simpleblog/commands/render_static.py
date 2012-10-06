@@ -17,7 +17,7 @@ def changed(data, path):
     """Check if ``data`` is changed from the file data at ``path``.
     """
     
-    if os.stat(path).st_size != len(data):
+    if (not os.path.isfile(path)) or (os.stat(path).st_size != len(data)):
         return True
     with open(path, 'r') as f:
         olddata = f.read()

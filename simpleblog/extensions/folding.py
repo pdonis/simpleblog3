@@ -84,8 +84,15 @@ class FoldingExtension(BlogExtension):
         )
         return params
     
+    def use_short_entry(self, entry, params):
+        return (
+            # This first clause allows other extensions to force a short entry
+            params.get('force_short', False)
+            or (params.index > self.max_index_full)
+        )
+    
     def entry_get_body(self, entry, format, params):
-        if (params.index > self.max_index_full) and entry.has_short(format):
+        if self.use_short_entry(entry, params) and entry.has_short(format):
             return entry.short_template(format).format(
                 body=entry.rendered_short,
                 link=entry.make_permalink(format)
