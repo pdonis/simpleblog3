@@ -144,6 +144,9 @@ give good examples of how the extension mechanism can be used:
   on the To Do list; currently simpleblog is only tested with
   English ASCII text.
 
+- The ``paginate`` extension allows splitting sources with many
+  entries into multiple pages.
+
 - The ``quote`` extension adds quoted versions of all URLS
   found in the blog's metadata. I added this because I link to
   the W3C HTML validator for my blog's index page, which wants
@@ -226,8 +229,6 @@ implemented, but more are on the To Do list:
 
 To Do
 -----
-
-Add an extension to allow pagination of index pages.
 
 Add support for having extension and command files available
 in other places besides the simpleblog sub-packages. This will
