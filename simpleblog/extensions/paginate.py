@@ -56,6 +56,8 @@ class PageEntries(BlogEntries):
     
     @cached_method
     def make_urlpath(self, urlshort, pagenum):
+        if (pagenum != self.pagenum) and (pagenum == 0):
+            return urlshort
         return "{}index{}".format(
             urlshort,
             pagenum if pagenum > 0 else ""
@@ -79,7 +81,7 @@ class PageEntries(BlogEntries):
             "&nbsp;&nbsp;".join([
                 '<a href="{}.{}">{}</a>'.format(
                     self.make_urlpath(self.urlshort, self.pagenum + ofs),
-                    format,
+                    format if (self.pagenum + ofs) > 0 else "",
                     label
                 ) for test, ofs, label in linkspecs
                 if self.pagenum * ofs < test
