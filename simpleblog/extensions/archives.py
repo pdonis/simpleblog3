@@ -32,6 +32,17 @@ class BlogArchiveEntries(BlogEntries):
     
     sourcetype = 'archive'
     
+    title_varnames = (
+        'year',
+        'month',
+        'day',
+        'monthkey'
+    )
+    
+    heading_varnames = (
+        'title',
+    )
+    
     def __init__(self, blog, year, month=0, day=0):
         BlogEntries.__init__(self, blog)
         self.year = year
@@ -52,21 +63,20 @@ class BlogArchiveEntries(BlogEntries):
             if day:
                 self.sortkey = (year, month, day)
                 self.urlshort = "/{0}/{1}/{2:02d}/".format(year, monthkey, day)
-                title_template = self.archive_day_template
+                self.default_title = self.archive_day_template
             else:
                 self.sortkey = (year, month)
                 self.urlshort = "/{0}/{1}/".format(year, monthkey)
-                title_template = self.archive_month_template
+                self.default_title = self.archive_month_template
         else:
             self.sortkey = (year,)
             self.urlshort = "/{}/".format(year)
-            title_template = self.archive_year_template
+            self.default_title = self.archive_year_template
         
         if self.prefix:
             self.urlshort = "/{0}{1}".format(self.prefix, self.urlshort)
         
-        self.default_title = title_template.format(**vars(self))
-        self.default_heading = "Archive: {}".format(self.title)
+        self.default_heading = "Archive: {title}"
     
     def _get_entries(self):
         if self.month:

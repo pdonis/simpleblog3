@@ -512,12 +512,12 @@ class BlogEntries(BlogObject):
     @cached_method
     def config_or_default(self, key):
         default = getattr(self, 'default_{}'.format(key))
-        if self.sourcetype:
-            return self.config.get(
-                '{}_index_{}'.format(self.sourcetype, key),
-                default
-            )
-        return default
+        tmpl = self.config.get(
+            '{}_index_{}'.format(self.sourcetype, key),
+            default
+        ) if self.sourcetype else default
+        varnames = getattr(self, '{}_varnames'.format(key), {})
+        return tmpl.format(**dict((k, getattr(self, k)) for k in varnames))
     
     @cached_property
     def title(self):

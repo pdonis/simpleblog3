@@ -47,6 +47,10 @@ class BlogCurrentFeedEntries(BlogEntries):
     
     urlshort = "/"
     
+    heading_varnames = (
+        'title',
+    )
+    
     is_current_feed = True
     
     def __init__(self, blog, arglist, *args):
@@ -61,7 +65,7 @@ class BlogCurrentFeedEntries(BlogEntries):
         self.next_args = arglist[i + 1] if i < (len(arglist) - 2) else None
         
         self.default_title = self.argstr('-', *args)
-        self.default_heading = "Feed Archive: {}".format(self.title)
+        self.default_heading = "Feed Archive: {title}"
     
     @cached_method
     def argstr(self, sep, *args):
