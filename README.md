@@ -105,8 +105,8 @@ give good examples of how the extension mechanism can be used.
 up as Python module names, they must be valid identifiers,
 which means they can't include hyphens. However, ``simpleblog``
 allows you to use hyphens when referring to extensions, as in
-the ``render-markdown`` extension below; it converts the hyphens
-to underscores before looking up the module name. Command names
+the ``render-markdown`` extension; it converts the hyphens to
+underscores before looking up the module name. Command names
 are handled the same way--see below.)
 
 - The ``archives`` extension adds containers for entries that
