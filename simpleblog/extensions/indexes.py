@@ -13,7 +13,7 @@ from operator import attrgetter
 from plib.stdlib.decotools import cached_property
 from plib.stdlib.strings import universal_newline
 
-from simpleblog import BlogObject, BlogPage
+from simpleblog import BlogObject, BlogPage, prefixed_keys
 from simpleblog.extensions import BlogExtension
 
 
@@ -23,6 +23,10 @@ class BlogIndexPage(BlogPage):
     
     config_vars = dict(
         index_link_template="{link}",
+        link_index_title_template="{heading}",
+        link_index_heading_alpha="Alphabetical",
+        link_index_heading_chrono="Chronological",
+        link_index_heading_key="Key",
         link_index_sep="<br>"
     )
     
@@ -36,11 +40,12 @@ class BlogIndexPage(BlogPage):
             format
         )
         self.heading = "{} Index".format(
-            "Key" if alpha is None else "Alphabetical" if alpha else "Chronological"
+            self.link_index_heading_key if alpha is None
+            else self.link_index_heading_alpha if alpha
+            else self.link_index_heading_chrono
         )
-        self.title = "{0} - {1}".format(
-            blog.metadata.get('title', "Blog"),
-            self.heading
+        self.title = self.link_index_title_template.format(
+            heading=self.heading
         )
     
     @cached_property
