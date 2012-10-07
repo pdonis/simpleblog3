@@ -8,11 +8,14 @@ Released under the GNU General Public License, Version 2
 See the LICENSE and README files for more information
 """
 
-from plib.stdlib.decotools import cached_property
 from plib.stdlib.strings import universal_newline
 
-from simpleblog import BlogMixin
+from simpleblog import BlogMixin, extendable_property
+from simpleblog.caching import cached
 from simpleblog.extensions import BlogExtension
+
+
+titles_file = BlogExtension.config.get('titles_file', "titles")
 
 
 class TitleEntryMixin(BlogMixin):
@@ -28,6 +31,13 @@ class TitleEntryMixin(BlogMixin):
         else:
             self._titlestr = ""
         return raw
+    
+    @extendable_property(
+        cached(titles_file)
+    )
+    def title(self):
+        self.load()
+        return self._titlestr
 
 
 class TitleExtension(BlogExtension):
@@ -35,7 +45,3 @@ class TitleExtension(BlogExtension):
     """
     
     entry_mixin = TitleEntryMixin
-    
-    def entry_get_title(self, entry):
-        entry.load()
-        return entry._titlestr
