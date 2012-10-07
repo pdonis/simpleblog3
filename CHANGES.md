@@ -11,6 +11,8 @@ entries in the appropriate order.
 Added ``paginate`` extension to allow splitting sources with many
 entries into multiple pages.
 
+The ``title`` extension now caches entry titles.
+
 Titles and headings for index pages are now configurable.
 
 The template for container links (used by various extensions that
