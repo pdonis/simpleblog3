@@ -23,6 +23,7 @@ class BlogIndexPage(BlogPage):
     
     config_vars = dict(
         index_link_template="{link}",
+        index_link_suffix_template="",
         link_index_title_template="{heading}",
         link_index_heading_alpha="Alphabetical",
         link_index_heading_chrono="Chronological",
@@ -62,7 +63,7 @@ class BlogIndexPage(BlogPage):
         else:
             label = attrgetter('title')
             key = label if self.alpha else attrgetter('timestamp')
-            suffix = lambda entry: " - {}".format(entry.datestamp_formatted)
+            suffix = lambda entry: self.index_link_suffix_template.format(entry)
             reverse = not self.alpha
         return self.indexlinks_template.format(
             index_links=self.link_index_sep.join([
