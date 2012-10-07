@@ -54,7 +54,6 @@ class GroupingPageMixin(BlogMixin):
                     entryparams.update(group_params)
                     yield entry.formatted(self.format, entryparams)
                 yield self.group_foot_template.format(**params)
-                first_group = False
         else:
             for item in super(GroupingPageMixin, self)._get_format_entries():
                 yield item
