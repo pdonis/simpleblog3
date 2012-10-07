@@ -492,13 +492,44 @@ class BlogEntry(BlogObject):
 # CONTAINERS
 
 
+def make_config_or_default_property(key):
+    """Return``cached_property`` for config_or_default setting.
+    
+    The ``key`` argument is the name of the property.
+    """
+    
+    def fget(self):
+        return self.config_or_default(key)
+    fget.__name__ = key
+    return cached_property(fget)
+
+
+class BlogEntriesMeta(BlogConfigUserMeta):
+    """Metaclass to automatically set up configs for blog entry containers.
+    """
+    
+    def __init__(cls, name, bases, attrs):
+        super(BlogEntriesMeta, cls).__init__(name, bases, attrs)
+        # Similar setup to BlogConfigUserMeta, but for config_or_default_vars
+        for key, value in attrs.get('config_or_default_vars', {}).iteritems():
+            setattr(cls, 'default_{}'.format(key), value)
+            setattr(cls, key, make_config_or_default_property(key))
+
+
 class BlogEntries(BlogObject):
     """Container for a set of blog entries.
     """
     
+    __metaclass__ = BlogEntriesMeta
+    
     config_vars = dict(
         entry_sort_key='timestamp',
         entry_sort_reversed=True
+    )
+    
+    config_or_default_vars = dict(
+        title="",
+        heading=""
     )
     
     sourcetype = None
@@ -506,26 +537,19 @@ class BlogEntries(BlogObject):
     
     urlshort = ""
     
-    default_title = ""
-    default_heading = ""
-    
     @cached_method
     def config_or_default(self, key):
-        default = getattr(self, 'default_{}'.format(key))
+        default_tmpl = getattr(self, 'default_{}'.format(key))
         tmpl = self.config.get(
-            '{}_index_{}'.format(self.sourcetype, key),
-            default
-        ) if self.sourcetype else default
-        varnames = getattr(self, '{}_varnames'.format(key), {})
+            '{}_{}_template'.format(self.sourcetype, key),
+            default_tmpl
+        ) if self.sourcetype else default_tmpl
+        default_varnames = getattr(self, '{}_varnames'.format(key), {})
+        varnames = self.config.get(
+            '{}_{}_varnames'.format(self.sourcetype, key),
+            default_varnames
+        ) if self.sourcetype else default_varnames
         return tmpl.format(**dict((k, getattr(self, k)) for k in varnames))
-    
-    @cached_property
-    def title(self):
-        return self.config_or_default('title')
-    
-    @cached_property
-    def heading(self):
-        return self.config_or_default('heading')
     
     @cached_property
     def entries(self):

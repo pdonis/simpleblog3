@@ -43,6 +43,8 @@ class BlogArchiveEntries(BlogEntries):
         'title',
     )
     
+    default_heading = "Archive: {title}"
+    
     def __init__(self, blog, year, month=0, day=0):
         BlogEntries.__init__(self, blog)
         self.year = year
@@ -75,8 +77,6 @@ class BlogArchiveEntries(BlogEntries):
         
         if self.prefix:
             self.urlshort = "/{0}{1}".format(self.prefix, self.urlshort)
-        
-        self.default_heading = "Archive: {title}"
     
     def _get_entries(self):
         if self.month:
