@@ -29,6 +29,7 @@ class PageEntries(BlogEntries):
     
     config_vars = dict(
         page_max_entries=10,
+        page_home_include_pagenum=False,
         page_title_template="{title} - Page {pagenum}",
         page_heading_template="{heading} - Page {pagenum}",
         page_prev_label="Newer Entries",
@@ -43,13 +44,17 @@ class PageEntries(BlogEntries):
         self.index_end = self.index_start + self.page_max_entries
         self.urlshort = source.urlshort
         
-        page_attrs = dict(
-            title=source.title,
-            heading=source.heading,
-            pagenum=pagenum + 1  # pagenum is zero-based
-        )
-        self.default_title = self.page_title_template.format(**page_attrs)
-        self.default_heading = self.page_heading_template.format(**page_attrs)
+        if (pagenum == 0) and not self.page_home_include_pagenum:
+            self.default_title = source.title
+            self.default_heading = source.heading
+        else:
+            page_attrs = dict(
+                title=source.title,
+                heading=source.heading,
+                pagenum=pagenum + 1  # pagenum is zero-based
+            )
+            self.default_title = self.page_title_template.format(**page_attrs)
+            self.default_heading = self.page_heading_template.format(**page_attrs)
     
     def _get_entries(self):
         return self.orig_source.entries[self.index_start:self.index_end]
