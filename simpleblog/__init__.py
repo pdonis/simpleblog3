@@ -794,6 +794,7 @@ def first_subclass(o, c):
 
 
 def load_sub(subtype, name, err, subcls):
+    name = name.replace('-', '_')
     # FIXME allow subtype objects to "live" in other places as well
     from importlib import import_module
     try:
