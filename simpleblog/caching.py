@@ -40,23 +40,27 @@ class BlogCache(BlogObject):
     
     @cached_property
     def cache(self):
-        with open(self.filename, 'rU') as f:
-            lines = f.readlines()
-        if self.reverse:
-            def r(line):
-                return tuple(reversed(line.strip().rsplit(self.sep, 1)))
+        try:
+            with open(self.filename, 'rU') as f:
+                lines = f.readlines()
+        except IOError:
+            return {}
         else:
-            def r(line):
-                return tuple(line.strip().split(self.sep, 1))
-        if self.objtype:
-            def e(t):
-                return t[0], self.objtype(t[1])
-        else:
-            def e(t):
-                return t
-        return dict(
-            e(r(line)) for line in lines
-        )
+            if self.reverse:
+                def r(line):
+                    return tuple(reversed(line.strip().rsplit(self.sep, 1)))
+            else:
+                def r(line):
+                    return tuple(line.strip().split(self.sep, 1))
+            if self.objtype:
+                def e(t):
+                    return t[0], self.objtype(t[1])
+            else:
+                def e(t):
+                    return t
+            return dict(
+                e(r(line)) for line in lines
+            )
     
     def save(self):
         items = self.cache.iteritems()
