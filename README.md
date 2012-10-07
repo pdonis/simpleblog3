@@ -99,7 +99,15 @@ desired changed or added behaviors, and add its name to the
 list of extensions in your config file. That's it. Or, of
 course, you can use one of the extensions that come with
 simpleblog, listed below. I use all of them for my blog. They
-give good examples of how the extension mechanism can be used:
+give good examples of how the extension mechanism can be used.
+
+(Note: Strictly speaking, since extension names will be looked
+up as Python module names, they must be valid identifiers,
+which means they can't include hyphens. However, ``simpleblog``
+allows you to use hyphens when referring to extensions, as in
+the ``render-markdown`` extension below; it converts the hyphens
+to underscores before looking up the module name. Command names
+are handled the same way--see below.)
 
 - The ``archives`` extension adds containers for entries that
   were published during specific time periods--years, months,
@@ -158,7 +166,7 @@ give good examples of how the extension mechanism can be used:
   quoted URLs, and this was an easy way to avoid having to type
   them into my blog metadata by hand. :)
 
-- The ``render_markdown`` extension allows your entry source
+- The ``render-markdown`` extension allows your entry source
   to be plain text using Markdown syntax; the extension then
   renders it into HTML. (Without any extension changing the
   rendering, simpleblog just uses your entry source unchanged
@@ -225,9 +233,13 @@ into the Python interactive shell, with the ``simpleblog`` package
 loaded; I find this extremely useful for testing and debugging. But
 the script can also be enhanced with commands, by a mechanism similar
 to the extension mechanism. Currently, only one command has been
-implemented, but more are on the To Do list:
+implemented, but more are on the To Do list.
 
-- The ``render_static`` command renders static versions of all the
+(Note: As with extension names, hyphens in command names are converted
+to underscores before looking up the module, so you can use hyphens,
+as is done below, if you find them easier to type, as I do.)
+
+- The ``render-static`` command renders static versions of all the
   pages in your blog. A config setting controls the directory that
   the files are rendered to. For my blog, this is currently sufficient,
   since I publish it as static files.

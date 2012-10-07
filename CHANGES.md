@@ -23,6 +23,11 @@ The ``feed`` extension now supports customized templates for the
 unique ids that label entries and for the category elements of
 entries.
 
+You can now use hyphens instead of underscores in extension and
+command names; the hyphens will be converted to underscores before
+looking for extension or command modules (since module names must
+be valid identifiers).
+
 Version 0.4
 -----------
 
