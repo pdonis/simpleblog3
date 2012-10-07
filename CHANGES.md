@@ -7,6 +7,8 @@ Version 0.5
 Added ``paginate`` extension to allow splitting sources with many
 entries into multiple pages.
 
+Titles and headings for index pages are now configurable.
+
 The template for container links (used by various extensions that
 call the ``get_links`` API) is now configurable. (The API function
 itself is now a method of the ``BlogExtension`` class.)
