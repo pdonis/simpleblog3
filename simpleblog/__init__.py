@@ -637,14 +637,18 @@ class BlogPage(BlogObject):
     def __init__(self, blog, source, format):
         BlogObject.__init__(self, blog)
         self.source = source
+        self.title = self.source.title
+        self.heading = self.source.heading
         if isinstance(source, BlogEntry):
             self.entries = [source]
         else:
             self.entries = source.entries
         self.format = format
-        self.urlpath = "{0}.{1}".format(
-            source.urlpath, format)
-        self.filepath = os.path.join(
+        self.urlpath = "{0}.{1}".format(source.urlpath, format)
+    
+    @cached_property
+    def filepath(self):
+        return os.path.join(
             *self.urlpath[1:].split('/')
         )
     
@@ -676,8 +680,8 @@ class BlogPage(BlogObject):
     @extendable_property()
     def attrs(self):
         metadata = dict(
-            title=self.source.title,
-            heading=self.source.heading,
+            title=self.title,
+            heading=self.heading,
             entries=self.body
         )
         return dict(
