@@ -132,6 +132,11 @@ give good examples of how the extension mechanism can be used:
   can be changed by config settings (of course they should both
   be changed consistently).
 
+- The ``indexes`` extension adds index pages to your blog that
+  give links to all entries in either alphabetical (by title),
+  chronological, or "key" (meaning the unique key assigned to
+  each entry) order.
+
 - The ``links`` extension allows you to add links to the previous
   and next entries in your blog's containers to each entry. By
   default it only does this on single-entry pages, but this can

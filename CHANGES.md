@@ -4,6 +4,10 @@ Simpleblog Change Log
 Version 0.5
 -----------
 
+Added ``indexes`` extension to add alphabetical, chronological,
+and/or key index pages to blog; these pages have links to all blog
+entries in the appropriate order.
+
 Added ``paginate`` extension to allow splitting sources with many
 entries into multiple pages.
 
