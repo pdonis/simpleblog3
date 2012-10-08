@@ -55,7 +55,8 @@ class BlogExtension(BlogConfigUser):
     """
     
     config_vars = dict(
-        container_link_template='<a href="{urlshort}">{title}</a>'
+        container_link_template='<a href="{urlshort}">{title}</a>',
+        container_link_sep=''
     )
     
     def __init__(self, config):
@@ -92,7 +93,7 @@ class BlogExtension(BlogConfigUser):
         """Return HTML links to containers.
         """
         
-        return universal_newline.join(
+        return "{}{}".format(self.container_link_sep, universal_newline).join(
             self.container_link_template.format(**c.link_attrs)
             for c in sorted(containers, key=attrgetter('sortkey'), reverse=reverse)
         )
