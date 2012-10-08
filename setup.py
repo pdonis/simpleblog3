@@ -7,9 +7,9 @@ Released under the GNU General Public License, Version 2
 See the LICENSE and README files for more information
 """
 
+from simpleblog import __version__ as version
 
 name = "simpleblog"
-version = "0.5"
 description = "A simple Python blogging system."
 
 startline = 5
