@@ -66,7 +66,7 @@ class BlogIndexPage(BlogPage):
             suffix = lambda entry: self.index_link_suffix_template.format(entry)
             reverse = not self.alpha
         return self.indexlinks_template.format(
-            index_links=self.link_index_sep.join([
+            index_links=("{}{}".format(self.link_index_sep, universal_newline)).join([
                 self.index_link_template.format(
                     link='<a href="{0}.{1}">{2}</a>{3}'.format(
                         entry.urlpath, self.format, label(entry), suffix(entry)
