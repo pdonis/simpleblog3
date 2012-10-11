@@ -238,7 +238,8 @@ to the extension mechanism.
 to underscores before looking up the module, so you can use hyphens,
 as is done below, if you find them easier to type, as I do.)
 
-- The ``publish`` command publishes your blog using SSH.
+- The ``publish`` command publishes your statically rendered blog using
+  SSH.
 
 - The ``render-static`` command renders static versions of all the
   pages in your blog. A config setting controls the directory that
