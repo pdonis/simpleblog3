@@ -8,7 +8,7 @@ Released under the GNU General Public License, Version 2
 See the LICENSE and README files for more information
 """
 
-from plib.stdlib.options import parse_options
+from plib.stdlib.options import parse_options, make_ns
 
 from simpleblog import BlogError, load_blog
 from simpleblog.commands import BlogCommand
@@ -34,6 +34,8 @@ def run(cmdname, opts, result=None, remaining=None):
         copts, cargs = parse_options(
             optlist, arglist, description, epilog, remaining, result
         )
+    else:
+        copts = cargs = make_ns((), ())
     
     cmd = klass(config, copts, cargs)
     cmd.run(blog)
