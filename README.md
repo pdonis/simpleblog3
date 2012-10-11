@@ -259,7 +259,7 @@ as is done below, if you find them easier to type, as I do.)
   recommended to try to serve your blog to the Internet using this
   command.
 
-## User-Defined Commands and Extensions
+### User-Defined Commands and Extensions
 
 Simpleblog supports defining your own commands or extensions,
 separate from the ones supplied with ``simpleblog`` itself. All you
