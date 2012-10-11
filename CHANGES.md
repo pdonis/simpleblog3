@@ -13,6 +13,8 @@ host that will serve it.
 Commands can now use the ``config_vars`` mechanism the same way
 extensions do.
 
+Added support for user-supplied commands and extensions.
+
 The separator for container links is now configurable.
 
 Version 0.5

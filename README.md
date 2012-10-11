@@ -259,13 +259,19 @@ as is done below, if you find them easier to type, as I do.)
   recommended to try to serve your blog to the Internet using this
   command.
 
+## User-Defined Commands and Extensions
+
+Simpleblog supports defining your own commands or extensions,
+separate from the ones supplied with ``simpleblog`` itself. All you
+have to do is set the ``command_dir`` or ``extension_dir`` config
+and supply Python modules that match the command or extension name
+you want to use. The command and extension loading mechanism will
+look in your user-defined directories first, so you can even define a
+command or extension with the same name as a pre-packaged one, and it
+will take precedence.
+
 To Do
 -----
-
-Add support for having extension and command files available
-in other places besides the simpleblog sub-packages. This will
-allow you to write your own and use them without having to mess
-with the simpleblog installation itself.
 
 Add fancier example blogs to show how the various extensions work.
 
