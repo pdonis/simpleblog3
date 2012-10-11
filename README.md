@@ -239,10 +239,15 @@ implemented, but more are on the To Do list.
 to underscores before looking up the module, so you can use hyphens,
 as is done below, if you find them easier to type, as I do.)
 
+- The ``publish`` command publishes your blog using SSH.
+
 - The ``render-static`` command renders static versions of all the
   pages in your blog. A config setting controls the directory that
   the files are rendered to. For my blog, this is currently sufficient,
   since I publish it as static files.
+
+- The ``serve-local`` command serves your statically rendered blog on
+  localhost for testing.
 
 To Do
 -----
@@ -251,10 +256,6 @@ Add support for having extension and command files available
 in other places besides the simpleblog sub-packages. This will
 allow you to write your own and use them without having to mess
 with the simpleblog installation itself.
-
-Add a command for publishing your blog via SSH (I do this now with
-a shell script, but doing it in Python would allow some enhancements
-that aren't easy in shell).
 
 Add fancier example blogs to show how the various extensions work.
 
