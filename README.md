@@ -272,12 +272,6 @@ Add fancier example blogs to show how the various extensions work.
 Add support for comments while still allowing the blog to be
 statically generated.
 
-Add support for generating feeds for other container index
-pages besides the blog index (e.g., categories, tags, and
-archives).
-
-Add more localization support.
-
 Copyright and License
 ---------------------
 
