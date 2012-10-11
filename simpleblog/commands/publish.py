@@ -48,7 +48,6 @@ class Publish(BlogCommand):
         if self.opts.debug:
             print cmdline
         try:
-            # FIXME: find rsync binary ourselves instead of using the shell
             output = check_output(cmdline, stderr=STDOUT, shell=True)
         except CalledProcessError, e:
             output = e.output
