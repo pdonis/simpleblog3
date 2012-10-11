@@ -782,46 +782,12 @@ class Blog(BlogObject):
 
 # INITIALIZATION
 
-def first_subclass(o, c):
-    """Return first object in o that is a subclass of c
-    """
-    return first(
-        obj for obj in vars(o).itervalues()
-        if (obj is not c)
-        and isinstance(obj, type)
-        and issubclass(obj, c)
-    )
-
-
-def load_sub(subtype, name, err, subcls):
-    name = name.replace('-', '_')
-    # FIXME allow subtype objects to "live" in other places as well
-    from importlib import import_module
-    try:
-        mod = import_module("simpleblog.{0}s.{1}".format(subtype, name))
-    except ImportError:
-        raise err("{0} {1} not found!".format(subtype, name))
-    klass = first_subclass(mod, subcls)
-    if not klass:
-        raise err("no {0} in {1} module!".format(subtype, name))
-    return mod, klass
-
-
-class BlogExtensionError(BlogError):
-    pass
-
 
 def initialize(config):
     extensions = config.get("extensions", ())
     if extensions:
-        from simpleblog.extensions import BlogExtension
-        # This hack is useful for extensions that need to access the
-        # config in module or class level code, e.g., in decorators
-        BlogExtension.config = config
-        for extname in extensions:
-            mod, klass = load_sub("extension", extname,
-                BlogExtensionError, BlogExtension)
-            mod.extension = klass(config)
+        from simpleblog.ext import load
+        load(config, extensions)
 
 
 def load_blog(opts):

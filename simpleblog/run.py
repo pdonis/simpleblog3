@@ -10,8 +10,9 @@ See the LICENSE and README files for more information
 
 from plib.stdlib.options import parse_options
 
-from simpleblog import BlogError, load_sub, load_blog
+from simpleblog import BlogError, load_blog
 from simpleblog.commands import BlogCommand
+from simpleblog.sub import load_sub
 
 
 class BlogCommandError(BlogError):
@@ -19,7 +20,10 @@ class BlogCommandError(BlogError):
 
 
 def run(cmdname, opts, result=None, remaining=None):
-    mod, klass = load_sub("command", cmdname,
+    config, blog = load_blog(opts)
+    
+    mod, klass = load_sub(cmdname,
+        "command", config.get('command_dir', ""),
         BlogCommandError, BlogCommand)
     
     optlist = klass.options or ()
@@ -31,6 +35,5 @@ def run(cmdname, opts, result=None, remaining=None):
             optlist, arglist, description, epilog, remaining, result
         )
     
-    config, blog = load_blog(opts)
     cmd = klass(config, copts, cargs)
     cmd.run(blog)
