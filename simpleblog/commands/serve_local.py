@@ -20,12 +20,20 @@ class ServeLocal(BlogCommand):
     """
     
     config_vars = dict(
-        local_host="localhost",
-        local_port=8000,
         static_dir="static"
     )
     
     options = (
+        ("-n", "--hostname", {
+            'action': 'store', 'type': str,
+            'default': "localhost",
+            'help': "host name or IP address"
+        }),
+        ("-p", "--port", {
+            'action': 'store', 'type': int,
+            'default': 8000,
+            'help': "port number"
+        }),
         ("-q", "--quiet", {
             'action': 'store_true',
             'help': "suppress console output"
@@ -38,9 +46,12 @@ class ServeLocal(BlogCommand):
         os.chdir(http_root)
         server_class = BaseHTTPServer.HTTPServer
         handler_class = SimpleHTTPServer.SimpleHTTPRequestHandler
-        server_address = (self.local_host, self.local_port)
+        server_address = (self.opts.hostname, self.opts.port)
         if not self.opts.quiet:
-            print "Serving files under %s at %s" % (http_root, "http://%s:%d/" % (self.local_host, self.local_port))
+            print "Serving files under {} at {}".format(
+                http_root,
+                "http://{}:{:d}/".format(self.opts.hostname, self.opts.port)
+            )
         httpd = server_class(server_address, handler_class)
         try:
             httpd.serve_forever()
