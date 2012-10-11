@@ -1,6 +1,14 @@
 Simpleblog Change Log
 =====================
 
+Version 0.6
+-----------
+
+Commands can now use the ``config_vars`` mechanism the same way
+extensions do.
+
+The separator for container links is now configurable.
+
 Version 0.5
 -----------
 
