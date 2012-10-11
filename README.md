@@ -232,8 +232,7 @@ one. If run without any command at all, the script simply puts you
 into the Python interactive shell, with the ``simpleblog`` package
 loaded; I find this extremely useful for testing and debugging. But
 the script can also be enhanced with commands, by a mechanism similar
-to the extension mechanism. Currently, only one command has been
-implemented, but more are on the To Do list.
+to the extension mechanism.
 
 (Note: As with extension names, hyphens in command names are converted
 to underscores before looking up the module, so you can use hyphens,
