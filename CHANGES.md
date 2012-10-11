@@ -7,6 +7,8 @@ Version 0.6
 Added ``serve-local`` command to serve statically rendered blog
 on localhost for testing.
 
+Added ``publish`` command to publish blog via SSH.
+
 Commands can now use the ``config_vars`` mechanism the same way
 extensions do.
 
