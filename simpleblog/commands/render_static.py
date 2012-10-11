@@ -37,6 +37,10 @@ class RenderStatic(BlogCommand):
             'action': 'store_true',
             'help': "force writing of unchanged files"
         }),
+        ("-q", "--quiet", {
+            'action': 'store_true',
+            'help': "suppress console output"
+        })
     )
     
     def run(self, blog):
@@ -44,11 +48,13 @@ class RenderStatic(BlogCommand):
             data = page.formatted
             path = os.path.abspath(os.path.join(self.static_dir, page.filepath))
             if self.opts.force or changed(data, path):
-                print "Rendering", path
+                if not self.opts.quiet:
+                    print "Rendering", path
                 dir = os.path.split(path)[0]
                 if not os.path.isdir(dir):
                     os.makedirs(dir)
                 with open(path, 'w') as f:
                     f.write(data)
             else:
-                print path, "is unchanged"
+                if not self.opts.quiet:
+                    print path, "is unchanged"
