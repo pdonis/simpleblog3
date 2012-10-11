@@ -33,9 +33,8 @@ class ServeLocal(BlogCommand):
     )
     
     def run(self, blog):
-        # realpath fixes things up if static_dir has a .. in it
         oldcwd = os.getcwd()
-        http_root = os.path.realpath(os.path.join(oldcwd, self.static_dir))
+        http_root = os.path.abspath(self.static_dir)
         os.chdir(http_root)
         server_class = BaseHTTPServer.HTTPServer
         handler_class = SimpleHTTPServer.SimpleHTTPRequestHandler
