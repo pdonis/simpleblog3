@@ -238,8 +238,13 @@ to the extension mechanism.
 to underscores before looking up the module, so you can use hyphens,
 as is done below, if you find them easier to type, as I do.)
 
-- The ``publish`` command publishes your statically rendered blog using
-  SSH.
+- The ``publish`` command publishes your statically rendered blog via
+  SSH to a remote host that will serve it. By default it uses the
+  ``rsync`` command, but a config setting allows you to change the
+  command name (though it must be a command that uses the same
+  command-line syntax as ``rsync``, such as ``scp``). You can also
+  configure the command options and the SSH user, the remote hostname,
+  and the path on the remote host to publish to.
 
 - The ``render-static`` command renders static versions of all the
   pages in your blog. A config setting controls the directory that
@@ -247,7 +252,12 @@ as is done below, if you find them easier to type, as I do.)
   since I publish it as static files.
 
 - The ``serve-local`` command serves your statically rendered blog on
-  localhost for testing.
+  localhost for testing. You can use command-line options to change
+  the host name (or IP address) and port used (the defaults are
+  ``localhost`` on port 8000), for example to allow testing on a LAN.
+  Since the built-in Python ``SimpleHTTPServer`` is used, it is *not*
+  recommended to try to serve your blog to the Internet using this
+  command.
 
 To Do
 -----
