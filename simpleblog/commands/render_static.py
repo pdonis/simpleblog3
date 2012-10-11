@@ -28,6 +28,10 @@ class RenderStatic(BlogCommand):
     """Static rendering of all blog pages.
     """
     
+    config_vars = dict(
+        static_dir="static"
+    )
+    
     options = (
         ("-f", "--force", {
             'action': 'store_true',
@@ -35,12 +39,10 @@ class RenderStatic(BlogCommand):
         }),
     )
     
-    def run(self, config, blog):
+    def run(self, blog):
         for page in blog.pages:
             data = page.formatted
-            path = os.path.abspath(os.path.join(
-                config.get('static_dir', "static"), page.filepath
-            ))
+            path = os.path.abspath(os.path.join(self.static_dir, page.filepath))
             if self.opts.force or changed(data, path):
                 print "Rendering", path
                 dir = os.path.split(path)[0]

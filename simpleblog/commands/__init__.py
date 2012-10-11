@@ -7,8 +7,10 @@ Released under the GNU General Public License, Version 2
 See the LICENSE and README files for more information
 """
 
+from simpleblog import BlogConfigUser
 
-class BlogCommand(object):
+
+class BlogCommand(BlogConfigUser):
     """Base class for command mechanism.
     """
     
@@ -17,9 +19,10 @@ class BlogCommand(object):
     description = None
     epilog = None
     
-    def __init__(self, opts, args):
+    def __init__(self, config, opts, args):
+        BlogConfigUser.__init__(self, config)
         self.opts = opts
         self.args = args
     
-    def run(self, config, blog):
+    def run(self, blog):
         raise NotImplementedError

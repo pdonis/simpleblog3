@@ -31,6 +31,6 @@ def run(cmdname, opts, result=None, remaining=None):
             optlist, arglist, description, epilog, remaining, result
         )
     
-    cmd = klass(copts, cargs)
     config, blog = load_blog(opts)
-    cmd.run(config, blog)
+    cmd = klass(config, copts, cargs)
+    cmd.run(blog)
