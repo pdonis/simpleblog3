@@ -23,7 +23,9 @@ class LinksEntryMixin(BlogMixin):
     config_vars = dict(
         entrylink_sep="&nbsp;",
         link_next_template="next in {}",
+        link_next_title_template="Next in {}",
         link_prev_template="previous in {}",
+        link_prev_title_template="Previous in {}",
         link_display_sourcetypes=dict(
             vartype=set,
             default=['entry'])
@@ -36,14 +38,17 @@ class LinksEntryMixin(BlogMixin):
     @cached_method
     def get_entrylink(self, attr, format, prefix):
         entry, label = attr
-        title = (
-            self.link_next_template,
-            self.link_prev_template
-        )[prefix.startswith('p')].format(label)
+        tmpl_title, tmpl_content = (
+            (self.link_prev_title_template, self.link_prev_template)
+            if prefix.startswith('p') else
+            (self.link_next_title_template, self.link_next_template)
+        )
+        content = tmpl_content.format(label)
         if entry is not None:
+            title = tmpl_title.format(label.capitalize())
             href = entry.make_permalink(format)
-            return '<a href="{0}">{1}</a>'.format(href, title)
-        return title
+            return '<a href="{}" title="{}">{}</a>'.format(href, title, content)
+        return content
     
     @extendable_method()
     def prev_next_link(self, attr, format, prefix):
