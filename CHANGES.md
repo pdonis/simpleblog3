@@ -15,6 +15,9 @@ extensions do.
 
 Added support for user-defined commands and extensions.
 
+The ``simpleblog-run`` script now displays command-specific help
+if a command is provided along with the ``--help`` option.
+
 The ``indexes`` extension now puts a line break between links,
 to make the generated HTML more readable.
 

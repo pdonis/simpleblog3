@@ -259,6 +259,10 @@ as is done below, if you find them easier to type, as I do.)
   recommended to try to serve your blog to the Internet using this
   command.
 
+For quick help on usage, use the ``--help`` option to the ``simpleblog-run``
+script. If a command name is provided, help specific to that command will
+be shown; otherwise, general help will be shown.
+
 ### User-Defined Commands and Extensions
 
 Simpleblog supports defining your own commands or extensions,
