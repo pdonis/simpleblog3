@@ -16,8 +16,6 @@ class BlogCommand(BlogConfigUser):
     
     options = None
     arguments = None
-    description = None
-    epilog = None
     
     def __init__(self, config, opts, args):
         BlogConfigUser.__init__(self, config)
