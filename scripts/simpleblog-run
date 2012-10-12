@@ -15,6 +15,10 @@ global_optlist = (
     ),
     ("-b", "--blogfile",
         { 'help': "the blog metadata file name" }
+    ),
+    ("-h", "--help",
+        { 'action': 'store_true',
+          'help': "show help information and exit" }
     )
 )
 
@@ -24,17 +28,21 @@ global_arglist = (
 
 
 if __name__ == '__main__':
-    from plib.stdlib.options import parse_options
+    from plib.stdlib.options import prepare_specs, make_parser, invoke_parser
     
-    opts, args, result, remaining = parse_options(
+    global_optlist, global_arglist = prepare_specs(global_optlist, global_arglist)
+    parser = make_parser(global_optlist, global_arglist,
+        add_help=False)
+    opts, args, result, remaining = invoke_parser(parser,
         global_optlist, global_arglist,
-        incremental=True
-    )
+        incremental=True)
     
     cmd = args.command
     if cmd:
         from simpleblog.run import run
-        run(cmd, opts, result, remaining)
+        run(cmd, parser, opts, global_optlist, result, remaining)
+    elif opts.help:
+        parser.print_help()
     else:
         from simpleblog import *
         from plib.stdlib.cmdline import run_shell

@@ -8,7 +8,7 @@ Released under the GNU General Public License, Version 2
 See the LICENSE and README files for more information
 """
 
-from plib.stdlib.options import parse_options, make_ns
+from plib.stdlib.options import prepare_specs, update_parser, invoke_parser
 
 from simpleblog import BlogError, load_blog
 from simpleblog.commands import BlogCommand
@@ -19,23 +19,28 @@ class BlogCommandError(BlogError):
     pass
 
 
-def run(cmdname, opts, result=None, remaining=None):
+def run(cmdname, parser, opts, goptlist, result=None, remaining=None):
     config, blog = load_blog(opts)
     
     mod, klass = load_sub(cmdname,
         "command", config.get('command_dir', ""),
         BlogCommandError, BlogCommand)
     
-    optlist = klass.options or ()
-    arglist = klass.arguments or ()
-    description = klass.description
-    epilog = klass.epilog
-    if optlist or arglist or remaining:
-        copts, cargs = parse_options(
-            optlist, arglist, description, epilog, remaining, result
-        )
-    else:
-        copts = cargs = make_ns((), ())
+    optlist, arglist = prepare_specs(klass.options or (), klass.arguments or ())
+    update_parser(parser, optlist, arglist)
+    opts, args = invoke_parser(parser, goptlist + optlist, arglist, remaining, result)
     
-    cmd = klass(config, copts, cargs)
-    cmd.run(blog)
+    if opts.help:
+        # Hack to make it look like the help is specific to cmdname; this is
+        # *not* documented in the argparse module ;) (actually, we rely in
+        # part on plib.stdlib.options setting the metavar keyword)
+        for action in parser._actions:
+            if action.metavar == "COMMAND":
+                action.metavar = cmdname
+                action.nargs = 1
+                # There can be only one
+                break
+        parser.print_help()
+    else:
+        cmd = klass(config, opts, args)
+        cmd.run(blog)
