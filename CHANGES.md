@@ -23,7 +23,8 @@ to make the generated HTML more readable.
 
 The ``links`` extension now makes entry links visible in the page
 as well as the entry, for more options when formatting single-entry
-pages.
+pages. It also now adds ``title`` attributes to the links (this can
+be disabled by setting the title template configs to empty values).
 
 The separator for container links is now configurable.
 
