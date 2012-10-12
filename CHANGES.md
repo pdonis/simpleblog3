@@ -15,6 +15,9 @@ extensions do.
 
 Added support for user-defined commands and extensions.
 
+The ``indexes`` extension now puts a line break between links,
+to make the generated HTML more readable.
+
 The separator for container links is now configurable.
 
 Version 0.5
