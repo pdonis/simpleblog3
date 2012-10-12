@@ -98,6 +98,16 @@ class LinksExtension(BlogExtension):
         )
         return params
     
+    def page_mod_attrs(self, page, attrs):
+        attrs.update(
+            page_entrylinks=(
+                page.source.make_entrylinks(page.format, page.entry_params(page.source))
+                if page.source and (page.source.sourcetype == 'entry')
+                else ""
+            )
+        )
+        return attrs
+    
     def blog_mod_sources(self, blog, sources):
         prev_tmpl = 'prev_in_{}'
         next_tmpl = 'next_in_{}'
