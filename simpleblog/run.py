@@ -36,8 +36,8 @@ def run(cmdname, parser, opts, goptlist, result=None, remaining=None):
         # part on plib.stdlib.options setting the metavar keyword)
         for action in parser._actions:
             if action.metavar == "COMMAND":
-                action.metavar = cmdname
-                action.nargs = 1
+                action.metavar = cmdname  # this displays the specific command name
+                action.nargs = 1  # this removes the brackets from the command name
                 # There can be only one
                 break
         parser.print_help()
