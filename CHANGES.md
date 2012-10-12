@@ -21,6 +21,10 @@ if a command is provided along with the ``--help`` option.
 The ``indexes`` extension now puts a line break between links,
 to make the generated HTML more readable.
 
+The ``links`` extension now makes entry links visible in the page
+as well as the entry, for more options when formatting single-entry
+pages.
+
 The separator for container links is now configurable.
 
 Version 0.5
