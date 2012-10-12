@@ -45,9 +45,11 @@ class LinksEntryMixin(BlogMixin):
         )
         content = tmpl_content.format(label)
         if entry is not None:
-            title = tmpl_title.format(label.capitalize())
+            title = tmpl_title.format(label.capitalize()) if tmpl_title else None
             href = entry.make_permalink(format)
-            return '<a href="{}" title="{}">{}</a>'.format(href, title, content)
+            if title:
+                return '<a href="{}" title="{}">{}</a>'.format(href, title, content)
+            return '<a href="{}">{}</a>'.format(href, content)
         return content
     
     @extendable_method()
