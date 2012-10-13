@@ -32,8 +32,9 @@ class PageEntries(BlogEntries):
         page_home_include_pagenum=False,
         page_title_template="{title} - Page {pagenum}",
         page_heading_template="{heading} - Page {pagenum}",
-        page_prev_label="Newer Entries",
-        page_next_label="Older Entries"
+        page_newer_label="Newer Entries",
+        page_older_label="Older Entries",
+        page_link_sep="&nbsp;&nbsp;"
     )
     
     def __init__(self, blog, source, pagenum):
@@ -79,20 +80,21 @@ class PageEntries(BlogEntries):
     @cached_method
     def make_pagelinks(self, format):
         linkspecs = (
-            (0, -1, self.page_prev_label),
-            (num_pages(self.orig_source, self.page_max_entries) - 1, 1, self.page_next_label)
+            (0, -1, self.page_newer_label),
+            (num_pages(self.orig_source, self.page_max_entries) - 1, 1, self.page_older_label)
+        )
+        link_newer, link_older = tuple(
+            '<a href="{}{}">{}</a>'.format(
+                self.make_urlpath(self.urlshort, self.pagenum + ofs),
+                ".{}".format(format) if (self.pagenum + ofs) > 0 else "",
+                label
+            ) if (self.pagenum * ofs) < test else ""
+            for test, ofs, label in linkspecs
         )
         return "{}{}".format(
-            "&nbsp;&nbsp;".join([
-                '<a href="{}{}">{}</a>'.format(
-                    self.make_urlpath(self.urlshort, self.pagenum + ofs),
-                    ".{}".format(format) if (self.pagenum + ofs) > 0 else "",
-                    label
-                ) for test, ofs, label in linkspecs
-                if self.pagenum * ofs < test
-            ]),
+            self.page_link_sep.join(link for link in (link_newer, link_older) if link),
             universal_newline
-        )
+        ), link_newer, link_older
 
 
 class PaginateExtension(BlogExtension):
@@ -121,12 +123,14 @@ class PaginateExtension(BlogExtension):
         return params
     
     def page_mod_attrs(self, page, attrs):
+        if isinstance(page.source, PageEntries):
+            page_links, page_link_newer, page_link_older = page.source.make_pagelinks(page.format)
+        else:
+            page_links = page_link_newer = page_link_older = ""
         attrs.update(
-            page_links=(
-                page.source.make_pagelinks(page.format)
-                if isinstance(page.source, PageEntries)
-                else ""
-            )
+            page_links=page_links,
+            page_link_newer=page_link_newer,
+            page_link_older=page_link_older
         )
         return attrs
     
