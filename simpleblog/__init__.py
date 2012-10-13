@@ -320,8 +320,30 @@ def extendable(cls):
 # ENTRY
 
 
+class BlogSource(BlogObject):
+    """Base class for blog objects that can be page sources.
+    """
+    
+    sourcetype = None
+    multisource = None
+    
+    @cached_property
+    def next_source(self):
+        return self._get_next_source()
+    
+    def _get_next_source(self):
+        return None
+    
+    @cached_property
+    def prev_source(self):
+        return self._get_prev_source()
+    
+    def _get_prev_source(self):
+        return None
+
+
 @extendable
-class BlogEntry(BlogObject):
+class BlogEntry(BlogSource):
     """Single blog entry.
     """
     
@@ -332,7 +354,6 @@ class BlogEntry(BlogObject):
     )
     
     sourcetype = 'entry'
-    multisource = None
     
     def __init__(self, blog, name):
         BlogObject.__init__(self, blog)
@@ -516,7 +537,7 @@ class BlogEntriesMeta(BlogConfigUserMeta):
             setattr(cls, key, make_config_or_default_property(key))
 
 
-class BlogEntries(BlogObject):
+class BlogEntries(BlogSource):
     """Container for a set of blog entries.
     """
     
@@ -531,9 +552,6 @@ class BlogEntries(BlogObject):
         title="",
         heading=""
     )
-    
-    sourcetype = None
-    multisource = None
     
     urlshort = ""
     
@@ -631,7 +649,9 @@ class BlogPage(BlogObject):
     """
     
     config_vars = dict(
-        no_entries=('no_entries_content', "<p>No entries found!</p>")
+        no_entries=('no_entries_content', "<p>No entries found!</p>"),
+        source_link_template='<a href="{urlshort}">{title}</a>',
+        source_link_sep="&nbsp;&nbsp;"
     )
     
     def __init__(self, blog, source, format):
@@ -677,12 +697,29 @@ class BlogPage(BlogObject):
     def template(self):
         return self.template_data("page", self.format)
     
+    @cached_property
+    def source_links(self):
+        """Return HTML links to next and previous sources.
+        """
+        source = self.source
+        return tuple(
+            self.source_link_template.format(**s.link_attrs) if s else ""
+            for s in (
+                source.next_source if source else None,
+                source.prev_source if source else None
+            )
+        )
+    
     @extendable_property()
     def attrs(self):
+        links = (link_next_source, link_prev_source) = self.source_links
         metadata = dict(
             title=self.title,
             heading=self.heading,
-            entries=self.body
+            entries=self.body,
+            sourcelinks=self.source_link_sep.join(link for link in links if link),
+            sourcelink_next=link_next_source,
+            sourcelink_prev=link_prev_source
         )
         return dict(
             prefixed_keys(self.blog.metadata, 'blog_'),
