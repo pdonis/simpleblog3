@@ -277,6 +277,9 @@ will take precedence.
 To Do
 -----
 
+Standardize use of unicode internally for content and use of encodings
+when rendering to output formats.
+
 Add fancier example blogs to show how the various extensions work.
 
 Add support for comments while still allowing the blog to be
