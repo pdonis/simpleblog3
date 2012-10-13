@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="{blog_encoding}"?>
+<?xml version="1.0" encoding="{blog_charset}"?>
 <?xml-stylesheet type="text/css" href="{blog_root_url}{blog_feed_stylesheet_url}" ?>
 
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
