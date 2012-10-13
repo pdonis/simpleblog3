@@ -46,14 +46,14 @@ def load_submodule(subtype, subdir, name, err, subcls):
 
 
 @contextmanager
-def tmp_sys_path(subdir):
+def tmp_sys_path(subdir, index=0):
     """Temporarily munge ``sys.path`` to allow import from non-standard dir
     """
     
     if subdir:
         subdir = os.path.abspath(subdir)
         oldpath = sys.path[:]
-        sys.path.insert(0, subdir)
+        sys.path.insert(index, subdir)
     else:
         oldpath = None
     try:
