@@ -600,6 +600,31 @@ class BlogEntries(BlogSource):
             heading=self.heading,
             count=len(self.entries)
         )
+    
+    @cached_property
+    def sourcetype_sources(self):
+        return self._get_sourcetype_sources()
+    
+    def _get_sourcetype_sources(self):
+        return []
+    
+    @cached_property
+    def sourcetype_index(self):
+        if self.sourcetype_sources:
+            return self.sourcetype_sources.index(self)
+        return -1
+    
+    def _get_next_source(self):
+        i = self.sourcetype_index
+        if (i > -1) and (i < (len(self.sourcetype_sources) - 1)):
+            return self.sourcetype_sources[i + 1]
+        return None
+    
+    def _get_prev_source(self):
+        i = self.sourcetype_index
+        if i > 0:
+            return self.sourcetype_sources[i - 1]
+        return None
 
 
 class BlogIndex(BlogEntries):
@@ -697,17 +722,18 @@ class BlogPage(BlogObject):
     def template(self):
         return self.template_data("page", self.format)
     
+    @extendable_property()
+    def link_source(self):
+        return self.source
+    
     @cached_property
     def source_links(self):
         """Return HTML links to next and previous sources.
         """
-        source = self.source
+        source = self.link_source
         return tuple(
             self.source_link_template.format(**s.link_attrs) if s else ""
-            for s in (
-                source.next_source if source else None,
-                source.prev_source if source else None
-            )
+            for s in ((source.next_source, source.prev_source) if source else (None, None))
         )
     
     @extendable_property()

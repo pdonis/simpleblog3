@@ -25,6 +25,8 @@ class NamedEntries(BlogEntries):
     typename = None
     prefix = None
     
+    sourcetype_attrname = None
+    
     title_varnames = (
         'name',
     )
@@ -48,6 +50,11 @@ class NamedEntries(BlogEntries):
     @cached_property
     def prev_next_suffix(self):
         return self.name
+    
+    def _get_sourcetype_sources(self):
+        if self.sourcetype_attrname:
+            return sorted(getattr(self.blog, self.sourcetype_attrname), key=attrgetter('sortkey'), reverse=True)
+        return BlogEntries._get_sourcetype_sources(self)
 
 
 class BlogExtension(BlogConfigUser):

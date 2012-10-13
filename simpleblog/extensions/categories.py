@@ -27,6 +27,7 @@ class BlogCategory(NamedEntries):
     
     sourcetype = 'category'
     typename = "Category"
+    sourcetype_attrname = 'all_categories'
     
     def _get_entries(self):
         return [

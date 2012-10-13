@@ -86,8 +86,7 @@ class BlogArchiveEntries(BlogEntries):
             return self.blog.month_entries[(self.year, self.month)]
         return self.blog.year_entries[self.year]
     
-    @cached_property
-    def _other_archives(self):
+    def _get_sourcetype_sources(self):
         archives = self.blog.all_archives
         if self.month:
             if self.day:
@@ -97,22 +96,6 @@ class BlogArchiveEntries(BlogEntries):
         else:
             match = lambda a: (a.month == 0) and (a.day == 0)
         return sorted((a for a in archives if match(a)), key=attrgetter('sortkey'))
-    
-    @cached_property
-    def _index(self):
-        return self._other_archives.index(self)
-    
-    def _get_next_source(self):
-        i = self._index
-        if i < (len(self._other_archives) - 1):
-            return self._other_archives[i + 1]
-        return None
-    
-    def _get_prev_source(self):
-        i = self._index
-        if i > 0:
-            return self._other_archives[i - 1]
-        return None
 
 
 class ArchivesExtension(BlogExtension):

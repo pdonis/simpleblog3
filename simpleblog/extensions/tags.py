@@ -64,6 +64,7 @@ class BlogTag(NamedEntries):
     sourcetype = 'tag'
     multisource = 'tags'
     typename = "Tag"
+    sourcetype_attrname = 'all_tags'
     
     def _get_entries(self):
         return [

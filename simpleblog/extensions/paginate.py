@@ -12,7 +12,7 @@ from plib.stdlib.decotools import cached_method
 from plib.stdlib.iters import group_into
 from plib.stdlib.strings import universal_newline
 
-from simpleblog import BlogEntries
+from simpleblog import BlogEntries, noresult
 from simpleblog.extensions import BlogExtension
 
 
@@ -106,6 +106,11 @@ class PaginateExtension(BlogExtension):
         page_link_sep="&nbsp;&nbsp;"
     )
     
+    def page_get_link_source(self, page):
+        if isinstance(page.source, PageEntries):
+            return page.source.orig_source
+        return noresult
+    
     def page_mod_entry_params(self, page, params, entry):
         if self.page_force_short:
             try:
@@ -124,9 +129,10 @@ class PaginateExtension(BlogExtension):
             page_link_newer, page_link_older = page.source.make_pagelinks(page.format)
         else:
             page_link_newer = page_link_older = ""
-        links = (page_link_newer, page_link_older)
         if self.page_links_include_sources:
-            links = (attrs['page_sourcelink_next'],) + links + (attrs['page_sourcelink_prev'],)
+            links = (attrs['page_sourcelink_next'], page_link_newer, page_link_older, attrs['page_sourcelink_prev'],)
+        else:
+            links = (page_link_newer, page_link_older)
         page_links = self.page_link_sep.join(link for link in links if link)
         attrs.update(
             page_links="{}{}".format(page_links, universal_newline) if page_links else "",
