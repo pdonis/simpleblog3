@@ -126,7 +126,7 @@ class PaginateExtension(BlogExtension):
             page_link_newer = page_link_older = ""
         links = (page_link_newer, page_link_older)
         if self.page_links_include_sources:
-            links = (attrs['sourcelink_next'],) + links + (attrs['sourcelink_prev'],)
+            links = (attrs['page_sourcelink_next'],) + links + (attrs['page_sourcelink_prev'],)
         page_links = self.page_link_sep.join(link for link in links if link)
         attrs.update(
             page_links="{}{}".format(page_links, universal_newline) if page_links else "",
