@@ -18,6 +18,11 @@ Added support for user-defined commands and extensions.
 The ``simpleblog-run`` script now displays command-specific help
 if a command is provided along with the ``--help`` option.
 
+Added support for "next source" and "previous source" links on
+index pages; the ``archives``, ``categories``, and ``tags``
+extensions all use this feature to allow linking between index
+pages for those source types.
+
 The ``indexes`` extension now puts a line break between links,
 to make the generated HTML more readable.
 
@@ -25,6 +30,10 @@ The ``links`` extension now makes entry links visible in the page
 as well as the entry, for more options when formatting single-entry
 pages. It also now adds ``title`` attributes to the links (this can
 be disabled by setting the title template configs to empty values).
+
+The ``paginate`` extension now has a config setting to include the
+"next source" and "previous source" links in the page links it
+generates, for easier formatting when both features are in use.
 
 The separator for container links is now configurable.
 
