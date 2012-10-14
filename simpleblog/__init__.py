@@ -778,7 +778,7 @@ class BlogPage(BlogObject):
     
     @cached_property
     def encoded(self):
-        return encode(self.formatted, self.blog.metadata.get('charset', 'utf-8'))
+        return encode(self.formatted, self.blog.metadata['charset'])
 
 
 # BLOG
@@ -819,7 +819,9 @@ class Blog(BlogObject):
     
     @extendable_property()
     def default_metadata(self):
-        return {}
+        return dict(
+            charset='utf-8'
+        )
     
     @cached_method
     def filter_entries(self, path):

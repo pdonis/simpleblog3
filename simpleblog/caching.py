@@ -92,7 +92,7 @@ def cached(cachename, reverse=False, objtype=None, sep=' '):
                     reverse,
                     objtype,
                     sep,
-                    self.blog.metadata.get('charset', 'utf-8')
+                    self.blog.metadata['charset']
                 )
             cache = cacheobj.cache
             try:
