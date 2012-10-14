@@ -39,23 +39,23 @@ class MarkdownEntryMixin(BlogMixin):
         blankline_flag = False
         for line in lines:
             if blankline_flag:
-                if not line.endswith("</blockquote>"):
+                if not line.endswith(u"</blockquote>"):
                     out.append("")
                 blankline_flag = False
             if in_blockquote:
-                if line.endswith("</blockquote>"):
+                if line.endswith(u"</blockquote>"):
                     in_blockquote = False
                 else:
                     line = "  {}".format(line)
             else:
-                if line.startswith("<blockquote>"):
+                if line.startswith(u"<blockquote>"):
                     in_blockquote = True
             out.append(line)
             if (
-                line.endswith("</p>") or
-                line.endswith("</h1>") or
-                line.endswith("</pre>") or
-                line.endswith("</blockquote>")
+                line.endswith(u"</p>") or
+                line.endswith(u"</h1>") or
+                line.endswith(u"</pre>") or
+                line.endswith(u"</blockquote>")
             ):
                 blankline_flag = True
         return universal_newline.join(out)
