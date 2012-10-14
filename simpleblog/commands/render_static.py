@@ -11,7 +11,6 @@ See the LICENSE and README files for more information
 import os
 from codecs import encode
 
-from simpleblog import blogdata_encoding
 from simpleblog.commands import BlogCommand
 
 
@@ -47,7 +46,7 @@ class RenderStatic(BlogCommand):
     
     def run(self, blog):
         for page in blog.pages:
-            data = encode(page.formatted, blogdata_encoding)
+            data = encode(page.formatted, blog.metadata.get('charset', 'utf-8'))
             path = os.path.abspath(os.path.join(self.static_dir, page.filepath))
             if self.opts.force or changed(data, path):
                 if not self.opts.quiet:

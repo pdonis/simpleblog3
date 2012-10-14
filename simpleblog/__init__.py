@@ -48,11 +48,8 @@ else:
     SafeLoader.add_constructor('tag:yaml.org,2002:str', construct_yaml_str)
 
 
-blogdata_encoding='utf-8'
-
-
-def blogdata(data):
-    return decode(data, blogdata_encoding)
+def blogdata(data, encoding='utf-8'):
+    return decode(data, encoding)
 
 
 def read_blogfile(filename):
