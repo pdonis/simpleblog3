@@ -21,10 +21,10 @@ tags_file = BlogExtension.config.get('tags_file', "tags")
 
 def makelink(name, prefix=None):
     if prefix:
-        href = "{0}/{1}".format(prefix, name)
+        href = u"{0}/{1}".format(prefix, name)
     else:
         href = name
-    return '<a href="/{0}/">{1}</a>'.format(href, name)
+    return u'<a href="/{0}/">{1}</a>'.format(href, name)
 
 
 class Tagset(object):
@@ -63,7 +63,7 @@ class BlogTag(NamedEntries):
     
     sourcetype = 'tag'
     multisource = 'tags'
-    typename = "Tag"
+    typename = u"Tag"
     sourcetype_attrname = 'all_tags'
     
     def _get_entries(self):

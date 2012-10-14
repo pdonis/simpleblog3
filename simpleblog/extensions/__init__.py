@@ -36,8 +36,8 @@ class NamedEntries(BlogEntries):
         'name'
     )
     
-    default_title = "{name}"
-    default_heading = "{typename}: {name}"
+    default_title = u"{name}"
+    default_heading = u"{typename}: {name}"
     
     def __init__(self, blog, name):
         BlogEntries.__init__(self, blog)
@@ -62,8 +62,8 @@ class BlogExtension(BlogConfigUser):
     """
     
     config_vars = dict(
-        container_link_template='<a href="{urlshort}">{title}</a>',
-        container_link_sep='',
+        container_link_template=u'<a href="{urlshort}">{title}</a>',
+        container_link_sep=u'',
     )
     
     def __init__(self, config):

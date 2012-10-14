@@ -9,6 +9,7 @@ See the LICENSE and README files for more information
 
 import os
 import pkgutil
+from codecs import decode
 from collections import defaultdict
 from datetime import datetime
 from functools import wraps
@@ -31,11 +32,33 @@ __version__ = "0.7"
 blogfile_exts = ["json"]
 
 try:
-    from yaml import safe_load as load
+    from yaml import safe_load as loads
 except ImportError:
-    from json import load
+    from json import loads
 else:
     blogfile_exts.insert(0, "yaml")
+    
+    # Make PyYAML load unicode strings
+    from yaml import Loader, SafeLoader
+    
+    def construct_yaml_str(self, node):
+        return self.construct_scalar(node)
+    
+    Loader.add_constructor('tag:yaml.org,2002:str', construct_yaml_str)
+    SafeLoader.add_constructor('tag:yaml.org,2002:str', construct_yaml_str)
+
+
+blogdata_encoding='utf-8'
+
+
+def blogdata(data):
+    return decode(data, blogdata_encoding)
+
+
+def read_blogfile(filename):
+    with open(filename, 'rb') as f:
+        data = f.read()
+    return blogdata(data)
 
 
 def load_blogfile(filename, basename, mapping):
@@ -45,8 +68,7 @@ def load_blogfile(filename, basename, mapping):
     ]
     for fname in trial_names:
         if fname and os.path.isfile(fname):
-            with open(fname, 'rU') as f:
-                mapping.update(load(f))
+            mapping.update(loads(read_blogfile(fname)))
             break
 
 
@@ -177,12 +199,11 @@ class BlogObject(BlogConfigUser):
     @cached_method
     def template_data(self, kind, format):
         try:
-            with open(self.template_file(kind, format), 'rU') as f:
-                return f.read()
+            return read_blogfile(self.template_file(kind, format))
         except IOError:
             try:
-                return pkgutil.get_data('simpleblog',
-                    "templates/{}".format(self.template_basename(kind, format)))
+                return blogdata(pkgutil.get_data('simpleblog',
+                    "templates/{}".format(self.template_basename(kind, format))))
             except IOError:
                 raise BlogConfigError("template {}.{} not found".format(kind, format))
 
@@ -349,8 +370,8 @@ class BlogEntry(BlogSource):
     
     config_vars = dict(
         utc_timestamps=False,
-        timestamp_template="{hour:02d}:{minute:02d}",
-        datestamp_template="{year}-{month:02d}-{day:02d}"
+        timestamp_template=u"{hour:02d}:{minute:02d}",
+        datestamp_template=u"{year}-{month:02d}-{day:02d}"
     )
     
     sourcetype = 'entry'
@@ -370,7 +391,7 @@ class BlogEntry(BlogSource):
     
     @extendable_property()
     def heading(self):
-        return "Single Entry"
+        return u"Single Entry"
     
     @extendable_property()
     def title(self):
@@ -631,8 +652,8 @@ class BlogIndex(BlogEntries):
     
     sourcetype = 'blog'
     urlshort = "/"
-    default_title = "Home"
-    default_heading = "Home Page"
+    default_title = u"Home"
+    default_heading = u"Home Page"
     
     def _get_entries(self):
         return self.blog.all_entries
@@ -674,9 +695,9 @@ class BlogPage(BlogObject):
     """
     
     config_vars = dict(
-        no_entries=('no_entries_content', "<p>No entries found!</p>"),
-        source_link_template='<a href="{urlshort}">{title}</a>',
-        source_link_sep="&nbsp;&nbsp;"
+        no_entries=('no_entries_content', u"<p>No entries found!</p>"),
+        source_link_template=u'<a href="{urlshort}">{title}</a>',
+        source_link_sep=u"&nbsp;&nbsp;"
     )
     
     def __init__(self, blog, source, format):

@@ -22,13 +22,14 @@ class BlogIndexPage(BlogPage):
     """
     
     config_vars = dict(
-        index_link_template="{link}",
-        index_link_suffix_template="",
-        link_index_title_template="{heading}",
-        link_index_heading_alpha="Alphabetical",
-        link_index_heading_chrono="Chronological",
-        link_index_heading_key="Key",
-        link_index_sep="<br>"
+        index_link_template=u"{link}",
+        index_link_suffix_template=u"",
+        link_index_title_template=u"{heading}",
+        link_index_heading_template=u"{label} Index",
+        link_index_heading_alpha=u"Alphabetical",
+        link_index_heading_chrono=u"Chronological",
+        link_index_heading_key=u"Key",
+        link_index_sep=u"<br>"
     )
     
     def __init__(self, blog, format, alpha):
@@ -40,10 +41,12 @@ class BlogIndexPage(BlogPage):
             "key" if alpha is None else "alpha" if alpha else "chrono",
             format
         )
-        self.heading = "{} Index".format(
-            self.link_index_heading_key if alpha is None
-            else self.link_index_heading_alpha if alpha
-            else self.link_index_heading_chrono
+        self.heading = self.link_index_heading_template.format(
+            label=(
+                self.link_index_heading_key if alpha is None
+                else self.link_index_heading_alpha if alpha
+                else self.link_index_heading_chrono
+            )
         )
         self.title = self.link_index_title_template.format(
             heading=self.heading
@@ -68,7 +71,7 @@ class BlogIndexPage(BlogPage):
         return self.indexlinks_template.format(
             index_links=("{}{}".format(self.link_index_sep, universal_newline)).join([
                 self.index_link_template.format(
-                    link='<a href="{0}.{1}">{2}</a>{3}'.format(
+                    link=u'<a href="{0}.{1}">{2}</a>{3}'.format(
                         entry.urlpath, self.format, label(entry), suffix(entry)
                     )
                 ) for entry in sorted(self.blog.all_entries, key=key, reverse=reverse)

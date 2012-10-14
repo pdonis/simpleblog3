@@ -9,7 +9,9 @@ See the LICENSE and README files for more information
 """
 
 import os
+from codecs import encode
 
+from simpleblog import blogdata_encoding
 from simpleblog.commands import BlogCommand
 
 
@@ -19,7 +21,7 @@ def changed(data, path):
     
     if (not os.path.isfile(path)) or (os.stat(path).st_size != len(data)):
         return True
-    with open(path, 'r') as f:
+    with open(path, 'rb') as f:
         olddata = f.read()
     return data != olddata
 
@@ -45,7 +47,7 @@ class RenderStatic(BlogCommand):
     
     def run(self, blog):
         for page in blog.pages:
-            data = page.formatted
+            data = encode(page.formatted, blogdata_encoding)
             path = os.path.abspath(os.path.join(self.static_dir, page.filepath))
             if self.opts.force or changed(data, path):
                 if not self.opts.quiet:
@@ -53,7 +55,7 @@ class RenderStatic(BlogCommand):
                 dir = os.path.split(path)[0]
                 if not os.path.isdir(dir):
                     os.makedirs(dir)
-                with open(path, 'w') as f:
+                with open(path, 'wb') as f:
                     f.write(data)
             else:
                 if not self.opts.quiet:

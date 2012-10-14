@@ -21,11 +21,11 @@ from simpleblog.extensions import BlogExtension
 class LinksEntryMixin(BlogMixin):
     
     config_vars = dict(
-        entrylink_sep="&nbsp;",
-        link_next_template="next in {}",
-        link_next_title_template="Next in {}",
-        link_prev_template="previous in {}",
-        link_prev_title_template="Previous in {}",
+        entrylink_sep=u"&nbsp;",
+        link_next_template=u"next in {}",
+        link_next_title_template=u"Next in {}",
+        link_prev_template=u"previous in {}",
+        link_prev_title_template=u"Previous in {}",
         link_display_sourcetypes=dict(
             vartype=set,
             default=['entry'])
@@ -48,14 +48,14 @@ class LinksEntryMixin(BlogMixin):
             title = tmpl_title.format(label.capitalize()) if tmpl_title else None
             href = entry.make_permalink(format)
             if title:
-                return '<a href="{}" title="{}">{}</a>'.format(href, title, content)
-            return '<a href="{}">{}</a>'.format(href, content)
+                return u'<a href="{}" title="{}">{}</a>'.format(href, title, content)
+            return u'<a href="{}">{}</a>'.format(href, content)
         return content
     
     @extendable_method()
     def prev_next_link(self, attr, format, prefix):
         if isinstance(attr, list):
-            sep = '{0}{1}{0}'.format(universal_newline, self.entrylink_sep)
+            sep = u'{0}{1}{0}'.format(universal_newline, self.entrylink_sep)
             return sep.join(
                 self.get_entrylink(value, format, prefix)
                 for value in attr

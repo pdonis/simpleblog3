@@ -18,7 +18,7 @@ class LocalizeExtension(BlogExtension):
     def post_init(self):
         config = self.config
         try:
-            config.settings.setdefault('locale', "{0}_{1}.{2}".format(
+            config.settings.setdefault('locale', u"{0}_{1}.{2}".format(
                 config.language, config.country, config.charset
             ))
         except AttributeError:
