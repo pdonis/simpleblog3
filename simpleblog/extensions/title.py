@@ -15,7 +15,7 @@ from simpleblog.caching import cached
 from simpleblog.extensions import BlogExtension
 
 
-titles_file = BlogExtension.config.get('titles_file', "titles")
+titles_file = BlogExtension.config.get('titles_file', u"titles")
 
 
 class TitleEntryMixin(BlogMixin):

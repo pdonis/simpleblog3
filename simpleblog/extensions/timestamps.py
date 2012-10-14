@@ -15,7 +15,7 @@ from simpleblog.caching import cached
 from simpleblog.extensions import BlogExtension
 
 
-timestamps_file = BlogExtension.config.get('timestamps_file', "timestamps")
+timestamps_file = BlogExtension.config.get('timestamps_file', u"timestamps")
 
 timestamp_cache_format = "%Y-%m-%d %H:%M"
 

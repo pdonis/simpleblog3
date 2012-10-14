@@ -9,6 +9,7 @@ See the LICENSE and README files for more information
 """
 
 import os
+import codecs
 from functools import wraps
 
 from plib.stdlib.decotools import cached_property
@@ -23,12 +24,13 @@ class BlogCache(BlogObject):
     without having to stat or open and load any entry files.
     """
     
-    def __init__(self, blog, cachename, reverse=False, objtype=None, sep=' '):
+    def __init__(self, blog, cachename, reverse=False, objtype=None, sep=u' ', encoding='utf-8'):
         BlogObject.__init__(self, blog)
         self.cachename = cachename
         self.reverse = reverse
         self.objtype = objtype
         self.sep = sep
+        self.encoding = encoding
     
     @cached_property
     def cache_dir(self):
@@ -41,7 +43,7 @@ class BlogCache(BlogObject):
     @cached_property
     def cache(self):
         try:
-            with open(self.filename, 'rU') as f:
+            with codecs.open(self.filename, 'r', self.encoding) as f:
                 lines = f.readlines()
         except IOError:
             return {}
@@ -66,8 +68,8 @@ class BlogCache(BlogObject):
         items = self.cache.iteritems()
         if self.reverse:
             items = ((v, k) for k, v in items)
-        lines = sorted("{0!s}{1}{2!s}\n".format(a, self.sep, b) for a, b in items)
-        with open(self.filename, 'w') as f:
+        lines = sorted(u"{0}{1}{2}\n".format(unicode(a), self.sep, unicode(b)) for a, b in items)
+        with codecs.open(self.filename, 'w', self.encoding) as f:
             f.writelines(lines)
 
 

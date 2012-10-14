@@ -16,7 +16,7 @@ from simpleblog.caching import cached
 from simpleblog.extensions import BlogExtension, NamedEntries
 
 
-tags_file = BlogExtension.config.get('tags_file', "tags")
+tags_file = BlogExtension.config.get('tags_file', u"tags")
 
 
 def makelink(name, prefix=None):
