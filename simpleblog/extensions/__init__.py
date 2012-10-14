@@ -11,11 +11,10 @@ from operator import attrgetter
 
 from plib.stdlib.decotools import cached_property, wraps_class
 from plib.stdlib.iters import prefixed_items
-from plib.stdlib.strings import universal_newline
 
 from simpleblog import (BlogConfigUser,
     extension_types, extension_map, extend_attributes,
-    BlogEntries, universal_newline)
+    BlogEntries, newline)
 
 
 class NamedEntries(BlogEntries):
@@ -99,7 +98,7 @@ class BlogExtension(BlogConfigUser):
     def get_links(self, containers, reverse=False):
         """Return HTML links to containers.
         """
-        return "{}{}".format(self.container_link_sep, universal_newline).join(
+        return "{}{}".format(self.container_link_sep, newline).join(
             self.container_link_template.format(**c.link_attrs)
             for c in sorted(containers, key=attrgetter('sortkey'), reverse=reverse)
         )

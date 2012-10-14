@@ -14,10 +14,9 @@ from itertools import groupby
 
 from plib.stdlib.decotools import cached_property, cached_method
 from plib.stdlib.localize import weekdayname, monthname, monthname_long
-from plib.stdlib.strings import universal_newline
 from plib.stdlib.tztools import UTCTimezone, LocalTimezone
 
-from simpleblog import BlogMixin, extendable_property, BlogEntries
+from simpleblog import BlogMixin, extendable_property, BlogEntries, newline
 from simpleblog.extensions import BlogExtension
 
 
@@ -126,8 +125,8 @@ class BlogCurrentFeedEntries(BlogEntries):
     @cached_method
     def archive_elements(self, format):
         return "{}{}{}".format(
-            universal_newline,
-            universal_newline.join(
+            newline,
+            newline.join(
                 item for item in [
                     self.archive_elem,
                     self.archive_current(format)
@@ -137,7 +136,7 @@ class BlogCurrentFeedEntries(BlogEntries):
                 ]
                 if item
             ),
-            universal_newline
+            newline
         )
 
 
@@ -360,7 +359,7 @@ class FeedExtension(BlogExtension):
             feedlinks.append(
                 blog.feedlink_template_atom.format(**blog.metadata)
             )
-        blog.metadata['feed_links'] = universal_newline.join(feedlinks)
+        blog.metadata['feed_links'] = newline.join(feedlinks)
         
         if self.archive_feeds:
             arglist = self.archive_feed_args(blog)

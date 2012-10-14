@@ -22,7 +22,6 @@ from plib.stdlib.iters import suffixed_items
 from plib.stdlib.localize import (
     weekdayname, weekdayname_long,
     monthname, monthname_long)
-from plib.stdlib.strings import universal_newline
 from plib.stdlib.version import version_string
 
 
@@ -70,6 +69,9 @@ def load_blogfile(filename, basename, mapping):
 
 
 # CONFIG
+
+newline = os.linesep
+
 
 class BlogError(Exception):
     pass
@@ -732,7 +734,7 @@ class BlogPage(BlogObject):
     @extendable_property()
     def body(self):
         if self.entries:
-            return universal_newline.join(self.format_entries())
+            return newline.join(self.format_entries())
         return self.no_entries
     
     @extendable_property()

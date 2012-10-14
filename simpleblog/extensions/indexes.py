@@ -11,9 +11,8 @@ See the LICENSE and README files for more information
 from operator import attrgetter
 
 from plib.stdlib.decotools import cached_property
-from plib.stdlib.strings import universal_newline
 
-from simpleblog import BlogObject, BlogPage, prefixed_keys
+from simpleblog import BlogObject, BlogPage, prefixed_keys, newline
 from simpleblog.extensions import BlogExtension
 
 
@@ -69,7 +68,7 @@ class BlogIndexPage(BlogPage):
             suffix = lambda entry: self.index_link_suffix_template.format(entry)
             reverse = not self.alpha
         return self.indexlinks_template.format(
-            index_links=("{}{}".format(self.link_index_sep, universal_newline)).join([
+            index_links=("{}{}".format(self.link_index_sep, newline)).join([
                 self.index_link_template.format(
                     link=u'<a href="{0}.{1}">{2}</a>{3}'.format(
                         entry.urlpath, self.format, label(entry), suffix(entry)

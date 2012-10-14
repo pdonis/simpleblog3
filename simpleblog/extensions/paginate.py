@@ -10,9 +10,8 @@ See the LICENSE and README files for more information
 
 from plib.stdlib.decotools import cached_method
 from plib.stdlib.iters import group_into
-from plib.stdlib.strings import universal_newline
 
-from simpleblog import BlogEntries, noresult
+from simpleblog import BlogEntries, noresult, newline
 from simpleblog.extensions import BlogExtension
 
 
@@ -140,7 +139,7 @@ class PaginateExtension(BlogExtension):
             links = (page_link_newer, page_link_older)
         page_links = self.page_link_sep.join(link for link in links if link)
         attrs.update(
-            page_links="{}{}".format(page_links, universal_newline) if page_links else "",
+            page_links="{}{}".format(page_links, newline) if page_links else "",
             page_link_newer=page_link_newer,
             page_link_older=page_link_older
         )

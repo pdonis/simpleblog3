@@ -9,9 +9,9 @@ See the LICENSE and README files for more information
 """
 
 from plib.stdlib.decotools import cached_property, convert
-from plib.stdlib.strings import split_string, universal_newline
+from plib.stdlib.strings import split_string
 
-from simpleblog import BlogMixin, extendable_property
+from simpleblog import BlogMixin, extendable_property, newline
 from simpleblog.caching import cached
 from simpleblog.extensions import BlogExtension, NamedEntries
 
@@ -76,7 +76,7 @@ class TagsEntryMixin(BlogMixin):
     
     config_vars = dict(
         tags_marker="#tags ",
-        tags_end=universal_newline
+        tags_end=newline
     )
     
     def _do_load(self):
@@ -110,7 +110,7 @@ class TagsExtension(BlogExtension):
     
     def entry_post_init(self, entry):
         entry.metadata.update(
-            taglinks=',{}'.format(universal_newline).join(
+            taglinks=',{}'.format(newline).join(
                 makelink(tag, self.tags_prefix) for tag in sorted(entry.tags)
             )
         )

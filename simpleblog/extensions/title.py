@@ -8,9 +8,7 @@ Released under the GNU General Public License, Version 2
 See the LICENSE and README files for more information
 """
 
-from plib.stdlib.strings import universal_newline
-
-from simpleblog import BlogMixin, extendable_property
+from simpleblog import BlogMixin, extendable_property, newline
 from simpleblog.caching import cached
 from simpleblog.extensions import BlogExtension
 
@@ -21,7 +19,7 @@ titles_file = BlogExtension.config.get('titles_file', u"titles")
 class TitleEntryMixin(BlogMixin):
     
     config_vars = dict(
-        title_separator=universal_newline
+        title_separator=newline
     )
     
     def _do_load(self):

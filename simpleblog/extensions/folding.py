@@ -9,11 +9,10 @@ See the LICENSE and README files for more information
 """
 
 from plib.stdlib.decotools import cached_property, cached_method
-from plib.stdlib.strings import universal_newline
 
 from simpleblog import (BlogMixin,
     extendable_property, extendable_method,
-    noresult)
+    noresult, newline)
 from simpleblog.extensions import BlogExtension
 
 
@@ -31,7 +30,7 @@ class FoldEntryMixin(BlogMixin):
     def fold_marker(self):
         if self.fold_inline:
             return self.fold_symbol
-        return '{0}{1}'.format(self.fold_symbol, universal_newline)
+        return '{0}{1}'.format(self.fold_symbol, newline)
     
     def _do_load(self):
         raw = super(FoldEntryMixin, self)._do_load()
