@@ -46,10 +46,10 @@ else:
         from yaml import SafeLoader as _Loader
     
     # Make PyYAML load unicode strings
-    def construct_yaml_str(self, node):
-        return self.construct_scalar(node)
-    
-    _Loader.add_constructor('tag:yaml.org,2002:str', construct_yaml_str)
+    _Loader.add_constructor(
+        'tag:yaml.org,2002:str',
+        lambda self, node: self.construct_scalar(node)
+    )
     
     loads = partial(_loads, Loader=_Loader)
 
