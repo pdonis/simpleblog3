@@ -31,20 +31,27 @@ __version__ = "0.7"
 blogfile_exts = ["json"]
 
 try:
-    from yaml import safe_load as loads
+    from yaml import load as _loads
 except ImportError:
     from json import loads
 else:
     blogfile_exts.insert(0, "yaml")
     
-    # Make PyYAML load unicode strings
-    from yaml import Loader, SafeLoader
+    from functools import partial
     
+    try:
+        # Use libyaml if present, much faster
+        from yaml import CSafeLoader as _Loader
+    except ImportError:
+        from yaml import SafeLoader as _Loader
+    
+    # Make PyYAML load unicode strings
     def construct_yaml_str(self, node):
         return self.construct_scalar(node)
     
-    Loader.add_constructor('tag:yaml.org,2002:str', construct_yaml_str)
-    SafeLoader.add_constructor('tag:yaml.org,2002:str', construct_yaml_str)
+    _Loader.add_constructor('tag:yaml.org,2002:str', construct_yaml_str)
+    
+    loads = partial(_loads, Loader=_Loader)
 
 
 def blogdata(data, encoding='utf-8'):
