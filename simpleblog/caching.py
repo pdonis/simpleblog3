@@ -87,7 +87,12 @@ def cached(cachename, reverse=False, objtype=None, sep=' '):
                 cacheobj = cache_map[cachename]
             except KeyError:
                 cacheobj = cache_map[cachename] = BlogCache(
-                    self.blog, cachename, reverse, objtype, sep
+                    self.blog,
+                    cachename,
+                    reverse,
+                    objtype,
+                    sep,
+                    self.blog.metadata.get('charset', 'utf-8')
                 )
             cache = cacheobj.cache
             try:
