@@ -31,7 +31,7 @@ __version__ = "0.7"
 blogfile_exts = ["json"]
 
 try:
-    from yaml import load
+    from yaml import safe_load as load
 except ImportError:
     from json import load
 else:
