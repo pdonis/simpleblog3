@@ -463,8 +463,7 @@ class BlogEntry(BlogSource):
         return self._get_source()
     
     def _get_source(self):
-        with open(self.filename, 'rU') as f:
-            return f.read()
+        return read_blogfile(self.filename)
     
     # Load is also *not* extendable, because it must be callable
     # from any code that needs to ensure that the actual data is
