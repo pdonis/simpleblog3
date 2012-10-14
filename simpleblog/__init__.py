@@ -25,7 +25,7 @@ from plib.stdlib.strings import universal_newline
 from plib.stdlib.version import version_string
 
 
-__version__ = "0.6"
+__version__ = "0.7"
 
 
 blogfile_exts = ["json"]
