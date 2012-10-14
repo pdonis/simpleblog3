@@ -1,6 +1,18 @@
 Simpleblog Change Log
 =====================
 
+Version 0.7
+-----------
+
+Standardized use of unicode internally for content. Source content
+(blog entries, templates, metadata, and configs) is loaded using
+UTF-8 encoding; output content (statically rendered pages) is
+encoded using the charset specified in the blog metadata (or UTF-8
+if none is specified).
+
+Switched to the PyYAML ``safe_load`` function for loading blog config
+and metadata.
+
 Version 0.6
 -----------
 
