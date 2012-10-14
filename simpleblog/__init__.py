@@ -9,7 +9,7 @@ See the LICENSE and README files for more information
 
 import os
 import pkgutil
-from codecs import decode
+from codecs import decode, encode
 from collections import defaultdict
 from datetime import datetime
 from functools import wraps
@@ -776,6 +776,10 @@ class BlogPage(BlogObject):
     @extendable_property()
     def formatted(self):
         return self.template.format(**self.attrs)
+    
+    @cached_property
+    def encoded(self):
+        return encode(self.formatted, self.blog.metadata.get('charset', 'utf-8'))
 
 
 # BLOG
