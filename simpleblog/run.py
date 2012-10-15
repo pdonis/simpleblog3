@@ -41,6 +41,7 @@ def run(cmdname, parser, opts, goptlist, result=None, remaining=None):
                 # There can be only one
                 break
         parser.print_help()
+    
     else:
         cmd = klass(config, opts, args)
         cmd.run(blog)
