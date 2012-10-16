@@ -277,9 +277,6 @@ will take precedence.
 To Do
 -----
 
-Add support for a program config file to allow customizing things
-like the source file encoding (to be something other than UTF-8).
-
 Add fancier example blogs to show how the various extensions work.
 
 Add support for comments while still allowing the blog to be

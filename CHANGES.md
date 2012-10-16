@@ -4,11 +4,16 @@ Simpleblog Change Log
 Version 0.7
 -----------
 
+Add support for a program config file to allow customizing things
+like the source file encoding (to be something other than UTF-8;
+see next item).
+
 Standardized use of unicode internally for content. Source content
 (blog entries, templates, metadata, and configs) is loaded using
-UTF-8 encoding; output content (statically rendered pages) is
-encoded using the charset specified in the blog metadata (or UTF-8
-if none is specified).
+the encoding specified in the program config file (see above; the
+default is UTF-8); output content (statically rendered pages) is
+encoded using the charset specified in the blog metadata (again
+the default is UTF-8 if none is specified).
 
 Switched to the PyYAML ``safe_load`` function for loading blog config
 and metadata.
