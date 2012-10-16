@@ -18,6 +18,8 @@ from operator import attrgetter
 from plib.stdlib.builtins import first
 from plib.stdlib.decotools import (
     cached_method, cached_property, memoize_generator)
+from plib.stdlib.ini import PIniFile
+from plib.stdlib.ini.defs import *
 from plib.stdlib.iters import suffixed_items
 from plib.stdlib.localize import (
     weekdayname, weekdayname_long,
@@ -54,7 +56,14 @@ else:
     loads = partial(_loads, Loader=_Loader)
 
 
-def blogdata(data, encoding='utf-8'):
+inifile = PIniFile("simpleblog", [
+    ('source', [
+        ('encoding', INI_STRING, 'utf-8')
+    ])
+])
+
+
+def blogdata(data, encoding=inifile.source_encoding):
     return decode(data, encoding)
 
 
