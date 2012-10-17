@@ -18,6 +18,10 @@ the default is UTF-8 if none is specified).
 Switched to the PyYAML ``safe_load`` function for loading blog config
 and metadata.
 
+Added config setting in ``categories`` extension to allow customizing
+the link or text to appear as the "category" link for entries that
+have no category.
+
 Version 0.6
 -----------
 
