@@ -279,6 +279,9 @@ To Do
 
 Add fancier example blogs to show how the various extensions work.
 
+Add documentation other than this README file, both for users and
+for developers.
+
 Add support for comments while still allowing the blog to be
 statically generated.
 
