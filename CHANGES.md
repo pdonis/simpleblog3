@@ -22,6 +22,9 @@ Added config setting in ``categories`` extension to allow customizing
 the link or text to appear as the "category" link for entries that
 have no category.
 
+Updated required blog metadata for extensions that need specific
+keys to be present.
+
 Version 0.6
 -----------
 
