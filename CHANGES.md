@@ -22,6 +22,9 @@ Added config setting in ``categories`` extension to allow customizing
 the link or text to appear as the "category" link for entries that
 have no category.
 
+Fixed ``localize`` extension to use blog metadata instead of config
+settings.
+
 Updated required blog metadata for extensions that need specific
 keys to be present.
 
