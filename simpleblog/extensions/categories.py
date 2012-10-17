@@ -47,7 +47,8 @@ class CategoryExtension(BlogExtension):
     """
     
     config_vars = dict(
-        category_link_template=u'<a href="/{category}/">{category}</a>'
+        category_link_template=u'<a href="/{category}/">{category}</a>',
+        no_category_link="(None)"
     )
     
     entry_mixin = CategoryEntryMixin
@@ -71,7 +72,7 @@ class CategoryExtension(BlogExtension):
         if entry.category:
             link = self.make_category_link(entry)
         else:
-            link = "(None)"
+            link = self.no_category_link
         entry.metadata.update(
             categorylink=link
         )
