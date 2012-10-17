@@ -303,6 +303,11 @@ class FeedExtension(BlogExtension):
         return attrs
     
     def blog_mod_required_metadata(self, blog, data):
+        data.update([
+            'root_url',
+            'author',
+            'email'
+        ])
         if 'rss' in blog.feed_formats:
             data.add('language')
         return data
@@ -359,7 +364,9 @@ class FeedExtension(BlogExtension):
             feedlinks.append(
                 blog.feedlink_template_atom.format(**blog.metadata)
             )
-        blog.metadata['feed_links'] = newline.join(feedlinks)
+        blog.metadata.update(
+            feed_links=newline.join(feedlinks)
+        )
         
         if self.archive_feeds:
             arglist = self.archive_feed_args(blog)
