@@ -4,7 +4,7 @@ Simpleblog Change Log
 Version 0.7
 -----------
 
-Add support for a program config file to allow customizing things
+Added support for a program config file to allow customizing things
 like the source file encoding (to be something other than UTF-8;
 see next item).
 
