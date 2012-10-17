@@ -15,11 +15,12 @@ class LocalizeExtension(BlogExtension):
     """Allow config to specify localization for blog.
     """
     
-    def post_init(self):
-        config = self.config
+    def blog_post_init(self, blog):
         try:
-            config.settings.setdefault('locale', u"{0}_{1}.{2}".format(
-                config.language, config.country, config.charset
+            blog.metadata.setdefault('locale', u"{0}_{1}.{2}".format(
+                blog.metadata['language'],
+                blog.metadata['country'],
+                blog.metadata['charset']
             ))
         except AttributeError:
             pass
