@@ -121,11 +121,9 @@ are handled the same way--see below.)
 - The ``copyright`` extension automatically generates copyright
   metadata based on the starting and ending year of blog entries.
 
-- The ``feed`` extension generates feeds for your blog. Both
-  RSS 2.0 and Atom feeds are supported. Currently only your
-  blog's index page will have a feed generated, but extending
-  that is on the To Do list (see below). This extension also
-  supports archived feeds per RFC 5005 (this only works for
+- The ``feed`` extension generates feeds for your blog's index
+  page. Both RSS 2.0 and Atom feeds are supported. This extension
+  also supports archived feeds per RFC 5005 (this only works for
   Atom feeds since the RSS spec does not appear to support
   this), which lets you limit the size of your syndication
   feed file by archiving old entries.
