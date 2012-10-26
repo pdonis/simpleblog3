@@ -49,20 +49,15 @@ class BlogCache(BlogObject):
             return {}
         else:
             if self.reverse:
-                def r(line):
-                    return tuple(reversed(line.strip().rsplit(self.sep, 1)))
+                r = lambda line: tuple(reversed(line.strip().rsplit(self.sep, 1)))
             else:
-                def r(line):
-                    return tuple(line.strip().split(self.sep, 1))
+                r = lambda line: tuple(line.strip().split(self.sep, 1))
             if self.objtype:
-                def e(t):
-                    return t[0], self.objtype(t[1])
+                e = lambda t: (t[0], self.objtype(t[1]))
+                expr = (e(r(line)) for line in lines)
             else:
-                def e(t):
-                    return t
-            return dict(
-                e(r(line)) for line in lines
-            )
+                expr = (r(line) for line in lines)
+            return dict(expr)
     
     def save(self):
         items = self.cache.iteritems()
