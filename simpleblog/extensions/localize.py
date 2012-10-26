@@ -12,7 +12,7 @@ from simpleblog.extensions import BlogExtension
 
 
 class LocalizeExtension(BlogExtension):
-    """Allow config to specify localization for blog.
+    """Allow metadata to specify localization for blog.
     """
     
     def blog_post_init(self, blog):
