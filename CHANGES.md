@@ -22,6 +22,9 @@ Added config setting in ``categories`` extension to allow customizing
 the link or text to appear as the "category" link for entries that
 have no category.
 
+Added ``copyright`` extension to automatically generate copyright
+metadata based on starting and ending year of blog entries.
+
 Fixed ``localize`` extension to use blog metadata instead of config
 settings.
 

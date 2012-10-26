@@ -118,6 +118,9 @@ are handled the same way--see below.)
   by category, and adds a container and an index page for each
   category.
 
+- The ``copyright`` extension automatically generates copyright
+  metadata based on the starting and ending year of blog entries.
+
 - The ``feed`` extension generates feeds for your blog. Both
   RSS 2.0 and Atom feeds are supported. Currently only your
   blog's index page will have a feed generated, but extending
