@@ -17,7 +17,7 @@
 <email>{blog_email}</email>
 </author>
 
-<rights>{blog_copyright}</rights>
+<rights>{blog_copyright} by {blog_author}</rights>
 
 <generator uri="{sys_gen_uri}" version="{sys_gen_version}">
 {sys_gen_name} {sys_gen_version}
