@@ -27,7 +27,7 @@ from plib.stdlib.localize import (
 from plib.stdlib.version import version_string
 
 
-__version__ = "0.7"
+__version__ = "0.8"
 
 
 blogfile_exts = ["json"]
