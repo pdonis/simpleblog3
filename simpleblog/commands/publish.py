@@ -20,8 +20,8 @@ class Publish(BlogCommand):
     
     config_vars = dict(
         static_dir="static",
-        cmd_name="rsync",
-        cmd_options="-rt",
+        publish_cmd_name="rsync",
+        publish_cmd_options="-rt",
         ssh_user="",
         ssh_host="",
         ssh_path="~/",
@@ -40,8 +40,8 @@ class Publish(BlogCommand):
     
     def run(self, blog):
         cmdline = ' '.join([
-            self.cmd_name,
-            self.cmd_options,
+            self.publish_cmd_name,
+            self.publish_cmd_options,
             os.path.join(os.path.abspath(self.static_dir), "*"),
             "{}@{}:{}".format(self.ssh_user, self.ssh_host, self.ssh_path)
         ])
