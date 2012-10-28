@@ -1,6 +1,11 @@
 Simpleblog Change Log
 =====================
 
+Version 0.8
+-----------
+
+Changed some config variable names for the ``publish`` command.
+
 Version 0.7
 -----------
 
