@@ -4,6 +4,9 @@ Simpleblog Change Log
 Version 0.8
 -----------
 
+Added very simple italics and bold formatting to the ``title``
+extension.
+
 Changed some config variable names for the ``publish`` command.
 
 Version 0.7

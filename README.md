@@ -197,7 +197,8 @@ are handled the same way--see below.)
 - The ``title`` extension allows you to specify a title for each
   entry in the entry's source file. (Without any extension, the
   title of an entry is the same as its relative file name or URL
-  path, which is probably not what you want.)
+  path, which is probably not what you want.) It also supports
+  very simple italics and bold formatting in the title.
 
 Note that in some cases the order in which extensions are declared
 in your config file matters. The order in which extensions are
