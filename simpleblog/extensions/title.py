@@ -38,8 +38,8 @@ class TitleEntryMixin(BlogMixin):
     @cached_property
     def title_rexps(self):
         return map(re.compile, [
-            (r"\*([A-Za-z0-9]+)\*", "<em>\g<1></em>"),
-            (r"\*\*([A-Za-z0-9]+)\*\*", "<strong>\g<1></strong>")
+            (r"\*\*([A-Za-z0-9]+)\*\*", "<strong>\g<1></strong>"),
+            (r"\*([A-Za-z0-9]+)\*", "<em>\g<1></em>")
         ])
     
     def _format_title(self):
