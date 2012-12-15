@@ -28,7 +28,7 @@ class BlogArchiveEntries(BlogEntries):
         archive_long_monthnames=False,
         archive_year_template=u"{year}",
         archive_month_template=u"{year}-{monthkey}",
-        archive_day_template=u"{year}-{monthkey}-{day}"
+        archive_day_template=u"{year}-{monthkey}-{daykey}"
     )
     
     sourcetype = 'archive'
@@ -37,7 +37,8 @@ class BlogArchiveEntries(BlogEntries):
         'year',
         'month',
         'day',
-        'monthkey'
+        'monthkey',
+        'daykey'
     )
     
     heading_varnames = (
@@ -61,11 +62,12 @@ class BlogArchiveEntries(BlogEntries):
         else:
             self.monthname = self.monthname_long = self.monthkey = ""
         self.day = day
+        self.daykey = daykey = "{:02d}".format(day)
         
         if month:
             if day:
                 self.sortkey = (year, month, day)
-                self.urlshort = "/{0}/{1}/{2:02d}/".format(year, monthkey, day)
+                self.urlshort = "/{0}/{1}/{2}/".format(year, monthkey, daykey)
                 self.default_title = self.archive_day_template
             else:
                 self.sortkey = (year, month)
