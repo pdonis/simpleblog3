@@ -24,7 +24,6 @@ from plib.stdlib.iters import suffixed_items
 from plib.stdlib.localize import (
     weekdayname, weekdayname_long,
     monthname, monthname_long)
-from plib.stdlib.version import version_string
 
 
 __version__ = "0.8"
@@ -786,7 +785,7 @@ class BlogPage(BlogObject):
             prefixed_keys(self.blog.metadata, 'blog_'),
             sys_gen_name='simpleblog',
             sys_gen_uri="http://pypi.python.org/pypi/simpleblog",
-            sys_gen_version=version_string(__version__),
+            sys_gen_version=__version__,
             **prefixed_keys(metadata, 'page_')
         )
     
