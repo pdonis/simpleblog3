@@ -9,11 +9,15 @@ See the LICENSE and README files for more information
 """
 
 from operator import attrgetter
+from re import compile, sub
 
 from plib.stdlib.decotools import cached_property
 
 from simpleblog import BlogObject, BlogPage, prefixed_keys, newline
 from simpleblog.extensions import BlogExtension
+
+
+rexp = compile(r"[^A-Za-z\ ]")
 
 
 class BlogIndexPage(BlogPage):
@@ -64,7 +68,11 @@ class BlogIndexPage(BlogPage):
             reverse = False
         else:
             label = attrgetter('title')
-            key = label if self.alpha else attrgetter('timestamp')
+            if self.alpha:
+                # Remove characters that aren't spaces or alphanumerics for sorting
+                key = lambda entry: sub(rexp, "", entry.title).split()
+            else:
+                key = attrgetter('timestamp')
             suffix = lambda entry: self.index_link_suffix_template.format(entry)
             reverse = not self.alpha
         return self.indexlinks_template.format(
