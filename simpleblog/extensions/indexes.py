@@ -70,7 +70,7 @@ class BlogIndexPage(BlogPage):
             label = attrgetter('title')
             if self.alpha:
                 # Remove characters that aren't spaces or alphanumerics for sorting
-                key = lambda entry: sub(rexp, "", entry.title).split()
+                key = lambda entry: sub(rexp, "", entry.title)
             else:
                 key = attrgetter('timestamp')
             suffix = lambda entry: self.index_link_suffix_template.format(entry)
