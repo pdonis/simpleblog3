@@ -4,6 +4,10 @@ Simpleblog Change Log
 Version 0.8
 -----------
 
+Fixed sorting of alphanumeric index in the ``indexes`` extension,
+so that quotes and other non-alphanumeric characters are not used
+in the sort key.
+
 Added very simple italics and bold formatting to the ``title``
 extension.
 
