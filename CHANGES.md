@@ -11,7 +11,17 @@ in the sort key.
 Added very simple italics and bold formatting to the ``title``
 extension.
 
+The ``timezone`` extension now allows for changing the time zone
+of your blog. This only works if the ``timestamps`` extension is
+used to cache entry time stamps; the time zone name of each entry
+is stored in the cache, so it stays the same if the blog's default
+time zone is later changed.
+
 Changed some config variable names for the ``publish`` command.
+
+Added ``timezone`` example blog to show how the ``timezone`` and
+``timestamps`` extensions are used, including handling a change of
+time zone.
 
 Version 0.7
 -----------

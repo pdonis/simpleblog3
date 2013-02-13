@@ -279,8 +279,6 @@ will take precedence.
 To Do
 -----
 
-Allow for changing timezones in the ``timezone`` extension.
-
 Add fancier example blogs to show how the various extensions work.
 
 Add documentation other than this README file, both for users and
