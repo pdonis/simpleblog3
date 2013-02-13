@@ -50,10 +50,10 @@ behavior of the code, and all the other objects have a reference
 to it. The other object types fall into a simple hierarchy:
 
 - The blog contains one or more pages, plus metadata which can be
-  specified in a separate file from the config file (the default
+  specified in a separate file from the config file; the default
   filenames are ``blog.yaml`` (or ``blog.json``) and ``config.yaml``
   (or ``config.json``), but other filenames can be passed on the
-  command line to the ``simpleblog-run`` script--see below);
+  command line to the ``simpleblog-run`` script--see below;
 
 - Each page wraps a "source", which can be either a single entry,
   or a container;

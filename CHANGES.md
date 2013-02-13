@@ -1,6 +1,11 @@
 Simpleblog Change Log
 =====================
 
+Version 0.9
+-----------
+
+Beta Release.
+
 Version 0.8
 -----------
 
