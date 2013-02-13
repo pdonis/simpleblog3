@@ -51,6 +51,10 @@ class TimezoneExtension(BlogExtension):
     exception is raised).
     """
     
+    config_vars = dict(
+        warn_on_timezone_mismatch=False,
+    )
+    
     entry_mixin = TimezoneEntryMixin
     
     def entry_get_datetime_from_mtime(self, entry, mtime):
@@ -72,7 +76,9 @@ class TimezoneExtension(BlogExtension):
             # This flags the entry as having a "mismatched" time zone (i.e., a
             # different time zone from the blog's current default); this is why
             # we only do this if there is indeed a mismatch
-            print "Mismatched time zone in entry!"
+            if self.warn_on_timezone_mismatch:
+                # FIXME: Allow control of debug output/logging
+                print "Mismatched time zone in entry!"
             entry._tzname = tzname
         dt_naive = datetime.strptime(s, fmt)
         return entry.timezone.localize(dt_naive, is_dst=bool(sdst))
