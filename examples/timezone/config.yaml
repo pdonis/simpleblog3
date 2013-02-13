@@ -1,0 +1,13 @@
+# Config for example blog
+# Used by simpleblog
+
+entry_ext: .txt
+
+extensions:
+- title
+- render_markdown
+- timestamps
+- timezone
+
+timezone_name: America/New_York
+warn_on_timezone_mismatch: yes

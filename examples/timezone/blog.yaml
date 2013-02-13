@@ -1,0 +1,9 @@
+# Blog metadata for example blog
+# Used by simpleblog
+
+title: "Timezone Example Blog"
+description: "An example blog using simpleblog with the timezone extension"
+author: "Ima Writer"
+email: "ima@example.com"
+
+charset: "iso-8859-1"

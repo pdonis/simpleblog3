@@ -1,0 +1,2 @@
+New Example Post
+This is a new blog post written in the blog's current time zone.
