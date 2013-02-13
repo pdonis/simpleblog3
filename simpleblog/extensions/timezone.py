@@ -25,9 +25,11 @@ class TimezoneEntryMixin(BlogMixin):
         timezone_name=""
     )
     
+    _tzname = ""
+    
     @extendable_property()
     def timezone_tzname(self):
-        return self.timezone_name or ("UTC" if self.utc_timestamps else local_tzname())
+        return self._tzname or self.timezone_name or ("UTC" if self.utc_timestamps else local_tzname())
     
     @extendable_property()
     def timezone(self):
@@ -66,7 +68,11 @@ class TimezoneExtension(BlogExtension):
     
     def entry_get_datetime_from_string(self, entry, s, fmt):
         s, tzname, sdst = s.rsplit(' ', 2)
-        # FIXME: relax the below to allow changing timezones
-        assert tzname == entry.timezone_tzname
+        if tzname != entry.timezone_tzname:
+            # This flags the entry as having a "mismatched" time zone (i.e., a
+            # different time zone from the blog's current default); this is why
+            # we only do this if there is indeed a mismatch
+            print "Mismatched time zone in entry!"
+            entry._tzname = tzname
         dt_naive = datetime.strptime(s, fmt)
         return entry.timezone.localize(dt_naive, is_dst=bool(sdst))
