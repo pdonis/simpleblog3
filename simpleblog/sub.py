@@ -13,16 +13,7 @@ import os
 from contextlib import contextmanager
 from importlib import import_module
 
-
-def first_subclass(o, c):
-    """Return first object in o that is a subclass of c
-    """
-    return first(
-        obj for obj in vars(o).itervalues()
-        if (obj is not c)
-        and isinstance(obj, type)
-        and issubclass(obj, c)
-    )
+from plib.stdlib.classtools import first_subclass
 
 
 def load_submodule(subtype, subdir, name, err, subcls):
