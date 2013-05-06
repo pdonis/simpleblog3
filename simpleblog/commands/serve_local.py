@@ -9,21 +9,12 @@ See the LICENSE and README files for more information
 """
 
 import os
-from contextlib import contextmanager
 import SimpleHTTPServer
 import BaseHTTPServer
 
+from plib.stdlib.ostools import tmp_chdir
+
 from simpleblog.commands import BlogCommand
-
-
-@contextmanager
-def tmp_chdir(newdir):
-    oldcwd = os.getcwd()
-    os.chdir(newdir)
-    try:
-        yield
-    finally:
-        os.chdir(oldcwd)
 
 
 class ServeLocal(BlogCommand):
