@@ -9,7 +9,8 @@ See the LICENSE and README files for more information
 """
 
 import os
-from subprocess import check_output, STDOUT, CalledProcessError
+
+from plib.stdlib.proc import process_call
 
 from simpleblog.commands import BlogCommand
 
@@ -47,13 +48,7 @@ class Publish(BlogCommand):
         ])
         if self.opts.debug:
             print cmdline
-        try:
-            output = check_output(cmdline, stderr=STDOUT, shell=True)
-        except CalledProcessError, e:
-            output = e.output
-            returncode = e.returncode
-        else:
-            returncode = 0
+        returncode, output = process_call(cmdline, shell=True)
         if (returncode != 0) or not self.opts.quiet:
             print output
         if returncode != 0:
