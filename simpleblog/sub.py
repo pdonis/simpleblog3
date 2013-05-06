@@ -8,12 +8,11 @@ Released under the GNU General Public License, Version 2
 See the LICENSE and README files for more information
 """
 
-import sys
 import os
-from contextlib import contextmanager
 from importlib import import_module
 
 from plib.stdlib.classtools import first_subclass
+from plib.stdlib.systools import tmp_sys_path
 
 
 def load_submodule(subtype, subdir, name, err, subcls):
@@ -34,24 +33,6 @@ def load_submodule(subtype, subdir, name, err, subcls):
     if not klass:
         raise err("no {0} in {1} module!".format(subtype, name))
     return mod, klass
-
-
-@contextmanager
-def tmp_sys_path(subdir, index=0):
-    """Temporarily munge ``sys.path`` to allow import from non-standard dir
-    """
-    
-    if subdir:
-        subdir = os.path.abspath(subdir)
-        oldpath = sys.path[:]
-        sys.path.insert(index, subdir)
-    else:
-        oldpath = None
-    try:
-        yield
-    finally:
-        if oldpath:
-            sys.path[:] = oldpath
 
 
 def load_sub(name, subtype, subdir, err, subcls):
