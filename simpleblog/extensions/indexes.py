@@ -87,7 +87,7 @@ class BlogIndexPage(BlogPage):
 
 
 class IndexesExtension(BlogExtension):
-    """Add alphabetical and/or chronological link index pages to blog.
+    """Add alphabetical, chronological, and/or key link index pages to blog.
     """
     
     config_vars = dict(
