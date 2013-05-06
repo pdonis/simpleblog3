@@ -10,18 +10,9 @@ See the LICENSE and README files for more information
 
 import os
 
+from plib.stdlib.ostools import data_changed
+
 from simpleblog.commands import BlogCommand
-
-
-def changed(data, path):
-    """Check if ``data`` is changed from the file data at ``path``.
-    """
-    
-    if (not os.path.isfile(path)) or (os.stat(path).st_size != len(data)):
-        return True
-    with open(path, 'rb') as f:
-        olddata = f.read()
-    return data != olddata
 
 
 class RenderStatic(BlogCommand):
@@ -47,7 +38,7 @@ class RenderStatic(BlogCommand):
         for page in blog.pages:
             data = page.encoded
             path = os.path.abspath(os.path.join(self.static_dir, page.filepath))
-            if self.opts.force or changed(data, path):
+            if self.opts.force or data_changed(data, path):
                 if not self.opts.quiet:
                     print "Rendering", path
                 dir = os.path.split(path)[0]
