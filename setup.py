@@ -20,7 +20,7 @@ author_email = "peterdonis@alum.mit.edu"
 
 data_dirs = ["examples"]
 
-dev_status = "Alpha"
+dev_status = "Beta"
 
 license = "GPLv2"
 
