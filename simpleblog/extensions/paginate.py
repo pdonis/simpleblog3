@@ -9,7 +9,6 @@ See the LICENSE and README files for more information
 """
 
 from plib.stdlib.decotools import cached_method
-from plib.stdlib.iters import group_into
 
 from simpleblog import BlogEntries, noresult, newline
 from simpleblog.extensions import BlogExtension
