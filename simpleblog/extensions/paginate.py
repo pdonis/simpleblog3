@@ -144,6 +144,7 @@ class PaginateExtension(BlogExtension):
         )
         return attrs
     
+    @cached_method
     def paginate(self, source, format):
         return (
             format in self.paginate_formats
