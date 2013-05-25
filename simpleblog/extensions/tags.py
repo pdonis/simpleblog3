@@ -8,7 +8,6 @@ Released under the GNU General Public License, Version 2
 See the LICENSE and README files for more information
 """
 
-from plib.stdlib.decotools import cached_property, convert
 from plib.stdlib.strings import split_string
 
 from simpleblog import BlogMixin, extendable_property, newline
