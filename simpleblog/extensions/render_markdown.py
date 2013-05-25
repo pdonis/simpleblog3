@@ -10,8 +10,6 @@ See the LICENSE and README files for more information
 
 from markdown import markdown
 
-from plib.stdlib.decotools import cached_property
-
 from simpleblog import BlogMixin, newline
 from simpleblog.extensions import BlogExtension
 

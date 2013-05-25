@@ -15,7 +15,6 @@ from datetime import datetime
 from functools import wraps
 from operator import attrgetter
 
-from plib.stdlib.builtins import first
 from plib.stdlib.decotools import (
     cached_method, cached_property, memoize_generator)
 from plib.stdlib.ini import PIniFile

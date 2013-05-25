@@ -11,9 +11,7 @@ See the LICENSE and README files for more information
 from itertools import groupby
 from operator import attrgetter
 
-from plib.stdlib.decotools import cached_property
-
-from simpleblog import BlogMixin, extendable_property, BlogEntry
+from simpleblog import BlogMixin, extendable_property
 from simpleblog.extensions import BlogExtension
 
 

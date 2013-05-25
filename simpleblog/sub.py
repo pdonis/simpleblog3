@@ -8,7 +8,6 @@ Released under the GNU General Public License, Version 2
 See the LICENSE and README files for more information
 """
 
-import os
 from importlib import import_module
 
 from plib.stdlib.classtools import first_subclass

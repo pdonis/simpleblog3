@@ -8,7 +8,7 @@ Released under the GNU General Public License, Version 2
 See the LICENSE and README files for more information
 """
 
-from plib.stdlib.decotools import cached_property, cached_method
+from plib.stdlib.decotools import cached_method
 
 from simpleblog import (BlogMixin,
     extendable_property, extendable_method,

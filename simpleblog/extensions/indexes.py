@@ -13,7 +13,7 @@ from re import compile, sub
 
 from plib.stdlib.decotools import cached_property
 
-from simpleblog import BlogObject, BlogPage, prefixed_keys, newline
+from simpleblog import BlogObject, BlogPage, newline
 from simpleblog.extensions import BlogExtension
 
 

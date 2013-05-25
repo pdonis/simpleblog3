@@ -11,7 +11,6 @@ See the LICENSE and README files for more information
 from collections import defaultdict
 from operator import attrgetter
 
-from plib.stdlib.decotools import cached_property
 from plib.stdlib.localize import monthname, monthname_long
 
 from simpleblog import BlogEntries

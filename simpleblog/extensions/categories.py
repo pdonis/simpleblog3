@@ -10,7 +10,6 @@ See the LICENSE and README files for more information
 
 import os
 
-from plib.stdlib.decotools import cached_property
 from plib.stdlib.ostools import subdirs
 
 from simpleblog import BlogMixin, extendable_property
