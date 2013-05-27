@@ -1,6 +1,14 @@
 Simpleblog Change Log
 =====================
 
+Version 0.9.1
+-------------
+
+Entry, page, and blog mixins in extension modules are now automatically
+discovered when extension classes are constructed; they no longer need
+to be declared explicitly. Each mixin type (entry, page, blog) now has
+its own base class in ``simpleblog.extensions``.
+
 Version 0.9
 -----------
 
