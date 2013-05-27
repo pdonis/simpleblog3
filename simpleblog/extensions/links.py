@@ -13,11 +13,11 @@ from operator import itemgetter
 
 from plib.stdlib.decotools import cached_property, cached_method
 
-from simpleblog import BlogMixin, extendable_method, newline
-from simpleblog.extensions import BlogExtension
+from simpleblog import extendable_method, newline
+from simpleblog.extensions import BlogExtension, EntryMixin
 
 
-class LinksEntryMixin(BlogMixin):
+class LinksEntryMixin(EntryMixin):
     
     config_vars = dict(
         entrylink_sep=u"&nbsp;",
@@ -89,8 +89,6 @@ class LinksExtension(BlogExtension):
             blog=None
         )
     )
-    
-    entry_mixin = LinksEntryMixin
     
     def entry_mod_attrs(self, entry, attrs, format, params):
         attrs.update(

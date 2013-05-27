@@ -7,12 +7,15 @@ Released under the GNU General Public License, Version 2
 See the LICENSE and README files for more information
 """
 
+import sys
 from operator import attrgetter
 
+from plib.stdlib.builtins import first
+from plib.stdlib.classtools import first_subclass
 from plib.stdlib.decotools import cached_property, wraps_class
 from plib.stdlib.iters import prefixed_items
 
-from simpleblog import (BlogConfigUser,
+from simpleblog import (BlogConfigUserMeta, BlogConfigUser,
     extension_types, extension_map, extend_attributes,
     BlogEntries, newline)
 
@@ -56,9 +59,43 @@ class NamedEntries(BlogEntries):
         return BlogEntries._get_sourcetype_sources(self)
 
 
+class EntryMixin(BlogConfigUser):
+    """All entry mixins in extensions must subclass this class.
+    """
+    pass
+
+class PageMixin(BlogConfigUser):
+    """All page mixins in extensions must subclass this class.
+    """
+    pass
+
+class BlogMixin(BlogConfigUser):
+    """All blog mixins in extensions must subclass this class.
+    """
+    pass
+
+
+class BlogExtensionMeta(BlogConfigUserMeta):
+    """Metaclass to automatically detect mixins in extension modules.
+    """
+    
+    def __init__(cls, name, bases, attrs):
+        super(BlogExtensionMeta, cls).__init__(name, bases, attrs)
+        # Auto-detect entry, page, and blog mixins in this class's module
+        thismod = sys.modules[__name__]
+        clsmod = sys.modules[cls.__module__]
+        for etype in ('Entry', 'Page', 'Blog'):
+            mixin_klass = getattr(thismod, '%sMixin' % etype)
+            ext_mixin = first_subclass(clsmod, mixin_klass)
+            if ext_mixin:
+                setattr(cls, '%s_mixin' % etype.lower(), ext_mixin)
+
+
 class BlogExtension(BlogConfigUser):
     """Base class for extension mechanism.
     """
+    
+    __metaclass__ = BlogExtensionMeta
     
     config_vars = dict(
         container_link_template=u'<a href="{urlshort}">{title}</a>',

@@ -16,8 +16,8 @@ from plib.stdlib.decotools import cached_property, cached_method
 from plib.stdlib.localize import weekdayname, monthname, monthname_long
 from plib.stdlib.tztools import UTCTimezone, LocalTimezone
 
-from simpleblog import BlogMixin, extendable_property, BlogEntries, newline
-from simpleblog.extensions import BlogExtension
+from simpleblog import extendable_property, BlogEntries, newline
+from simpleblog.extensions import BlogExtension, BlogMixin, EntryMixin
 
 
 tz_utc = UTCTimezone()
@@ -173,7 +173,7 @@ def atom_format(t):
     return template_atom.format(t)
 
 
-class FeedEntryMixin(BlogMixin):
+class FeedEntryMixin(EntryMixin):
     
     config_vars = dict(
         utc_timestamps=False
@@ -243,9 +243,6 @@ class FeedExtension(BlogExtension):
         rss_id_template=u"{cachekey}",
         rss_category_template=u"entries"
     )
-    
-    entry_mixin = FeedEntryMixin
-    blog_mixin = FeedBlogMixin
     
     def entry_mod_body(self, entry, body, format, params):
         if format in entry.blog.feed_formats:

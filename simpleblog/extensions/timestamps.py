@@ -10,9 +10,9 @@ See the LICENSE and README files for more information
 
 from datetime import datetime
 
-from simpleblog import BlogMixin, extendable_property, extendable_method
+from simpleblog import extendable_property, extendable_method
 from simpleblog.caching import cached
-from simpleblog.extensions import BlogExtension
+from simpleblog.extensions import BlogExtension, EntryMixin
 
 
 timestamps_file = BlogExtension.config.get('timestamps_file', u"timestamps")
@@ -20,7 +20,7 @@ timestamps_file = BlogExtension.config.get('timestamps_file', u"timestamps")
 timestamp_cache_format = "%Y-%m-%d %H:%M"
 
 
-class TimestampEntryMixin(BlogMixin):
+class TimestampEntryMixin(EntryMixin):
     
     @extendable_method()
     def string_from_datetime(self, dt, fmt):
@@ -41,8 +41,6 @@ class TimestampEntryMixin(BlogMixin):
 class TimestampsExtension(BlogExtension):
     """Cache entry timestamps.
     """
-    
-    entry_mixin = TimestampEntryMixin
     
     def entry_get_timestamp(self, entry):
         return entry.datetime_from_string(entry.timestamp_str, timestamp_cache_format)

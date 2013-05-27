@@ -10,13 +10,12 @@ See the LICENSE and README files for more information
 
 from plib.stdlib.decotools import cached_method
 
-from simpleblog import (BlogMixin,
-    extendable_property, extendable_method,
+from simpleblog import (extendable_property, extendable_method,
     noresult, newline)
-from simpleblog.extensions import BlogExtension
+from simpleblog.extensions import BlogExtension, EntryMixin
 
 
-class FoldEntryMixin(BlogMixin):
+class FoldEntryMixin(EntryMixin):
     
     config_vars = dict(
         fold_symbol=u"<!-- FOLD -->",
@@ -74,8 +73,6 @@ class FoldingExtension(BlogExtension):
             varkey='max_full_entries',
             default=1)
     )
-    
-    entry_mixin = FoldEntryMixin
     
     def page_mod_entry_params(self, page, params, entry):
         params.update(

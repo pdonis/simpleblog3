@@ -10,9 +10,9 @@ See the LICENSE and README files for more information
 
 from plib.stdlib.strings import split_string
 
-from simpleblog import BlogMixin, extendable_property, newline
+from simpleblog import extendable_property, newline
 from simpleblog.caching import cached
-from simpleblog.extensions import BlogExtension, NamedEntries
+from simpleblog.extensions import BlogExtension, EntryMixin, NamedEntries
 
 
 tags_file = BlogExtension.config.get('tags_file', u"tags")
@@ -71,7 +71,7 @@ class BlogTag(NamedEntries):
         ]
 
 
-class TagsEntryMixin(BlogMixin):
+class TagsEntryMixin(EntryMixin):
     
     config_vars = dict(
         tags_marker="#tags ",
@@ -104,8 +104,6 @@ class TagsExtension(BlogExtension):
     config_vars = dict(
         tags_prefix=""
     )
-    
-    entry_mixin = TagsEntryMixin
     
     def entry_post_init(self, entry):
         entry.metadata.update(

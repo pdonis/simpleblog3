@@ -12,8 +12,8 @@ import os
 
 from plib.stdlib.ostools import subdirs
 
-from simpleblog import BlogMixin, extendable_property
-from simpleblog.extensions import BlogExtension, NamedEntries
+from simpleblog import extendable_property
+from simpleblog.extensions import BlogExtension, EntryMixin, NamedEntries
 
 
 class BlogCategory(NamedEntries):
@@ -34,7 +34,7 @@ class BlogCategory(NamedEntries):
         ]
 
 
-class CategoryEntryMixin(BlogMixin):
+class CategoryEntryMixin(EntryMixin):
     
     @extendable_property()
     def category(self):
@@ -49,8 +49,6 @@ class CategoryExtension(BlogExtension):
         category_link_template=u'<a href="/{category}/">{category}</a>',
         no_category_link="(None)"
     )
-    
-    entry_mixin = CategoryEntryMixin
     
     def make_category_link(self, entry):
         return self.category_link_template.format(

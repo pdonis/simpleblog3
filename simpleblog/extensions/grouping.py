@@ -11,11 +11,11 @@ See the LICENSE and README files for more information
 from itertools import groupby
 from operator import attrgetter
 
-from simpleblog import BlogMixin, extendable_property
-from simpleblog.extensions import BlogExtension
+from simpleblog import extendable_property
+from simpleblog.extensions import BlogExtension, PageMixin
 
 
-class GroupingPageMixin(BlogMixin):
+class GroupingPageMixin(PageMixin):
     
     config_vars = dict(
         groupindex_key='groupindex',
@@ -60,5 +60,4 @@ class GroupingPageMixin(BlogMixin):
 class GroupingExtension(BlogExtension):
     """Group page entries by date.
     """
-    
-    page_mixin = GroupingPageMixin
+    pass

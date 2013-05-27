@@ -10,11 +10,11 @@ See the LICENSE and README files for more information
 
 from markdown import markdown
 
-from simpleblog import BlogMixin, newline
-from simpleblog.extensions import BlogExtension
+from simpleblog import newline
+from simpleblog.extensions import BlogExtension, EntryMixin
 
 
-class MarkdownEntryMixin(BlogMixin):
+class MarkdownEntryMixin(EntryMixin):
     
     config_vars = dict(
         output_format=('markdown_format', "html4"),
@@ -61,5 +61,4 @@ class MarkdownEntryMixin(BlogMixin):
 class MarkdownExtension(BlogExtension):
     """Markdown parsing of entry source.
     """
-    
-    entry_mixin = MarkdownEntryMixin
+    pass

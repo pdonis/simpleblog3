@@ -14,11 +14,11 @@ import pytz
 
 from plib.stdlib.tztools import local_tzname
 
-from simpleblog import BlogMixin, extendable_property
-from simpleblog.extensions import BlogExtension
+from simpleblog import extendable_property
+from simpleblog.extensions import BlogExtension, EntryMixin
 
 
-class TimezoneEntryMixin(BlogMixin):
+class TimezoneEntryMixin(EntryMixin):
     
     config_vars = dict(
         utc_timestamps=False,
@@ -54,8 +54,6 @@ class TimezoneExtension(BlogExtension):
     config_vars = dict(
         warn_on_timezone_mismatch=False,
     )
-    
-    entry_mixin = TimezoneEntryMixin
     
     def entry_get_datetime_from_mtime(self, entry, mtime):
         dt_naive = datetime.utcfromtimestamp(entry.mtime)

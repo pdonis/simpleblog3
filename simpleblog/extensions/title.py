@@ -12,15 +12,15 @@ import re
 
 from plib.stdlib.decotools import cached_property
 
-from simpleblog import BlogMixin, extendable_property, newline
+from simpleblog import extendable_property, newline
 from simpleblog.caching import cached
-from simpleblog.extensions import BlogExtension
+from simpleblog.extensions import BlogExtension, EntryMixin
 
 
 titles_file = BlogExtension.config.get('titles_file', u"titles")
 
 
-class TitleEntryMixin(BlogMixin):
+class TitleEntryMixin(EntryMixin):
     
     config_vars = dict(
         title_separator=newline,
@@ -59,5 +59,4 @@ class TitleEntryMixin(BlogMixin):
 class TitleExtension(BlogExtension):
     """Parse entry title out of entry source.
     """
-    
-    entry_mixin = TitleEntryMixin
+    pass

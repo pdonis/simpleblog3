@@ -177,11 +177,6 @@ class BlogConfigUser(object):
 
 # BASE
 
-class BlogMixin(BlogConfigUser):
-    """All entry, page, and blog mixins in extensions must subclass this class.
-    """
-    pass
-
 
 class BlogTemplateError(BlogError):
     pass
