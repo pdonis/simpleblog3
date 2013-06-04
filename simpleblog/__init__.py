@@ -90,6 +90,7 @@ newline = os.linesep
 class BlogError(Exception):
     pass
 
+
 class BlogConfigError(BlogError):
     pass
 
@@ -210,8 +211,10 @@ class BlogObject(BlogConfigUser):
             return read_blogfile(self.template_file(kind, format))
         except IOError:
             try:
-                return blogdata(pkgutil.get_data('simpleblog',
-                    "templates/{}".format(self.template_basename(kind, format))))
+                return blogdata(pkgutil.get_data(
+                    'simpleblog',
+                    "templates/{}".format(self.template_basename(kind, format))
+                ))
             except IOError:
                 raise BlogConfigError("template {}.{} not found".format(kind, format))
 
@@ -274,6 +277,7 @@ class extendable_attr(object):
         assert name == self._func.__name__
         getkey = '{0}_get_{1}'.format(etype, name)
         modkey = '{0}_mod_{1}'.format(etype, name)
+        
         @wraps(self._func)
         def meth(innerself, *args, **kwargs):
             # Check for extensions that might override the original function
@@ -282,9 +286,12 @@ class extendable_attr(object):
             if result is noresult:
                 result = self._func(innerself, *args, **kwargs)
             # Now check for extensions that want to modify the result
-            result = check_extensions(innerself, etype, modkey, args, kwargs,
-                result, True)
+            result = check_extensions(
+                innerself, etype, modkey, args, kwargs,
+                result, True
+            )
             return result
+        
         return meth
     
     def as_extended(self, cls, name):
@@ -337,10 +344,12 @@ def extendable(cls):
     # Implement post_init call at end of constructor
     initkey = '{}_post_init'.format(etype)
     oldinit = cls.__init__
+    
     @wraps(oldinit)
     def _newinit(self, *args, **kwargs):
         oldinit(self, *args, **kwargs)
         check_extensions(self, etype, initkey, result=noreturn)
+    
     cls.__init__ = _newinit
     
     return cls
@@ -599,7 +608,8 @@ class BlogEntries(BlogSource):
     
     @cached_property
     def entries(self):
-        return sorted(self._get_entries(),
+        return sorted(
+            self._get_entries(),
             key=attrgetter(self.entry_sort_key),
             reverse=self.entry_sort_reversed
         )

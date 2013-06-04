@@ -21,8 +21,10 @@ def load(config, extensions):
     # This hack is useful for extensions that need to access the
     # config in module or class level code, e.g., in decorators
     BlogExtension.config = config
-    exts = load_subs(extensions,
+    exts = load_subs(
+        extensions,
         "extension", config.get('extension_dir', ""),
-        BlogExtensionError, BlogExtension)
+        BlogExtensionError, BlogExtension
+    )
     for mod, klass in exts:
         mod.extension = klass(config)

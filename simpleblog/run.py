@@ -22,9 +22,11 @@ class BlogCommandError(BlogError):
 def run(cmdname, parser, opts, goptlist, result=None, remaining=None):
     config, blog = load_blog(opts)
     
-    mod, klass = load_sub(cmdname,
+    mod, klass = load_sub(
+        cmdname,
         "command", config.get('command_dir', ""),
-        BlogCommandError, BlogCommand)
+        BlogCommandError, BlogCommand
+    )
     
     optlist, arglist = prepare_specs(klass.options or (), klass.arguments or ())
     update_parser(parser, optlist, arglist)

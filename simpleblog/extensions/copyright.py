@@ -37,7 +37,8 @@ class CopyrightExtension(BlogExtension):
         return max(self.entry_years(blog))
     
     def blog_mod_default_metadata(self, blog, data):
-        params = dict(data,
+        params = dict(
+            data,
             start_year=self.copyright_start_year or self.start_year(blog),
             end_year=self.copyright_end_year or self.end_year(blog)
         )

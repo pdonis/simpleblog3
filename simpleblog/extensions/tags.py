@@ -80,7 +80,8 @@ class TagsEntryMixin(EntryMixin):
     
     def _do_load(self):
         raw = super(TagsEntryMixin, self)._do_load()
-        pre, mid, post = split_string(raw,
+        pre, mid, post = split_string(
+            raw,
             self.tags_marker, self.tags_end, find_newlines=False)
         if pre and post:
             self._tagstr = mid
@@ -120,9 +121,10 @@ class TagsExtension(BlogExtension):
     
     def blog_mod_sources(self, blog, sources):
         
-        blog.tag_names = set(t
-            for e in blog.all_entries
-            for t in e.tags
+        blog.tag_names = set(
+            tag
+            for entry in blog.all_entries
+            for tag in entry.tags
         )
         
         blog.all_tags = [

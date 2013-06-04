@@ -10,7 +10,8 @@ See the LICENSE and README files for more information
 
 from plib.stdlib.decotools import cached_method
 
-from simpleblog import (extendable_property, extendable_method,
+from simpleblog import (
+    extendable_property, extendable_method,
     noresult, newline)
 from simpleblog.extensions import BlogExtension, EntryMixin
 

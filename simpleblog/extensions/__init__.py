@@ -15,9 +15,11 @@ from plib.stdlib.classtools import first_subclass
 from plib.stdlib.decotools import cached_property, wraps_class
 from plib.stdlib.iters import prefixed_items
 
-from simpleblog import (BlogConfigUserMeta, BlogConfigUser,
+from simpleblog import (
+    BlogConfigUserMeta, BlogConfigUser,
     extension_types, extension_map, extend_attributes,
-    BlogEntries, newline)
+    BlogEntries, newline
+)
 
 
 class NamedEntries(BlogEntries):
@@ -64,10 +66,12 @@ class EntryMixin(BlogConfigUser):
     """
     pass
 
+
 class PageMixin(BlogConfigUser):
     """All page mixins in extensions must subclass this class.
     """
     pass
+
 
 class BlogMixin(BlogConfigUser):
     """All blog mixins in extensions must subclass this class.
@@ -121,9 +125,11 @@ class BlogExtension(BlogConfigUser):
                 mixin.extension_type = etype
                 extend_attributes(mixin)
                 oldcls = extension_types[etype]
+                
                 @wraps_class(oldcls)
                 class Extended(mixin, oldcls):
                     pass
+                
                 extension_types[etype] = Extended
         
         # Allow for post-init processing in subclasses
