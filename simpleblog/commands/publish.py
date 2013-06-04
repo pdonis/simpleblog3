@@ -2,7 +2,7 @@
 """
 Module PUBLISH -- Simple Blog Publisher
 Sub-Package SIMPLEBLOG.COMMANDS
-Copyright (C) 2012 by Peter A. Donis
+Copyright (C) 2012-2013 by Peter A. Donis
 
 Released under the GNU General Public License, Version 2
 See the LICENSE and README files for more information

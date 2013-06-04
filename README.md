@@ -290,7 +290,7 @@ statically generated.
 Copyright and License
 ---------------------
 
-SIMPLEBLOG is Copyright (C) 2012 by Peter A. Donis.
+SIMPLEBLOG is Copyright (C) 2012-2013 by Peter A. Donis.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

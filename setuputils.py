@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Module SETUPUTILS -- Utilities to automate boilerplate in Python setup scripts
-Copyright (C) 2012 by Peter A. Donis
+Copyright (C) 2012-2013 by Peter A. Donis
 
 Released under the Python Software Foundation License.
 

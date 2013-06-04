@@ -2,7 +2,7 @@
 """
 Module CACHING -- Simple Blog Caching Mechanism
 Package SIMPLEBLOG
-Copyright (C) 2012 by Peter A. Donis
+Copyright (C) 2012-2013 by Peter A. Donis
 
 Released under the GNU General Public License, Version 2
 See the LICENSE and README files for more information
