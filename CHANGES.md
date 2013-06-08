@@ -1,6 +1,13 @@
 Simpleblog Change Log
 =====================
 
+Version 0.9.2
+-------------
+
+Formatted code to PEP 8 guidelines.
+
+Updated copyright notices.
+
 Version 0.9.1
 -------------
 
