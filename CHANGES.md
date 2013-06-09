@@ -5,7 +5,7 @@ Version 0.9.3
 -------------
 
 Added ``show-unchanged`` option to ``render-static`` command; default
-is now now to output names of unchanged files to console.
+is now not to output names of unchanged files to console.
 
 Version 0.9.2
 -------------
