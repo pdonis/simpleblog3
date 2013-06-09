@@ -10,7 +10,7 @@ See the LICENSE and README files for more information
 from simpleblog import __version__ as version
 
 name = "simpleblog3"
-description = "A simple Python blogging system."
+description = "A simple Python 3 blogging system."
 
 startline = 5
 endspec = "Copyright and License"
