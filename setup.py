@@ -9,7 +9,7 @@ See the LICENSE and README files for more information
 
 from simpleblog import __version__ as version
 
-name = "simpleblog"
+name = "simpleblog3"
 description = "A simple Python blogging system."
 
 startline = 5
@@ -33,7 +33,7 @@ Operating System :: POSIX :: Linux
 """
 
 requires = """
-plib.stdlib (>=0.9.1)
+plib3.stdlib (>=0.9.1)
 """
 
 rst_header_template = """**{basename}** for {name} {version}
