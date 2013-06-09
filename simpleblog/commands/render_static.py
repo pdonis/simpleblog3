@@ -31,6 +31,10 @@ class RenderStatic(BlogCommand):
         ("-q", "--quiet", {
             'action': 'store_true',
             'help': "suppress console output"
+        }),
+        ("-u", "--show-unchanged", {
+            'action': 'store_true',
+            'help': "show console output for unchanged files"
         })
     )
     
@@ -47,5 +51,5 @@ class RenderStatic(BlogCommand):
                 with open(path, 'wb') as f:
                     f.write(data)
             else:
-                if not self.opts.quiet:
+                if self.opts.show_unchanged:
                     print(path, "is unchanged")
