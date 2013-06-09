@@ -50,6 +50,6 @@ class Publish(BlogCommand):
             print(cmdline)
         returncode, output = process_call(cmdline, shell=True)
         if (returncode != 0) or not self.opts.quiet:
-            print(output)
+            print(output.decode())
         if returncode != 0:
             print("Publish failed with return code {}".format(returncode))
