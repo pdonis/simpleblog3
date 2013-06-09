@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Package SIMPLEBLOG -- Simple Python blog system
 Copyright (C) 2012-2013 by Peter A. Donis

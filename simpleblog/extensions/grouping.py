@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Module GROUPING -- Simple Blog Grouping Extension
 Sub-Package SIMPLEBLOG.EXTENSIONS

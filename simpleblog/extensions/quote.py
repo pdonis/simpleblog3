@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Module QUOTE -- Simple Blog Quote Extension
 Sub-Package SIMPLEBLOG.EXTENSIONS

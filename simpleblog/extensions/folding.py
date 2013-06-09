@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Module FOLDING -- Simple Blog Folding Extension
 Sub-Package SIMPLEBLOG.EXTENSIONS

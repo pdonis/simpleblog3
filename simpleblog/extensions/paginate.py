@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Module PAGINATE -- Simple Blog Pagination Extension
 Sub-Package SIMPLEBLOG.EXTENSIONS

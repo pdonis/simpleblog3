@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Module RENDER_MARKDOWN -- Simple Blog Markdown Extension
 Sub-Package SIMPLEBLOG.EXTENSIONS

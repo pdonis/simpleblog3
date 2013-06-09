@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Module COPYRIGHT -- Simple Blog Copyright Extension
 Sub-Package SIMPLEBLOG.EXTENSIONS

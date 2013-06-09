@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Module INDEXES -- Simple Blog Index Generator Extension
 Sub-Package SIMPLEBLOG.EXTENSIONS

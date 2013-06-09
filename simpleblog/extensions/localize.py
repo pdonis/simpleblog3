@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Module LOCALIZE -- Simple Blog Localization Extension
 Sub-Package SIMPLEBLOG.EXTENSIONS

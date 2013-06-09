@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Module PUBLISH -- Simple Blog Publisher
 Sub-Package SIMPLEBLOG.COMMANDS

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Module CACHING -- Simple Blog Caching Mechanism
 Package SIMPLEBLOG

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Module TIMEZONE -- Simple Blog Time Zone Extension
 Sub-Package SIMPLEBLOG.EXTENSIONS

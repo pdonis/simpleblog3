@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Module RUN -- Simple Blog Command Runner
 Package SIMPLEBLOG

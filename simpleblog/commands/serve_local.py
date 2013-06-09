@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Module SERVE_LOCAL -- Simple Blog Test Server
 Sub-Package SIMPLEBLOG.COMMANDS

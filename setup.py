@@ -1,4 +1,4 @@
-#!/usr/bin/env python -u
+#!/usr/bin/env python3 -u
 """
 Setup script for SIMPLEBLOG package
 Copyright (C) 2012-2013 by Peter A. Donis

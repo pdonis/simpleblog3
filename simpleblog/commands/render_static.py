@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Module RENDER_STATIC -- Simple Blog Static Rendering
 Sub-Package SIMPLEBLOG.COMMANDS

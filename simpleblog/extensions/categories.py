@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Module CATEGORIES -- Simple Blog Categories Extension
 Sub-Package SIMPLEBLOG.EXTENSIONS

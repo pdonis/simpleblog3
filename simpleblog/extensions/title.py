@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Module TITLE -- Simple Blog Title Extension
 Sub-Package SIMPLEBLOG.EXTENSIONS

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Module TIMESTAMPS -- Simple Blog Timestamps Extension
 Sub-Package SIMPLEBLOG.EXTENSIONS
