@@ -17,7 +17,7 @@ class LocalizeExtension(BlogExtension):
     
     def blog_post_init(self, blog):
         try:
-            blog.metadata.setdefault('locale', u"{0}_{1}.{2}".format(
+            blog.metadata.setdefault('locale', "{0}_{1}.{2}".format(
                 blog.metadata['language'],
                 blog.metadata['country'],
                 blog.metadata['charset']

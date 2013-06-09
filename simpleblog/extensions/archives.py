@@ -25,9 +25,9 @@ class BlogArchiveEntries(BlogEntries):
         prefix=('archives_prefix', ""),
         archive_use_monthnames=False,
         archive_long_monthnames=False,
-        archive_year_template=u"{year}",
-        archive_month_template=u"{year}-{monthkey}",
-        archive_day_template=u"{year}-{monthkey}-{daykey}"
+        archive_year_template="{year}",
+        archive_month_template="{year}-{monthkey}",
+        archive_day_template="{year}-{monthkey}-{daykey}"
     )
     
     sourcetype = 'archive'
@@ -44,7 +44,7 @@ class BlogArchiveEntries(BlogEntries):
         'title',
     )
     
-    default_heading = u"Archive: {title}"
+    default_heading = "Archive: {title}"
     
     def __init__(self, blog, year, month=0, day=0):
         BlogEntries.__init__(self, blog)

@@ -19,7 +19,7 @@ from simpleblog.extensions import BlogExtension, EntryMixin
 class FoldEntryMixin(EntryMixin):
     
     config_vars = dict(
-        fold_symbol=u"<!-- FOLD -->",
+        fold_symbol="<!-- FOLD -->",
         fold_inline=False,
         short_formats=dict(
             vartype=set,

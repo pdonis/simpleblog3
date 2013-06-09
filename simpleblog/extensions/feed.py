@@ -25,11 +25,11 @@ tz_utc = UTCTimezone()
 tz_local = LocalTimezone()
 
 
-archive_marker = u"<fh:archive />"
+archive_marker = "<fh:archive />"
 
-archive_current_tmpl = u'<link rel="current" href="{}/index.{}" />'
+archive_current_tmpl = '<link rel="current" href="{}/index.{}" />'
 
-archive_rel_tmpl = u'<link rel="{}-archive" href="{}{}{}.{}" />'
+archive_rel_tmpl = '<link rel="{}-archive" href="{}{}{}.{}" />'
 
 archive_rel_specs = ('prev', 'next')
 
@@ -50,7 +50,7 @@ class BlogCurrentFeedEntries(BlogEntries):
         'title',
     )
     
-    default_heading = u"Feed Archive: {title}"
+    default_heading = "Feed Archive: {title}"
     
     is_current_feed = True
     
@@ -156,9 +156,9 @@ class BlogArchiveFeedEntries(BlogCurrentFeedEntries):
         return super(BlogArchiveFeedEntries, self)._get_urlpath()
 
 
-template_rss = u"{0}, {1.day:02d} {2} {1.year} {1.hour:02d}:{1.minute:02d} GMT"
+template_rss = "{0}, {1.day:02d} {2} {1.year} {1.hour:02d}:{1.minute:02d} GMT"
 
-template_atom = u"{0.year}-{0.month:02d}-{0.day:02d}T{0.hour:02d}:{0.minute:02d}:00Z"
+template_atom = "{0.year}-{0.month:02d}-{0.day:02d}T{0.hour:02d}:{0.minute:02d}:00Z"
 
 
 def rss_format(t):
@@ -227,7 +227,7 @@ def fixup_relative_links(html, root_url):
     """
     return re.sub(
         re_link,
-        lambda m: u'<a href="{0}/{1}"'.format(root_url, m.group(1)),
+        lambda m: '<a href="{0}/{1}"'.format(root_url, m.group(1)),
         html
     )
 
@@ -238,10 +238,10 @@ class FeedExtension(BlogExtension):
     
     config_vars = dict(
         archive_feeds=None,
-        atom_id_template=u"{cachekey}",
-        atom_category_template=u"entries",
-        rss_id_template=u"{cachekey}",
-        rss_category_template=u"entries"
+        atom_id_template="{cachekey}",
+        atom_category_template="entries",
+        rss_id_template="{cachekey}",
+        rss_category_template="entries"
     )
     
     def entry_mod_body(self, entry, body, format, params):
@@ -312,12 +312,12 @@ class FeedExtension(BlogExtension):
     def blog_mod_default_metadata(self, blog, data):
         if 'rss' in blog.feed_formats:
             data.update(
-                rss_title=u"RSS",
+                rss_title="RSS",
                 rss_url="/index.rss"
             )
         if 'atom' in blog.feed_formats:
             data.update(
-                atom_title=u"Atom",
+                atom_title="Atom",
                 atom_url="/index.atom",
             )
         return data

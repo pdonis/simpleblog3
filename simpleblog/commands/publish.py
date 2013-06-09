@@ -47,9 +47,9 @@ class Publish(BlogCommand):
             "{}@{}:{}".format(self.ssh_user, self.ssh_host, self.ssh_path)
         ])
         if self.opts.debug:
-            print cmdline
+            print(cmdline)
         returncode, output = process_call(cmdline, shell=True)
         if (returncode != 0) or not self.opts.quiet:
-            print output
+            print(output)
         if returncode != 0:
-            print "Publish failed with return code {}".format(returncode)
+            print("Publish failed with return code {}".format(returncode))

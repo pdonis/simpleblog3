@@ -15,15 +15,15 @@ from simpleblog.caching import cached
 from simpleblog.extensions import BlogExtension, EntryMixin, NamedEntries
 
 
-tags_file = BlogExtension.config.get('tags_file', u"tags")
+tags_file = BlogExtension.config.get('tags_file', "tags")
 
 
 def makelink(name, prefix=None):
     if prefix:
-        href = u"{0}/{1}".format(prefix, name)
+        href = "{0}/{1}".format(prefix, name)
     else:
         href = name
-    return u'<a href="/{0}/">{1}</a>'.format(href, name)
+    return '<a href="/{0}/">{1}</a>'.format(href, name)
 
 
 class Tagset(object):
@@ -62,7 +62,7 @@ class BlogTag(NamedEntries):
     
     sourcetype = 'tag'
     multisource = 'tags'
-    typename = u"Tag"
+    typename = "Tag"
     sourcetype_attrname = 'all_tags'
     
     def _get_entries(self):

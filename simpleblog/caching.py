@@ -24,7 +24,7 @@ class BlogCache(BlogObject):
     without having to stat or open and load any entry files.
     """
     
-    def __init__(self, blog, cachename, reverse=False, objtype=None, sep=u' ', encoding='utf-8'):
+    def __init__(self, blog, cachename, reverse=False, objtype=None, sep=' ', encoding='utf-8'):
         BlogObject.__init__(self, blog)
         self.cachename = cachename
         self.reverse = reverse
@@ -60,10 +60,10 @@ class BlogCache(BlogObject):
             return dict(expr)
     
     def save(self):
-        items = self.cache.iteritems()
+        items = iter(self.cache.items())
         if self.reverse:
             items = ((v, k) for k, v in items)
-        lines = sorted(u"{0}{1}{2}\n".format(unicode(a), self.sep, unicode(b)) for a, b in items)
+        lines = sorted("{0}{1}{2}\n".format(str(a), self.sep, str(b)) for a, b in items)
         with codecs.open(self.filename, 'w', self.encoding) as f:
             f.writelines(lines)
 

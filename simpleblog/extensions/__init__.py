@@ -40,8 +40,8 @@ class NamedEntries(BlogEntries):
         'name'
     )
     
-    default_title = u"{name}"
-    default_heading = u"{typename}: {name}"
+    default_title = "{name}"
+    default_heading = "{typename}: {name}"
     
     def __init__(self, blog, name):
         BlogEntries.__init__(self, blog)
@@ -95,15 +95,13 @@ class BlogExtensionMeta(BlogConfigUserMeta):
                 setattr(cls, '%s_mixin' % etype.lower(), ext_mixin)
 
 
-class BlogExtension(BlogConfigUser):
+class BlogExtension(BlogConfigUser, metaclass=BlogExtensionMeta):
     """Base class for extension mechanism.
     """
     
-    __metaclass__ = BlogExtensionMeta
-    
     config_vars = dict(
-        container_link_template=u'<a href="{urlshort}">{title}</a>',
-        container_link_sep=u'',
+        container_link_template='<a href="{urlshort}">{title}</a>',
+        container_link_sep='',
     )
     
     def __init__(self, config):

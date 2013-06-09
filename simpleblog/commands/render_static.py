@@ -40,7 +40,7 @@ class RenderStatic(BlogCommand):
             path = os.path.abspath(os.path.join(self.static_dir, page.filepath))
             if self.opts.force or data_changed(data, path):
                 if not self.opts.quiet:
-                    print "Rendering", path
+                    print("Rendering", path)
                 dir = os.path.split(path)[0]
                 if not os.path.isdir(dir):
                     os.makedirs(dir)
@@ -48,4 +48,4 @@ class RenderStatic(BlogCommand):
                     f.write(data)
             else:
                 if not self.opts.quiet:
-                    print path, "is unchanged"
+                    print(path, "is unchanged")

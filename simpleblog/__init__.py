@@ -160,17 +160,15 @@ class BlogConfigUserMeta(type):
     def __init__(cls, name, bases, attrs):
         super(BlogConfigUserMeta, cls).__init__(name, bases, attrs)
         # Only do this for config vars declared in this class
-        for key, value in attrs.get('config_vars', {}).iteritems():
+        for key, value in attrs.get('config_vars', {}).items():
             # The make_config_property function is factored out
             # to ensure each closure it returns is "clean"
             setattr(cls, key, make_config_property(key, value))
 
 
-class BlogConfigUser(object):
+class BlogConfigUser(object, metaclass=BlogConfigUserMeta):
     """Base class for objects that use a config.
     """
-    
-    __metaclass__ = BlogConfigUserMeta
     
     def __init__(self, config):
         self.config = config
@@ -387,8 +385,8 @@ class BlogEntry(BlogSource):
     
     config_vars = dict(
         utc_timestamps=False,
-        timestamp_template=u"{hour:02d}:{minute:02d}",
-        datestamp_template=u"{year}-{month:02d}-{day:02d}"
+        timestamp_template="{hour:02d}:{minute:02d}",
+        datestamp_template="{year}-{month:02d}-{day:02d}"
     )
     
     sourcetype = 'entry'
@@ -408,7 +406,7 @@ class BlogEntry(BlogSource):
     
     @extendable_property()
     def heading(self):
-        return u"Single Entry"
+        return "Single Entry"
     
     @extendable_property()
     def title(self):
@@ -457,7 +455,7 @@ class BlogEntry(BlogSource):
     def timestamp_attrs(self, dt):
         return dict(
             (key, (varfunc or attrgetter(key))(dt))
-            for key, varfunc in self.timestamp_attrfuncs.iteritems()
+            for key, varfunc in self.timestamp_attrfuncs.items()
         )
     
     @extendable_property()
@@ -569,16 +567,14 @@ class BlogEntriesMeta(BlogConfigUserMeta):
     def __init__(cls, name, bases, attrs):
         super(BlogEntriesMeta, cls).__init__(name, bases, attrs)
         # Similar setup to BlogConfigUserMeta, but for config_or_default_vars
-        for key, value in attrs.get('config_or_default_vars', {}).iteritems():
+        for key, value in attrs.get('config_or_default_vars', {}).items():
             setattr(cls, 'default_{}'.format(key), value)
             setattr(cls, key, make_config_or_default_property(key))
 
 
-class BlogEntries(BlogSource):
+class BlogEntries(BlogSource, metaclass=BlogEntriesMeta):
     """Container for a set of blog entries.
     """
-    
-    __metaclass__ = BlogEntriesMeta
     
     config_vars = dict(
         entry_sort_key='timestamp',
@@ -669,8 +665,8 @@ class BlogIndex(BlogEntries):
     
     sourcetype = 'blog'
     urlshort = "/"
-    default_title = u"Home"
-    default_heading = u"Home Page"
+    default_title = "Home"
+    default_heading = "Home Page"
     
     def _get_entries(self):
         return self.blog.all_entries
@@ -699,7 +695,7 @@ class BlogEntryParams(object):
     def update(self, mapping=None, **kwargs):
         for obj in (mapping, kwargs):
             if obj:
-                for k, v in obj.iteritems():
+                for k, v in obj.items():
                     setattr(self, k, v)
     
     def get(self, key, default=None):
@@ -712,9 +708,9 @@ class BlogPage(BlogObject):
     """
     
     config_vars = dict(
-        no_entries=('no_entries_content', u"<p>No entries found!</p>"),
-        source_link_template=u'<a href="{urlshort}">{title}</a>',
-        source_link_sep=u"&nbsp;&nbsp;"
+        no_entries=('no_entries_content', "<p>No entries found!</p>"),
+        source_link_template='<a href="{urlshort}">{title}</a>',
+        source_link_sep="&nbsp;&nbsp;"
     )
     
     def __init__(self, blog, source, format):
@@ -831,7 +827,7 @@ class Blog(BlogObject):
         for key in self.required_metadata:
             if key not in self.metadata:
                 raise BlogMetadataError("{} missing from blog metadata".format(key))
-        for key, value in self.default_metadata.iteritems():
+        for key, value in self.default_metadata.items():
             self.metadata.setdefault(key, value.format(**self.metadata))
     
     @extendable_property()

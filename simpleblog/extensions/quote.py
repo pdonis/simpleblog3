@@ -8,8 +8,7 @@ Released under the GNU General Public License, Version 2
 See the LICENSE and README files for more information
 """
 
-from urllib import quote_plus
-from urlparse import urljoin
+from urllib.parse import quote_plus, urljoin
 
 from plib.stdlib.iters import suffixed_items
 

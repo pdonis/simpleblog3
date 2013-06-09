@@ -28,10 +28,10 @@ class PageEntries(BlogEntries):
     config_vars = dict(
         page_max_entries=10,
         page_home_include_pagenum=False,
-        page_title_template=u"{title} - Page {pagenum}",
-        page_heading_template=u"{heading} - Page {pagenum}",
-        page_newer_label=u"Newer Entries",
-        page_older_label=u"Older Entries",
+        page_title_template="{title} - Page {pagenum}",
+        page_heading_template="{heading} - Page {pagenum}",
+        page_newer_label="Newer Entries",
+        page_older_label="Older Entries",
     )
     
     def __init__(self, blog, source, pagenum):
@@ -81,7 +81,7 @@ class PageEntries(BlogEntries):
             (num_pages(self.orig_source, self.page_max_entries) - 1, 1, self.page_older_label)
         )
         return tuple(
-            u'<a href="{}{}">{}</a>'.format(
+            '<a href="{}{}">{}</a>'.format(
                 self.make_urlpath(self.urlshort, self.pagenum + ofs),
                 ".{}".format(format) if (self.pagenum + ofs) > 0 else "",
                 label
@@ -101,7 +101,7 @@ class PaginateExtension(BlogExtension):
         page_max_entries=10,
         page_force_short=True,
         page_links_include_sources=False,
-        page_link_sep=u"&nbsp;&nbsp;"
+        page_link_sep="&nbsp;&nbsp;"
     )
     
     def page_get_link_source(self, page):
@@ -158,7 +158,7 @@ class PaginateExtension(BlogExtension):
             if self.paginate(source, format):
                 newsources.extend(
                     (PageEntries(blog, source, pagenum), format)
-                    for pagenum in xrange(num_pages(source, self.page_max_entries))
+                    for pagenum in range(num_pages(source, self.page_max_entries))
                 )
             else:
                 newsources.append((source, format))

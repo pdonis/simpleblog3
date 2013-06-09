@@ -25,7 +25,7 @@ class BlogCategory(NamedEntries):
     )
     
     sourcetype = 'category'
-    typename = u"Category"
+    typename = "Category"
     sourcetype_attrname = 'all_categories'
     
     def _get_entries(self):
@@ -46,7 +46,7 @@ class CategoryExtension(BlogExtension):
     """
     
     config_vars = dict(
-        category_link_template=u'<a href="/{category}/">{category}</a>',
+        category_link_template='<a href="/{category}/">{category}</a>',
         no_category_link="(None)"
     )
     

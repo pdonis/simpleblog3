@@ -9,8 +9,7 @@ See the LICENSE and README files for more information
 """
 
 import os
-import SimpleHTTPServer
-import BaseHTTPServer
+import http.server
 
 from plib.stdlib.ostools import tmp_chdir
 
@@ -44,18 +43,18 @@ class ServeLocal(BlogCommand):
     
     def run(self, blog):
         http_root = os.path.abspath(self.static_dir)
-        server_class = BaseHTTPServer.HTTPServer
-        handler_class = SimpleHTTPServer.SimpleHTTPRequestHandler
+        server_class = http.server.HTTPServer
+        handler_class = http.server.SimpleHTTPRequestHandler
         server_address = (self.opts.hostname, self.opts.port)
         if not self.opts.quiet:
-            print "Serving files under {} at {}".format(
+            print("Serving files under {} at {}".format(
                 http_root,
                 "http://{}:{:d}/".format(self.opts.hostname, self.opts.port)
-            )
+            ))
         httpd = server_class(server_address, handler_class)
         with tmp_chdir(http_root):
             try:
                 httpd.serve_forever()
             except KeyboardInterrupt:
                 if not self.opts.quiet:
-                    print "Shutting down...."
+                    print("Shutting down....")
