@@ -33,7 +33,7 @@ Operating System :: POSIX :: Linux
 """
 
 requires = """
-plib3.stdlib (>=0.9.1)
+plib3.stdlib (>=0.9.2)
 """
 
 rst_header_template = """**{basename}** for {name} {version}
