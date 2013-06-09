@@ -783,8 +783,8 @@ class BlogPage(BlogObject):
         )
         return dict(
             prefixed_keys(self.blog.metadata, 'blog_'),
-            sys_gen_name='simpleblog',
-            sys_gen_uri="http://pypi.python.org/pypi/simpleblog",
+            sys_gen_name='simpleblog3',
+            sys_gen_uri="http://pypi.python.org/pypi/simpleblog3",
             sys_gen_version=__version__,
             **prefixed_keys(metadata, 'page_')
         )
