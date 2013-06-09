@@ -1,7 +1,7 @@
 Simpleblog
 ==========
 
-Simpleblog is a simple Python blogging system. I use it to write
+Simpleblog is a simple Python 3 blogging system. I use it to write
 and publish my own blog at http://blog.peterdonis.com. I wrote
 it because I couldn't find an existing blogging system that made
 it sufficiently easy to write, format, and publish my blog.
