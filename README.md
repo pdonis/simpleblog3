@@ -29,15 +29,18 @@ metadata, and the template files in the ``templates``
 subdirectory, which give extremely plain HTML pages by default.
 
 Note that in order to use ``simpleblog``, you will need to have
-installed ``plib`` (my library of useful Python stuff, which is
+installed ``plib3`` (my library of useful Python 3 stuff, which is
 used in a number of places in ``simpleblog``). It is available
-from the Python Package Index at http://pypi.python.org/pypi/plib.
+from the Python Package Index at http://pypi.python.org/pypi/plib3.
 If you want to use YAML instead of JSON for your config and blog
 metadata files (I certainly find YAML much easier to type since
 I hate typing delimiters, as you will know if you read my blog),
 you will also need to have installed PyYAML, the YAML parsing
 library for Python (which in my opinion should be in the Python
 standard library).
+
+Note: ``simpleblog3`` is the Python 3 version of ``simpleblog``.
+If you are using Python 2, see https://pypi.python.org/pypi/simpleblog.
 
 Simpleblog's Architecture
 -------------------------
