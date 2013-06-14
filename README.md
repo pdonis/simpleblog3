@@ -40,7 +40,7 @@ library for Python (which in my opinion should be in the Python
 standard library).
 
 Note: ``simpleblog3`` is the Python 3 version of ``simpleblog``.
-If you are using Python 2, see https://pypi.python.org/pypi/simpleblog.
+If you are using Python 2, see https://github.com/pdonis/simpleblog.
 
 Simpleblog's Architecture
 -------------------------
