@@ -44,6 +44,7 @@ rst_header_template = """**{basename}** for {name} {version}
 
 
 if __name__ == '__main__':
+    from subprocess import call
     from distutils.core import setup
     from setuputils import convert_md_to_rst, current_date, setup_vars
     
@@ -54,5 +55,6 @@ if __name__ == '__main__':
         author=author,
         releasedate=current_date("%d %b %Y")
     )
+    call(['sed', '-i', 's/github.com\/pdonis/pypi.python.org\/pypi/', 'README'])
     
     setup(**setup_vars(globals()))
