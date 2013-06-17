@@ -108,6 +108,7 @@ class BlogExtension(BlogConfigUser, metaclass=BlogExtensionMeta):
         BlogConfigUser.__init__(self, config)
         
         # Register this extension in the appropriate places
+        thismod = sys.modules[__name__]
         attr_tmpl = '{}_'
         mixin_tmpl = '{}_mixin'
         for etype in extension_types:
@@ -120,15 +121,16 @@ class BlogExtension(BlogConfigUser, metaclass=BlogExtensionMeta):
             # Check for extensions that declare mixins
             mixin = getattr(self, mixin_tmpl.format(etype), None)
             if mixin:
+                mixin_klass = getattr(thismod, '%sMixin' % etype.capitalize())
                 mixin.extension_type = etype
                 extend_attributes(mixin)
                 oldcls = extension_types[etype]
-                
-                @wraps_class(oldcls)
-                class Extended(mixin, oldcls):
-                    pass
-                
-                extension_types[etype] = Extended
+                if issubclass(oldcls, mixin_klass):
+                    bases = (mixin,) + oldcls.__bases__
+                else:
+                    bases = (mixin, oldcls)
+                extcls = wraps_class(oldcls)(type(oldcls)('Extended', bases, {}))
+                extension_types[etype] = extcls
         
         # Allow for post-init processing in subclasses
         self.post_init()
