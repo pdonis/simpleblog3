@@ -55,6 +55,8 @@ if __name__ == '__main__':
         author=author,
         releasedate=current_date("%d %b %Y")
     )
+    call(['sed', '-i', 's/bitbucket.org\/pdonis\/plib-/pypi.python.org\/pypi\/plib./', 'README'])
+    call(['sed', '-i', 's/bitbucket.org\/pdonis\/plib3-/pypi.python.org\/pypi\/plib3./', 'README'])
     call(['sed', '-i', 's/github.com\/pdonis/pypi.python.org\/pypi/', 'README'])
     
     setup(**setup_vars(globals()))

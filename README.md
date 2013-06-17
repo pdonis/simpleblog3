@@ -32,7 +32,7 @@ Note that in order to use ``simpleblog``, you will need to have
 installed ``plib3.stdlib`` (my library of useful Python 3 stuff,
 which is used in a number of places in ``simpleblog``). It is
 available from the Python Package Index at
-http://pypi.python.org/pypi/plib3.stdlib. If you want to use
+http://bitbucket.org/pdonis/plib3-stdlib. If you want to use
 YAML instead of JSON for your config and blog metadata files
 (I certainly find YAML much easier to type since I hate typing
 delimiters, as you will know if you read my blog), you will
