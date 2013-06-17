@@ -62,6 +62,38 @@ from functools import partial
 from itertools import chain, dropwhile, islice, takewhile
 
 
+def _rst_header_lines(template, basename, **kwds):
+    # Generate header lines from template
+    if template:
+        return [
+            "{}{}".format(line, os.linesep) for line in
+            template.format(basename=basename, **kwds).splitlines()
+        ]
+    return []
+
+
+def _rst(basename, template, startline=None, rstext="rst", **kwds):
+    # Add header to file basename.rst and save to file basename
+    with open("{}.{}".format(basename, rstext), 'rU') as f:
+        lines = f.readlines()
+    outlines = _rst_header_lines(template, basename, **kwds) + lines[startline:]
+    with open(basename, 'w') as f:
+        f.writelines(outlines)
+
+
+def convert_rst(template=None,
+                dirname=".", rstnames=None, rstext="rst",
+                **kwds):
+    if rstnames is None:
+        rstnames = [
+            os.path.splitext(basename)[0]
+            for basename in os.listdir(dirname)
+            if os.path.splitext(basename)[1] == ".{}".format(rstext)
+        ]
+    for basename in rstnames:
+        _rst(basename, template=template, rstext=rstext, **kwds)
+
+
 def underline(line, underline='~'):
     """Return an underline string for ``line``.
     
@@ -80,19 +112,15 @@ def underline(line, underline='~'):
 h3_prefix = '### '
 
 
-def _rst_from_md(basename, template=None, startline=None, **kwds):
+def _rst_from_md(basename, template=None, startline=None, mdext="md", **kwds):
     # Convert Markdown text from file named basename.md to RST
     # text saved to file named basename
-    with open("{}.md".format(basename), 'rU') as f:
+    with open("{}.{}".format(basename, mdext), 'rU') as f:
         lines = f.readlines()
     outlines = []
     # Allow adding a header to the RST version (which can
     # be filtered out when generating PKG_INFO if desired)
-    if template:
-        outlines.extend(
-            "{}\n".format(line) for line in
-            template.format(basename=basename, **kwds).splitlines()
-        )
+    outlines.extend(_rst_header_lines(template, basename, **kwds))
     # Normally you will want to pass an integer in as the
     # startline keyword argument, since the Markdown file
     # will probably have a title at the start, and the RST
@@ -110,7 +138,7 @@ def _rst_from_md(basename, template=None, startline=None, **kwds):
 
 
 def convert_md_to_rst(template=None,
-                      dirname=".", mdnames=None,
+                      dirname=".", mdnames=None, mdext="md",
                       **kwds):
     """Convert Markdown text files to RST text files.
     
@@ -127,10 +155,10 @@ def convert_md_to_rst(template=None,
         mdnames = [
             os.path.splitext(basename)[0]
             for basename in os.listdir(dirname)
-            if os.path.splitext(basename)[1] == ".md"
+            if os.path.splitext(basename)[1] == ".{}".format(mdext)
         ]
     for basename in mdnames:
-        _rst_from_md(basename, template=template, **kwds)
+        _rst_from_md(basename, template=template, mdext=mdext, **kwds)
 
 
 def current_date(fmt):
