@@ -1,6 +1,12 @@
 Simpleblog Change Log
 =====================
 
+Version 0.9.4
+-------------
+
+Streamlined construction of extended classes when extensions define
+entry, page, or blog mixins.
+
 Version 0.9.3
 -------------
 
