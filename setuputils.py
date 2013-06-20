@@ -487,8 +487,9 @@ def _package_data_paths(pathname, ext_srcdir):
     return [
         "{}/*.*".format(subdir)
         for subdir in os.listdir(pathname)
-        if os.path.isdir(os.path.join(pathname, subdir))
+        if (subdir != "__pycache__")
         and (subdir != ext_srcdir)
+        and os.path.isdir(os.path.join(pathname, subdir))
         and ("__init__.py" not in os.listdir(os.path.join(pathname, subdir)))
     ]
 
@@ -774,7 +775,7 @@ def make_manifest_in(varmap):
     
     # This ensures that pyc files are left out in case the source
     # tree has them from testing
-    lines.append("recursive-exclude {} *.pyc\n".format(varmap['name']))
+    lines.append("recursive-exclude . *.pyc\n")
     
     # Read from the in.in file last so the user can override
     # any of the above (shouldn't need to but just in case)
