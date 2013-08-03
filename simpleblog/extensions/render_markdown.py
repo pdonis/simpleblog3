@@ -8,6 +8,8 @@ Released under the GNU General Public License, Version 2
 See the LICENSE and README files for more information
 """
 
+import re
+
 from markdown import Markdown
 
 from simpleblog import newline
@@ -18,11 +20,20 @@ class MarkdownEntryMixin(EntryMixin):
     
     config_vars = dict(
         output_format=('markdown_format', "html4"),
+        highlight_code=('markdown_highlight', False),
+        highlight_auto=('markdown_highlight_auto', False),
         pretty_print=('markdown_pretty', False)
     )
     
     def _do_render(self, rawdata):
-        md = Markdown(output_format=self.output_format)
+        kwargs = dict(
+            output_format=self.output_format
+        )
+        if self.highlight_code:
+            kwargs.update(
+                extensions=['codehilite(guess_lang={})'.format(self.highlight_auto)]
+            )
+        md = Markdown(**kwargs)
         html = md.convert(rawdata)
         if not self.pretty_print:
             return html
