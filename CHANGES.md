@@ -1,6 +1,11 @@
 Simpleblog Change Log
 =====================
 
+Version 0.9.5
+-------------
+
+Added syntax highlighting to ``render-markdown`` extension.
+
 Version 0.9.4
 -------------
 
