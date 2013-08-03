@@ -8,7 +8,7 @@ Released under the GNU General Public License, Version 2
 See the LICENSE and README files for more information
 """
 
-from markdown import markdown
+from markdown import Markdown
 
 from simpleblog import newline
 from simpleblog.extensions import BlogExtension, EntryMixin
@@ -22,7 +22,8 @@ class MarkdownEntryMixin(EntryMixin):
     )
     
     def _do_render(self, rawdata):
-        html = markdown(rawdata, output_format=self.output_format)
+        md = Markdown(output_format=self.output_format)
+        html = md.convert(rawdata)
         if not self.pretty_print:
             return html
         
