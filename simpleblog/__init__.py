@@ -881,6 +881,10 @@ class Blog(BlogObject):
             self.page_class(self, source, format)
             for source, format in self.sources
         ]
+    
+    @extendable_property()
+    def render_items(self):
+        return [(page.encoded, page.filepath) for page in self.pages]
 
 
 # INITIALIZATION

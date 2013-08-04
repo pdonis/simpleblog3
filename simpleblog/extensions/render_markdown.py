@@ -8,9 +8,15 @@ Released under the GNU General Public License, Version 2
 See the LICENSE and README files for more information
 """
 
+import os
 import re
+from codecs import encode
+from importlib import import_module
 
 from markdown import Markdown
+
+from plib.stdlib.classtools import first_subclass
+from plib.stdlib.systools import tmp_sys_path
 
 from simpleblog import newline
 from simpleblog.extensions import BlogExtension, EntryMixin
@@ -73,4 +79,37 @@ class MarkdownEntryMixin(EntryMixin):
 class MarkdownExtension(BlogExtension):
     """Markdown parsing of entry source.
     """
-    pass
+    
+    config_vars = dict(
+        markdown_highlight_style=None
+    )
+    
+    def blog_mod_render_items(self, blog, items):
+        if self.markdown_highlight_style:
+            from pygments.style import Style
+            from pygments.styles import get_style_by_name
+            from pygments.formatters import HtmlFormatter
+            
+            # User-defined custom style takes precedence
+            try:
+                with tmp_sys_path(self.config.get('command_dir', "")):
+                    mod = import_module(self.markdown_highlight_style)
+            except ImportError:
+                mdstyle = None
+            else:
+                mdstyle = first_subclass(mod, Style)
+            
+            # Try for built-in style if no custom style
+            if not mdstyle:
+                mdstyle = get_style_by_name(self.markdown_highlight_style)
+            
+            # Generate CSS with selector for markdown codehilite extension
+            css = HtmlFormatter(style=mdstyle).get_style_defs(arg=".codehilite")
+            if not css.endswith(os.linesep):
+                css = "{}{}".format(css, os.linesep)
+            csspath = blog.metadata['highlight_stylesheet_url']
+            if csspath.startswith('/'):
+                csspath = csspath[1:]
+            items.append((encode(css, blog.metadata['charset']), csspath))
+        
+        return items
