@@ -4,7 +4,10 @@ Simpleblog Change Log
 Version 0.9.5
 -------------
 
-Added syntax highlighting to ``render-markdown`` extension.
+Added syntax highlighting to ``render-markdown`` extension. Also
+factored out ``converter`` and ``formatter`` extentable properties
+to allow further customization of markdown behavior by other
+extensions.
 
 Version 0.9.4
 -------------
