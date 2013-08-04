@@ -18,36 +18,26 @@ from markdown import Markdown
 from plib.stdlib.classtools import first_subclass
 from plib.stdlib.systools import tmp_sys_path
 
-from simpleblog import newline
+from simpleblog import extendable_property, newline
 from simpleblog.extensions import BlogExtension, EntryMixin
 
 
-class MarkdownEntryMixin(EntryMixin):
+class BaseFormatter(object):
+    """Do-nothing formatter to serve as default.
+    """
     
-    config_vars = dict(
-        output_format=('markdown_format', "html4"),
-        highlight_code=('markdown_highlight', False),
-        highlight_auto=('markdown_highlight_auto', False),
-        pretty_print=('markdown_pretty', False)
-    )
+    def format(self, html):
+        return html
+
+
+class PrettyPrinter(BaseFormatter):
+    """Pretty-prints HTML to match the Pyblosxom markdown formatter.
     
-    def _do_render(self, rawdata):
-        kwargs = dict(
-            output_format=self.output_format
-        )
-        if self.highlight_code:
-            kwargs.update(
-                extensions=['codehilite(guess_lang={})'.format(self.highlight_auto)]
-            )
-        md = Markdown(**kwargs)
-        html = md.convert(rawdata)
-        if not self.pretty_print:
-            return html
-        
-        # Extra pretty formatting to match the behavior
-        # of the Pyblosxom markdown formatter (indent
-        # blockquotes and add blank lines between
-        # paragraphs)
+    Key formatting items are indentation of blockquotes and adding blank
+    lines between paragraphs.
+    """
+    
+    def format(self, html):
         lines = html.split(newline)
         out = []
         in_blockquote = False
@@ -74,6 +64,35 @@ class MarkdownEntryMixin(EntryMixin):
             ):
                 blankline_flag = True
         return newline.join(out)
+
+
+class MarkdownEntryMixin(EntryMixin):
+    
+    config_vars = dict(
+        output_format=('markdown_format', "html4"),
+        highlight_code=('markdown_highlight', False),
+        highlight_auto=('markdown_highlight_auto', False),
+        pretty_print=('markdown_pretty', False)
+    )
+    
+    @extendable_property()
+    def converter(self):
+        kwargs = dict(
+            output_format=self.output_format
+        )
+        if self.highlight_code:
+            kwargs.update(
+                extensions=['codehilite(guess_lang={})'.format(self.highlight_auto)]
+            )
+        return Markdown(**kwargs)
+    
+    @extendable_property()
+    def formatter(self):
+        return PrettyPrinter() if self.pretty_print else BaseFormatter()
+    
+    def _do_render(self, rawdata):
+        html = self.converter.convert(rawdata)
+        return self.formatter.format(html)
 
 
 class MarkdownExtension(BlogExtension):
