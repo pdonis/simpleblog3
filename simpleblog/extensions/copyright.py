@@ -18,8 +18,8 @@ class CopyrightExtension(BlogExtension):
     """
     
     config_vars = dict(
-        copyright_template="Copyright {start_year}-{end_year}",
-        copyright_display_template="Copyright &copy; {start_year}-{end_year}",
+        copyright_template="Copyright {yearspec}",
+        copyright_display_template="Copyright &copy; {yearspec}",
         copyright_start_year=None,
         copyright_end_year=None
     )
@@ -37,10 +37,11 @@ class CopyrightExtension(BlogExtension):
         return max(self.entry_years(blog))
     
     def blog_mod_default_metadata(self, blog, data):
+        start_year=self.copyright_start_year or self.start_year(blog)
+        end_year=self.copyright_end_year or self.end_year(blog)
         params = dict(
             data,
-            start_year=self.copyright_start_year or self.start_year(blog),
-            end_year=self.copyright_end_year or self.end_year(blog)
+            yearspec="{}-{}".format(start_year, end_year) if start_year < end_year else start_year
         )
         data.update(
             copyright=self.copyright_template.format(**params),
