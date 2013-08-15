@@ -25,7 +25,7 @@ from plib.stdlib.localize import (
     monthname, monthname_long)
 
 
-__version__ = "0.9.5"
+__version__ = "0.9.6"
 
 
 blogfile_exts = ["json"]
