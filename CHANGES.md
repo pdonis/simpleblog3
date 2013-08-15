@@ -8,7 +8,7 @@ Fixed bug in ``copyright`` extension to correct copyright text
 when the start and end year of blog entries are the same.
 
 Added syntax highlighting to ``render-markdown`` extension. Also
-factored out ``converter`` and ``formatter`` extentable properties
+factored out ``converter`` and ``formatter`` extendable properties
 to allow further customization of markdown behavior by other
 extensions.
 
