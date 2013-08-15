@@ -114,8 +114,28 @@ class BlogConfig(object):
             raise AttributeError
 
 
+class shared_property(object):
+    """Decorator for cached property shared among all instances of a class.
+    """
+    
+    def __init__(self, fget, name=None, doc=None):
+        self.__fget = fget
+        self.__name = name or fget.__name__
+        self.__doc__ = doc or fget.__doc__
+    
+    def __get__(self, instance, cls):
+        if instance is None:
+            return self
+        result = self.__fget(instance)
+        # This is the key difference from cached_property; the value can only
+        # be looked up on an instance, but once we have it, we set it on the
+        # class so all instances will see the same value
+        setattr(cls, self.__name, result)
+        return result
+
+
 def make_config_property(key, value):
-    """Return``cached_property`` for config setting.
+    """Return``shared_property`` for config setting.
     
     The ``key`` argument is the name of the property.
     
@@ -145,7 +165,7 @@ def make_config_property(key, value):
         def fget(self):
             return self.config.get(varkey, default)
     fget.__name__ = key
-    return cached_property(fget)
+    return shared_property(fget)
 
 
 class BlogConfigUserMeta(type):
@@ -195,7 +215,7 @@ class BlogObject(BlogConfigUser):
         self.blog = blog
         self.config = self.blog.config  # don't need to call the superclass __init__
     
-    @cached_method
+    @cached_function
     def template_basename(self, kind, format):
         return "{0}.{1}".format(kind, format)
     
