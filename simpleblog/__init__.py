@@ -215,7 +215,7 @@ class BlogObject(BlogConfigUser):
         self.blog = blog
         self.config = self.blog.config  # don't need to call the superclass __init__
     
-    @cached_function
+    @cached_method
     def template_basename(self, kind, format):
         return "{0}.{1}".format(kind, format)
     
