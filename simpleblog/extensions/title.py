@@ -12,7 +12,7 @@ import re
 
 from plib.stdlib.decotools import cached_property
 
-from simpleblog import extendable_property, newline
+from simpleblog import shared_property, extendable_property, newline
 from simpleblog.caching import cached
 from simpleblog.extensions import BlogExtension, EntryMixin
 
@@ -35,7 +35,7 @@ class TitleEntryMixin(EntryMixin):
             self._titlestr = ""
         return raw
     
-    @cached_property
+    @shared_property
     def title_rexps(self):
         return [(re.compile(r), s) for r, s in [
             (r"\*\*([A-Za-z0-9]+)\*\*", "<strong>\g<1></strong>"),
