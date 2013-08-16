@@ -81,7 +81,8 @@ class FoldingExtension(BlogExtension):
         )
         return params
     
-    def use_short_entry(self, entry, params):
+    @cached_method
+    def use_short_entry(self, params):
         return (
             # This first clause allows other extensions to force a short entry
             params.get('force_short', False)
@@ -89,7 +90,7 @@ class FoldingExtension(BlogExtension):
         )
     
     def entry_get_body(self, entry, format, params):
-        if self.use_short_entry(entry, params) and entry.has_short(format):
+        if self.use_short_entry(params) and entry.has_short(format):
             return entry.short_template(format).format(
                 body=entry.rendered_short,
                 link=entry.make_permalink(format)
