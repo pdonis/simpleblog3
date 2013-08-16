@@ -16,7 +16,7 @@ from functools import wraps
 from operator import attrgetter
 
 from plib.stdlib.decotools import (
-    cached_method, cached_property, memoize_generator)
+    cached_function, cached_method, cached_property, memoize_generator)
 from plib.stdlib.ini import PIniFile
 from plib.stdlib.ini.defs import *
 from plib.stdlib.iters import suffixed_items
@@ -168,6 +168,52 @@ def make_config_property(key, value):
     return shared_property(fget)
 
 
+class shared_method(object):
+    """Decorator to cache method results and share them among all class instances.
+    """
+    
+    share_class = None
+    
+    def __init__(self, func, name=None, doc=None):
+        self.__func = func
+        self.__name = name or func.__name__
+        self.__doc__ = doc or func.__doc__
+        self.__cached = None
+    
+    def _setup_cached(self, instance):
+        # If cache is already set up, just return it
+        if self.__cached:
+            return self.__cached
+        
+        @cached_function
+        @wraps(self.__func)
+        def _method(*args, **kwargs):
+            return self.__func(instance, *args, **kwargs)
+        
+        # This is the key difference from cached_method; we cache the function
+        # on the class, eliminating the instance argument, so all instances see
+        # the same cache; note that we have to wrap with the staticmethod
+        # decorator since the instance argument is no longer in the signature
+        setattr(self.share_class, self.__name, staticmethod(_method))
+        self.__cached = _method
+        return _method
+    
+    def __get__(self, instance, cls):
+        if instance is None:
+            # If there's no instance, we return an unbound method that will
+            # check the shared cache when called with an instance (and set
+            # up that shared cache if it is not set up)
+            def _unbound(inst, *args, **kwargs):
+                _cached = self._setup_cached(inst)
+                return _cached(*args, **kwargs)
+            
+            return _unbound
+        
+        else:
+            # We have an instance, set up the cache directly using it
+            return self._setup_cached(instance)
+
+
 class BlogConfigUserMeta(type):
     """Metaclass to automatically set up configurable attributes.
     
@@ -184,6 +230,10 @@ class BlogConfigUserMeta(type):
             # The make_config_property function is factored out
             # to ensure each closure it returns is "clean"
             setattr(cls, key, make_config_property(key, value))
+        # Only do this for shared methods declared in this class
+        for value in attrs.values():
+            if isinstance(value, shared_method):
+                value.share_class = cls
 
 
 class BlogConfigUser(object, metaclass=BlogConfigUserMeta):
@@ -215,15 +265,15 @@ class BlogObject(BlogConfigUser):
         self.blog = blog
         self.config = self.blog.config  # don't need to call the superclass __init__
     
-    @cached_method
+    @shared_method
     def template_basename(self, kind, format):
         return "{0}.{1}".format(kind, format)
     
-    @cached_method
+    @shared_method
     def template_file(self, kind, format):
         return os.path.join(self.template_dir, self.template_basename(kind, format))
     
-    @cached_method
+    @shared_method
     def template_data(self, kind, format):
         try:
             return read_blogfile(self.template_file(kind, format))
