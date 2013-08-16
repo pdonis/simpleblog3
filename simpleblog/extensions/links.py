@@ -13,7 +13,7 @@ from operator import itemgetter
 
 from plib.stdlib.decotools import cached_property, cached_method
 
-from simpleblog import extendable_method, newline
+from simpleblog import shared_property, extendable_method, newline
 from simpleblog.extensions import BlogExtension, EntryMixin
 
 
@@ -30,7 +30,7 @@ class LinksEntryMixin(EntryMixin):
             default=['entry'])
     )
     
-    @cached_property
+    @shared_property
     def entrylinks_template(self):
         return self.template_data("entry", "links")
     
