@@ -1,6 +1,13 @@
 Simpleblog Change Log
 =====================
 
+Version 0.9.6
+-------------
+
+Streamlined usage of config variables and attributes computed from
+them, by making sure results are shared among all config user class
+instances.
+
 Version 0.9.5
 -------------
 
