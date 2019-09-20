@@ -4,6 +4,9 @@ Simpleblog Change Log
 Version 0.9.6
 -------------
 
+Fixed ``setup.py`` to only convert MD file on sdist, and to properly
+handle long description.
+
 Streamlined usage of config variables and attributes computed from
 them, by making sure results are shared among all config user class
 instances.
