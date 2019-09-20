@@ -1,6 +1,12 @@
 Simpleblog Change Log
 =====================
 
+Version 0.9.7
+-------------
+
+Fixed handling of long description when running the ``sdist``
+command.
+
 Version 0.9.6
 -------------
 
