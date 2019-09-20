@@ -50,10 +50,6 @@ if __name__ == '__main__':
     from distutils.core import setup
     from setuputils import convert_md_to_rst, current_date, setup_vars, long_description as make_long_description
     
-    if os.path.isfile("README.md"):
-        startline = 3
-        long_description = make_long_description(globals(), filename="README.md")
-    
     if "sdist" in sys.argv:
         convert_md_to_rst(rst_header_template,
             startline=2,
@@ -65,5 +61,8 @@ if __name__ == '__main__':
         call(['sed', '-i', 's/bitbucket.org\/pdonis\/plib-/pypi.python.org\/pypi\/plib./', 'README'])
         call(['sed', '-i', 's/bitbucket.org\/pdonis\/plib3-/pypi.python.org\/pypi\/plib3./', 'README'])
         call(['sed', '-i', 's/github.com\/pdonis/pypi.python.org\/pypi/', 'README'])
+    elif os.path.isfile("README.md"):
+        startline = 3
+        long_description = make_long_description(globals(), filename="README.md")
     
     setup(**setup_vars(globals()))
