@@ -214,7 +214,7 @@ def long_description(varmap, filename="README",
 def pypi_url(varmap):
     """Return the PyPI URL for program ``name`` from the setup vars.
     """
-    return "http://pypi.python.org/pypi/{}".format(varmap['name'])
+    return "http://pypi.org/project/{}".format(varmap['name'])
 
 
 def provides(varmap):
@@ -228,15 +228,14 @@ def provides(varmap):
 
 
 def add_vars(varmap):
-    """Automate adding ``long_description``, ``url``, and ``provides`` setup vars.
+    """Automate adding ``long_description`` and ``url`` setup vars.
     """
     
     if 'long_description' not in varmap:
         varmap['long_description'] = long_description(varmap)
     if 'url' not in varmap:
         varmap['url'] = pypi_url(varmap)
-    if 'provides' not in varmap:
-        varmap['provides'] = provides(varmap)
+    # provides format changed and it's not used anyway, so don't automatically include it
 
 
 def convert_lists(varmap,
